@@ -136,6 +136,7 @@ public class JailCommand extends BaseCommand {
             		Util.Message("The jailing of " + event.getPlayer().getName() + " was cancelled due to another plugin.", sender);
             		return true;
             	}else {
+            		player = event.getPlayer(); //Set our instance of the player to the one from the event, in case a listener changed something.
             		prisoner = new JailPrisoner(playerName,
             				event.getTime() * 6, event.getJail(), event.getCell(), false, "",
             				event.getReason(), event.isMuted(), "", event.getJailer(), "", player.getGameMode());
