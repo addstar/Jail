@@ -59,7 +59,6 @@ public class JailVoteCommand extends BaseCommand{
 						Jail.instance.getServer().broadcastMessage(ChatColor.DARK_AQUA + "----------------------------");
 						@SuppressWarnings("unused")
 						BukkitTask task = new BukkitRunnable(){
-							@Override
 							public void run() {
 								if(JailVote.yesVotes > JailVote.noVotes){
 									JailPrisoner prisoner = new JailPrisoner(target.getName(), Settings.getGlobalInt(Setting.VoteJailTime) * 6, "", "", false, "", Settings.getGlobalString(Setting.VoteJailReason), true, "", "Players", "", target.getGameMode());

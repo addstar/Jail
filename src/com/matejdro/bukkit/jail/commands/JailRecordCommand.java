@@ -19,7 +19,7 @@ public class JailRecordCommand extends BaseCommand{
 		permission = "jail.command.jailrecord";
 	}
 	
-	@SuppressWarnings({ "resource", "unused" })
+	@SuppressWarnings({ "unused" })
 	@Override
 	public Boolean run(CommandSender sender, String[] args) {
 		if(args.length < 1){

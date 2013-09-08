@@ -26,7 +26,6 @@ public class JailCommand extends BaseCommand {
 		permission = "jail.command.jail";
 	}
 
-	@SuppressWarnings("unused")
 	public Boolean run(CommandSender sender, String[] args) {
 
             if (args.length < 1 && sender.hasPermission("jail.command.jail"))

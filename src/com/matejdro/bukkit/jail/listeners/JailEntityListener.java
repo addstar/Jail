@@ -66,8 +66,7 @@ public class JailEntityListener implements Listener {
 	}
 	
 	@EventHandler()
-	public void onEntityTarget(EntityTargetEvent event)
-	{
+	public void onEntityTarget(EntityTargetEvent event) {
 		if (!(event.getEntity() instanceof Creature)) return;
 		
 		JailPrisoner prisoner = Jail.guards.get(event.getEntity());
@@ -76,7 +75,6 @@ public class JailEntityListener implements Listener {
 			event.setCancelled(true);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler()
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled()) return;
@@ -102,6 +100,7 @@ public class JailEntityListener implements Listener {
 				if (eventD.getDamager() instanceof LivingEntity) prisoner.getPossibleGuardTargets().add((LivingEntity) eventD.getDamager());
 			}
 		}
+		
 		if (!(event instanceof EntityDamageByEntityEvent)) return;
 		EntityDamageByEntityEvent newevent = (EntityDamageByEntityEvent) event;
 		Entity damager = newevent.getDamager();

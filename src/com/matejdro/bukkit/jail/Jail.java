@@ -231,9 +231,7 @@ public class Jail extends JavaPlugin {
 		}
 	}
 
-	class TimeEvent implements Runnable
-	{
-		@Override
+	class TimeEvent implements Runnable {
 		public void run() {
 			int timePassed;
 			if (System.currentTimeMillis() - lastCheckTime >= 10000)

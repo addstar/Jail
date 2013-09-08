@@ -1,4 +1,4 @@
-Jail
+[Jail](http://dev.bukkit.org/bukkit-plugins/jail/)
 ====
 This plugins adds Jail to your minecraft server. Admins can define several jails and then jail/unjail people or jail them on time basis. Plugin also offers wide variety of protections, so players won't escape out of your jail.
 
