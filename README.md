@@ -14,3 +14,5 @@ Features
 * Supports escaping for role play servers.
 * Allows players to vote a player to be jailed
 * Allows players to handcuff other players, stopping them from being able to move
+* Throws custom events when a player is jailed
+* - OnlinePlayerJailedEvent for when an online player is jailed

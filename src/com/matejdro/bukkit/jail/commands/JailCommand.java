@@ -17,6 +17,7 @@ import com.matejdro.bukkit.jail.PrisonerManager;
 import com.matejdro.bukkit.jail.Setting;
 import com.matejdro.bukkit.jail.Settings;
 import com.matejdro.bukkit.jail.Util;
+import com.matejdro.bukkit.jail.events.OnlinePlayerJailedEvent;
 
 public class JailCommand extends BaseCommand {	
 	public JailCommand()
@@ -128,7 +129,18 @@ public class JailCommand extends BaseCommand {
             	
             	playerName = player.getName().toLowerCase();
             	
-            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, false, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "", player.getGameMode());
+            	OnlinePlayerJailedEvent event = new OnlinePlayerJailedEvent(player, time, jailname, cellname, reason, muted, sender instanceof Player ? ((Player) sender).getName() : "console");
+            	Jail.instance.getServer().getPluginManager().callEvent(event);
+            	
+            	if(event.isCancelled()) {
+            		Util.Message("The jailing of " + event.getPlayer().getName() + " was cancelled due to another plugin.", sender);
+            		return true;
+            	}else {
+            		prisoner = new JailPrisoner(playerName,
+            				event.getTime() * 6, event.getJail(), event.getCell(), false, "",
+            				event.getReason(), event.isMuted(), "", event.getJailer(), "", player.getGameMode());
+            	}
+            	
                 PrisonerManager.PrepareJail(prisoner, player);
                 
                 player.setGameMode(GameMode.SURVIVAL);
