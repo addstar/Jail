@@ -17,6 +17,6 @@ Features
 * Throws custom events when a player is jailed
 * - OnlinePlayerJailedEvent for when an online player is jailed
 
-Jail 3.0
+[Jail 3.0](http://git.graywolf336.com:8080/job/Jail/)
 ===
 * Changelog will be here!
