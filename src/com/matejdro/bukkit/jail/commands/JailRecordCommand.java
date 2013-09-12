@@ -19,7 +19,6 @@ public class JailRecordCommand extends BaseCommand{
 		permission = "jail.command.jailrecord";
 	}
 	
-	@SuppressWarnings({ "unused" })
 	@Override
 	public Boolean run(CommandSender sender, String[] args) {
 		if(args.length < 1){
@@ -40,12 +39,10 @@ public class JailRecordCommand extends BaseCommand{
 	            
 	            Scanner scanner = new Scanner(jailLogFile);
 	            
-	            int lineNum = 0;
 	            int timesJailed = 0;
 	            
 	            while(scanner.hasNextLine()){
 	            	String line = scanner.nextLine();
-	            	lineNum++;
 	            	if(line.contains(args[0] + " ")){
 	            		timesJailed ++;
 	            		sender.sendMessage(line);
@@ -64,6 +61,8 @@ public class JailRecordCommand extends BaseCommand{
 	            if(timesJailed !=  0){
 	            	timesJailed = 0;
 	            }
+	            
+	            scanner.close();
 	            
 			}catch(IOException e){
 				e.printStackTrace();
