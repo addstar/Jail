@@ -19,4 +19,4 @@ Features
 
 [Jail 3.0](http://git.graywolf336.com:8080/job/Jail/)
 ===
-* Changelog will be here!
+* New Command system, better handling of commands
