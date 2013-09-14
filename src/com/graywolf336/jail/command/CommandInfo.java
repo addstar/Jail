@@ -1,5 +1,9 @@
 package com.graywolf336.jail.command;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention (RetentionPolicy.RUNTIME)
 public @interface CommandInfo {	
 	/**
 	 * Gets the maximum amount of arguments required, -1 if no maximum (ex: Jailing someone with a reason or editing a reason).
