@@ -12,7 +12,7 @@ public class JailMain extends JavaPlugin {
 	
 	public void onEnable() {
 		jm = new JailManager();
-		cmdHand = new CommandHandler();
+		cmdHand = new CommandHandler(this);
 		
 		//For the time, we will use:
 		//http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/TimeUnit.html#convert(long, java.util.concurrent.TimeUnit)

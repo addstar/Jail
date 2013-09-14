@@ -5,22 +5,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.graywolf336.jail.JailMain;
 import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.command.commands.JailCommand;
 
 public class CommandHandler {
 	private LinkedHashMap<String, Command> commands;
 	
-	public CommandHandler() {
+	public CommandHandler(JailMain plugin) {
 		loadCommands();
 		
-		Bukkit.getLogger().info("Loaded " + commands.size() + " commands.");
-		for(Command c : commands.values())
-			Bukkit.getLogger().info(c.getClass().getAnnotation(CommandInfo.class).pattern());
+		plugin.getLogger().info("Loaded " + commands.size() + " commands.");
 	}
 	
 	public void handleCommand(JailManager jailmanager, CommandSender sender, String command, String[] args) {
@@ -105,10 +103,7 @@ public class CommandHandler {
 
 	private void load(Class<? extends Command> c) {
 		CommandInfo info = c.getAnnotation(CommandInfo.class);
-		if(info == null) {
-			Bukkit.getLogger().info("The information was null for some command.");
-			return;
-		}
+		if(info == null) return;
 		
 		try {
 			commands.put(info.pattern(), c.newInstance());
