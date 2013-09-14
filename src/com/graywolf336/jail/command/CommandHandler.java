@@ -105,7 +105,10 @@ public class CommandHandler {
 
 	private void load(Class<? extends Command> c) {
 		CommandInfo info = c.getAnnotation(CommandInfo.class);
-		if(info == null) return;
+		if(info == null) {
+			Bukkit.getLogger().info("The information was null for some command.");
+			return;
+		}
 		
 		try {
 			commands.put(info.pattern(), c.newInstance());
