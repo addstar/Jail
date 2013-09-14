@@ -29,6 +29,6 @@ public class JailMain extends JavaPlugin {
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 		cmdHand.handleCommand(jm, sender, command.getName().toLowerCase(), args);
-		return true;
+		return true;//Always return true here, that way we can handle the help and command usage ourself.
 	}
 }

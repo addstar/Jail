@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
 import com.graywolf336.jail.JailMain;
 import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.command.commands.JailCommand;
+import com.graywolf336.jail.command.commands.JailCreateCommand;
 
 public class CommandHandler {
 	private LinkedHashMap<String, Command> commands;
 	
 	public CommandHandler(JailMain plugin) {
+		commands = new LinkedHashMap<String, Command>();
 		loadCommands();
 		
 		plugin.getLogger().info("Loaded " + commands.size() + " commands.");
@@ -25,7 +27,7 @@ public class CommandHandler {
 		List<Command> matches = getMatches(command);
 		
 		if(matches.size() == 0) {
-			sender.sendMessage("No commands found by the name of " + command + ".");
+			sender.sendMessage("No commands registered by the name of " + command + ".");
 			return;
 		}
 		
@@ -44,25 +46,26 @@ public class CommandHandler {
 			return;
 		}
 		
-		// Next, let's check if we need a player and if the sender is actually a player
+		// Next, let's check if we need a player and then if the sender is actually a player
 		if(i.needsPlayer() && !(sender instanceof Player)) {
-			sender.sendMessage("A player context is required.");
+			sender.sendMessage("A player context is required for this command.");
 			return;
 		}
 		
-		//Now, let's check the size of the arguments passed. If it is shorter than the minimum required args, let's show the usage.
+		// Now, let's check the size of the arguments passed. If it is shorter than the minimum required args, let's show the usage.
 		if(args.length < i.minimumArgs()) {
 			showUsage(sender, c);
 			return;
 		}
 		
-		//Then, if the maximumArgs doesn't equal -1, we need to check if the size of the arguments passed is greater than the maximum args.
+		// Then, if the maximumArgs doesn't equal -1, we need to check if the size of the arguments passed is greater than the maximum args.
 		if(i.maxArgs() != -1 && i.maxArgs() < args.length) {
 			showUsage(sender, c);
 			return;
 		}
 		
-		//Since everything has been checked and we're all clear, let's execute it.
+		// Since everything has been checked and we're all clear, let's execute it.
+		// But if get back false, let's show the usage message.
 		if(!c.execute(jailmanager, sender, args)) {
 			showUsage(sender, c);
 			return;
@@ -96,9 +99,8 @@ public class CommandHandler {
 	
 	/** Loads all the commands into the hashmap. */
 	private void loadCommands() {
-		commands = new LinkedHashMap<String, Command>();
-		
 		load(JailCommand.class);
+		load(JailCreateCommand.class);
 	}
 
 	private void load(Class<? extends Command> c) {
