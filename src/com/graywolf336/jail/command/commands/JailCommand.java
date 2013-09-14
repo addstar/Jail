@@ -17,8 +17,7 @@ import com.graywolf336.jail.command.CommandInfo;
 public class JailCommand implements Command {
 
 	public boolean execute(JailManager jm, CommandSender sender, String... args) {
-		// TODO Jail someone!
-		return false;
+		return true; //If they made it this far, the command is intact and ready to be processed. :)
 	}
 
 }
