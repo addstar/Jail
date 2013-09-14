@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,13 +17,17 @@ public class CommandHandler {
 	
 	public CommandHandler() {
 		loadCommands();
+		
+		Bukkit.getLogger().info("Loaded " + commands.size() + " commands.");
+		for(Command c : commands.values())
+			Bukkit.getLogger().info(c.getClass().getAnnotation(CommandInfo.class).pattern());
 	}
 	
 	public void handleCommand(JailManager jailmanager, CommandSender sender, String command, String[] args) {
 		List<Command> matches = getMatches(command);
 		
 		if(matches.size() == 0) {
-			sender.sendMessage("No commands found by the name of " + command);
+			sender.sendMessage("No commands found by the name of " + command + ".");
 			return;
 		}
 		
