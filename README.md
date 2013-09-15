@@ -21,4 +21,5 @@ Features
 ===
 * New Command system, better handling of commands
 
-[Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/ws/doc/index.html)
+[Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
+====
