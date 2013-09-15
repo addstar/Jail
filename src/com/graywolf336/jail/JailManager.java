@@ -52,7 +52,7 @@ public class JailManager {
 	 * 
 	 * <p>
 	 * 
-	 * If you want to check to see if they're just creating a jail then use {@link #isCreatingAJail(name) isCreatingAJail} or if you want to see if they're creating a cell then use {@link #isCreatingACell(name) isCreatingACell}. 
+	 * If you want to check to see if they're just creating a jail then use {@link #isCreatingAJail(String) isCreatingAJail} or if you want to see if they're creating a cell then use {@link #isCreatingACell(String) isCreatingACell}. 
 	 * 
 	 * @param name The name of the player, in any case as we convert it to lowercase.
 	 * @return True if the player is creating a jail or cell, false if they're not creating anything.
@@ -69,7 +69,8 @@ public class JailManager {
 	/**
 	 * Method for setting a player to be creating a Jail, returns whether or not they were added successfully.
 	 * 
-	 * @param name The player who is creating a jail.
+	 * @param player The player who is creating a jail.
+	 * @param jailName The name of the jail we are creating.
 	 * @return True if they were added successfully, false if they are already creating a Jail.
 	 */
 	public boolean addCreatingJail(String player, String jailName) {
@@ -94,7 +95,8 @@ public class JailManager {
 	/**
 	 * Method for setting a player to be creating a Jail, returns whether or not they were added successfully.
 	 * 
-	 * @param name The player who is creating a jail.
+	 * @param player The player who is creating a jail.
+	 * @param cellName The name of the cell we are creating.
 	 * @return True if they were added successfully, false if they are already creating a Jail.
 	 */
 	public boolean addCreatingCell(String player, String cellName) {
