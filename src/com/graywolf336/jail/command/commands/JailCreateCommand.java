@@ -28,7 +28,7 @@ public class JailCreateCommand implements Command {
 		}else {
 			//Create jail and all that good stuff here
 			if(jm.addCreatingJail(player.getName(), name)) {
-				sender.sendMessage("");
+				jm.getJailCreationSteps().startStepping(jm.getJailCreationPlayer(player.getName()), player);
 			}else {
 				CreationPlayer cp = jm.getJailCreationPlayer(player.getName());
 				String message = "You're already creating a Jail with the name '" + cp.getName() + "' and you still need to ";
