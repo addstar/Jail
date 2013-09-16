@@ -31,7 +31,7 @@ public class JailMain extends JavaPlugin {
 		cmdHand = null;
 	}
 	
-	/* Majority of the new command system was heavily influced by the MobArena.
+	/* Majority of the new command system was heavily influenced by the MobArena.
 	 * Thank you garbagemule for the great system you have in place there.
 	 *
 	 * Send the command off to the CommandHandler class, that way this main class doesn't get clogged up.
