@@ -20,6 +20,7 @@ Features
 [Jail 3.0](http://git.graywolf336.com:8080/job/Jail/)
 ===
 * New Command system, better handling of commands
+* Fixed the teleport in location being able to be set outside of the Jail region.
 
 [Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
 ====

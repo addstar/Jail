@@ -3,6 +3,7 @@ package com.graywolf336.jail.steps;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.beans.CreationPlayer;
@@ -74,12 +75,24 @@ public class JailCreationSteps {
 	
 	/** Applies the third step, which is setting the teleport in location. */
 	private void thirdStep(CreationPlayer cp, Player p) {
-		p.sendMessage(ChatColor.AQUA + "---------- Jail Zone Creation ----------");
-		p.sendMessage(ChatColor.GREEN + "Teleport point selected. Now go outside of the jail and right click anywhere to select your current position as the location where people will be teleported after they are released from this jail.");
-		p.sendMessage(ChatColor.AQUA + "----------------------------------------");
 		
-		cp.setTeleportIn(p.getLocation());
-		cp.nextState();
+		int[] p1 = cp.getCornerOne();
+		int[] p2 = cp.getCornerTwo();
+		Vector v1 = new Vector(p1[0], p1[1], p1[2]);
+		Vector v2 = new Vector(p2[0], p2[1], p2[2]);
+		
+		if(p.getLocation().toVector().isInAABB(v1, v2)) {
+			p.sendMessage(ChatColor.AQUA + "---------- Jail Zone Creation ----------");
+			p.sendMessage(ChatColor.GREEN + "Teleport point selected. Now go outside of the jail and right click anywhere to select your current position as the location where people will be teleported after they are released from this jail.");
+			p.sendMessage(ChatColor.AQUA + "----------------------------------------");
+			
+			cp.setTeleportIn(p.getLocation());
+			cp.nextState();
+		} else {
+			p.sendMessage(ChatColor.RED + "---------- Jail Zone Creation ----------");
+			p.sendMessage(ChatColor.RED + "Teleport point NOT selected. Now go inside the jail and right click anywhere to select your current position as the teleport location for the jail. Point must be INSIDE the points selected for the Jail.");
+			p.sendMessage(ChatColor.RED + "----------------------------------------");
+		}
 	}
 	
 	private void fourthStep(JailManager jm, CreationPlayer cp, Player p) {
