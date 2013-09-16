@@ -1,5 +1,7 @@
 package com.graywolf336.jail.listeners;
 
-public class EntityListener {
+import org.bukkit.event.Listener;
+
+public class EntityListener implements Listener {
 
 }

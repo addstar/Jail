@@ -2,9 +2,13 @@ package com.graywolf336.jail;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.graywolf336.jail.command.CommandHandler;
+import com.graywolf336.jail.listeners.BlockListener;
+import com.graywolf336.jail.listeners.EntityListener;
+import com.graywolf336.jail.listeners.PlayerListener;
 
 public class JailMain extends JavaPlugin {
 	private JailManager jm;
@@ -13,6 +17,11 @@ public class JailMain extends JavaPlugin {
 	public void onEnable() {
 		jm = new JailManager();
 		cmdHand = new CommandHandler(this);
+		
+		PluginManager pm = this.getServer().getPluginManager();
+		pm.registerEvents(new BlockListener(), this);
+		pm.registerEvents(new EntityListener(), this);
+		pm.registerEvents(new PlayerListener(this), this);
 		
 		//For the time, we will use:
 		//http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/TimeUnit.html#convert(long, java.util.concurrent.TimeUnit)
