@@ -10,6 +10,15 @@ import com.graywolf336.jail.steps.JailCreationSteps;
 /**
  * Handles all things related to jails.
  * 
+ * <p>
+ * 
+ * Stores the following:
+ * <ul>
+ * 	<li>Players creating jails, see {@link CreationPlayer}.</li>
+ * 	<li>Players creating jail cells, see {@link CreationPlayer}.</li>
+ * 	<li>An instance of {@link JailCreationSteps} for stepping players through the Jail creation process.</li>
+ * </ul>
+ * 
  * @author graywolf336
  * @since 3.0.0
  * @version 1.0.0

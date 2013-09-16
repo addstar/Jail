@@ -13,6 +13,14 @@ import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.command.commands.JailCommand;
 import com.graywolf336.jail.command.commands.JailCreateCommand;
 
+/**
+ * Where all the commands are registered at and handled, processed, at.
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ *
+ */
 public class CommandHandler {
 	private LinkedHashMap<String, Command> commands;
 	
@@ -23,6 +31,27 @@ public class CommandHandler {
 		plugin.getLogger().info("Loaded " + commands.size() + " commands.");
 	}
 	
+	/**
+	 * Handles the given command and checks that the command is in valid form.
+	 * 
+	 * <p>
+	 * 
+	 * It checks in the following order:
+	 * <ol>
+	 * 	<li>If the command is registered or not.</li>
+	 * 	<li>If more than one command matches the command's name and sends the usage for each one.</li>
+	 * 	<li>If they have permission for it, if they don't then we send them a message stating so.</li>
+	 * 	<li>If the command needs a player instance, if so we send a message stating that.</li>
+	 * 	<li>If the required minimum arguments have been passed, if not sends the usage.</li>
+	 * 	<li>If the required maximum arguments have been passed (if there is a max, -1 if no max), if not sends the usage.</li>
+	 * 	<li>Then executes, upon failed execution it sends the usage command.</li>
+	 * </ol>
+	 * 
+	 * @param jailmanager The instance of {@link JailManager}.
+	 * @param sender The sender of the command.
+	 * @param command The name of the command.
+	 * @param args The arguments passed to the command.
+	 */
 	public void handleCommand(JailManager jailmanager, CommandSender sender, String command, String[] args) {
 		List<Command> matches = getMatches(command);
 		

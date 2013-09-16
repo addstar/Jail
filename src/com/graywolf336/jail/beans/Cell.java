@@ -1,6 +1,11 @@
 package com.graywolf336.jail.beans;
 
-/** Represents a Cell inside of a {@link Jail}. */
+/** Represents a Cell inside of a {@link Jail}.
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ */
 public class Cell {
 	private String name;
 	private Prisoner p;

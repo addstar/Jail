@@ -7,6 +7,7 @@ package com.graywolf336.jail.events;
  * 
  * @author graywolf336
  * @since 3.0.0
+ * @version 0.0.0
  */
 public class PrisonerReleasedEvent {
 

@@ -8,6 +8,13 @@ import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.beans.Jail;
 
+/**
+ * Class for stepping a player through the Jail creation process, instance is stored in {@link JailManager}.
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ */
 public class JailCreationSteps {
 	
 	/** Sends the Jail Creation message for starting out. */

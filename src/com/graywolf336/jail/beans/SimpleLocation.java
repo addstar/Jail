@@ -4,6 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+/**
+ * Simple location class which doesn't store any instances of {@link World worlds} or {@link Block blocks}, just uses strings, floats, and doubles.
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ */
 public class SimpleLocation {
 	private String world;
 	private double x, y, z;
