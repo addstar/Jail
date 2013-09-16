@@ -80,6 +80,49 @@ public class JailManager {
 		return this.jailCreators.containsKey(name.toLowerCase()) || this.cellCreators.containsKey(name.toLowerCase());
 	}
 	
+	/** Returns a message used for telling them what they're creating and what step they're on. */
+	public String getStepMessage(String player) {
+		String message = "";
+		
+		if(isCreatingACell(player)) {//Check whether it is a jail cell
+			CreationPlayer cp = this.getCellCreationPlayer(player);
+			message = "You're already creating a Cell with the name '" + cp.getName() + "' and you still need to ";
+			
+			switch(cp.getState()) {
+				case 1:
+					message += "set the teleport in location.";
+					break;
+				case 2:
+					message += "select all the signs.";
+					break;
+				case 3:
+					message += "set the double chest location.";
+					break;
+			}
+			
+		}else if(isCreatingAJail(player)) {//If not a cell, then check if a jail.
+			CreationPlayer cp = this.getJailCreationPlayer(player);
+			message = "You're already creating a Jail with the name '" + cp.getName() + "' and you still need to ";
+			
+			switch(cp.getState()) {
+				case 1:
+					message += "select the first point.";
+					break;
+				case 2:
+					message += "select the second point.";
+					break;
+				case 3:
+					message += "set the teleport in location.";
+					break;
+				case 4:
+					message += "set the release location.";
+					break;
+			}
+		}
+		
+		return message;
+	}
+	
 	/** Returns whether or not someone is creating a <strong>Jail</strong>. */
 	public boolean isCreatingAJail(String name) {
 		return this.jailCreators.containsKey(name.toLowerCase());

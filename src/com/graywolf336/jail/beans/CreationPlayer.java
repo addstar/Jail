@@ -48,6 +48,13 @@ public class CreationPlayer {
 	 * 	<li>Creating the teleport out location.</li>
 	 * </ol>
 	 * 
+	 * If it is a <strong>Cell</strong>, then when these numbers are returned it means the following:
+	 * <ol>
+	 * 	<li>Setting the teleport in location.</li>
+	 * 	<li>Setting all the signs.</li>
+	 * 	<li>Setting the double chest.</li>
+	 * </ol>
+	 * 
 	 * @return The state of the Jail/Cell Creation as a number.
 	 */
 	public int getState() {

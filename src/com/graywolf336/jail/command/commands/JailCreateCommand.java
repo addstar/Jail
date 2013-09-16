@@ -1,10 +1,10 @@
 package com.graywolf336.jail.command.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.graywolf336.jail.JailManager;
-import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.command.Command;
 import com.graywolf336.jail.command.CommandInfo;
 
@@ -20,38 +20,29 @@ public class JailCreateCommand implements Command {
 
 	public boolean execute(JailManager jm, CommandSender sender, String... args) {
 		Player player = (Player) sender;
-		String name = args[0];
+		String name = player.getName();
+		String jail = args[0];
 		
-		if(jm.isValidJail(name)) {
-			sender.sendMessage("Jail with that name already exist!");
-			return true;
-		}else {
-			//Create jail and all that good stuff here
-			if(jm.addCreatingJail(player.getName(), name)) {
-				jm.getJailCreationSteps().startStepping(jm.getJailCreationPlayer(player.getName()), player);
+		//Check if the player is currently creating something else
+		if(jm.isCreatingSomething(name)) {
+			String message = jm.getStepMessage(name);
+			if(!message.isEmpty()) {
+				player.sendMessage(ChatColor.RED + message);
 			}else {
-				CreationPlayer cp = jm.getJailCreationPlayer(player.getName());
-				String message = "You're already creating a Jail with the name '" + cp.getName() + "' and you still need to ";
-				
-				switch(cp.getState()) {
-					case 1:
-						message += "select the first point.";
-						break;
-					case 2:
-						message += "select the second point.";
-						break;
-					case 3:
-						message += "set the teleport in location.";
-						break;
-					case 4:
-						message += "set the release location.";
-						break;
-				}
-				
-				player.sendMessage(message);
+				player.sendMessage(ChatColor.RED + "You're already creating something else, please finish it or cancel.");
 			}
-			
-			return true;
+		}else {
+			if(jm.isValidJail(jail)) {
+				player.sendMessage(ChatColor.RED + "Jail by the name of '" + jail + "' already exist!");
+			}else {
+				if(jm.addCreatingJail(name, jail)) {
+					jm.getJailCreationSteps().startStepping(jm.getJailCreationPlayer(name), player);
+				}else {
+					player.sendMessage(ChatColor.RED + "Seems like you're already creating a Jail or something went wrong on our side.");
+				}
+			}
 		}
+		
+		return true;
 	}
 }

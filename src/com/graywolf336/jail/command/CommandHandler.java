@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.graywolf336.jail.JailMain;
 import com.graywolf336.jail.JailManager;
+import com.graywolf336.jail.command.commands.CellCreateCommand;
 import com.graywolf336.jail.command.commands.JailCommand;
 import com.graywolf336.jail.command.commands.JailCreateCommand;
 
@@ -128,6 +129,7 @@ public class CommandHandler {
 	
 	/** Loads all the commands into the hashmap. */
 	private void loadCommands() {
+		load(CellCreateCommand.class);
 		load(JailCommand.class);
 		load(JailCreateCommand.class);
 	}

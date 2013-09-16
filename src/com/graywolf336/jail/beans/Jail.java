@@ -1,5 +1,6 @@
 package com.graywolf336.jail.beans;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
@@ -12,7 +13,7 @@ import org.bukkit.Location;
  * @version 1.0.0
  */
 public class Jail {
-	private HashSet<Cell> cells;
+	private HashMap<String, Cell> cells;
 	private HashSet<Prisoner> nocellPrisoners;//prisoners who aren't in a cell
 	private String name = "", world = "";
 	private int minX, minY, minZ, maxX, maxY, maxZ;
@@ -20,7 +21,7 @@ public class Jail {
 	
 	public Jail(String name) {
 		this.name = name;
-		cells = new HashSet<Cell>();
+		cells = new HashMap<String, Cell>();
 		nocellPrisoners = new HashSet<Prisoner>();
 	}
 	
@@ -102,6 +103,16 @@ public class Jail {
 		return this.free.getLocation();
 	}
 	
+	/** Adds a cell to the Jail. */
+	public void addCell(Cell cell) {
+		this.cells.put(cell.getName(), cell);
+	}
+	
+	/** Gets the cell with the given name. */
+	public Cell getCell(String name) {
+		return this.cells.get(name);
+	}
+	
 	/** Gets the amount of cells the jail. */
 	public int getCellCount() {
 		return this.cells.size();
@@ -109,7 +120,7 @@ public class Jail {
 	
 	/** Gets all the cells in the jail. */
 	public HashSet<Cell> getCells() {
-		return this.cells;
+		return new HashSet<Cell>(this.cells.values());
 	}
 	
 	/** Gets a HashSet of <b>all</b> the prisoners, the ones in cells and ones who aren't. */
