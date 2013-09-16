@@ -2,20 +2,23 @@ package com.graywolf336.jail.beans;
 
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import com.graywolf336.jail.JailMain;
-
-/** Represents a Jail (formerly JailZone). */
+/** Represents a Jail (formerly JailZone).
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ */
 public class Jail {
-	private JailMain plugin;
 	private HashSet<Cell> cells;
 	private HashSet<Prisoner> nocellPrisoners;//prisoners who aren't in a cell
 	private String name = "", world = "";
 	private int minX, minY, minZ, maxX, maxY, maxZ;
+	private SimpleLocation in, free;
 	
-	public Jail(JailMain plugin, String name) {
-		this.plugin = plugin;
+	public Jail(String name) {
 		this.name = name;
 		cells = new HashSet<Cell>();
 		nocellPrisoners = new HashSet<Prisoner>();
@@ -40,9 +43,18 @@ public class Jail {
 		this.minZ = location.getBlockZ();
 	}
 	
+	/** Accepts an array of ints as the coord, where <strong>0 = x</strong>, <strong>1 = y</strong>, <strong>2 = z</strong>. */
+	public void setMinPoint(int[] coords) {
+		if(coords.length != 3) return;
+		
+		this.minX = coords[0];
+		this.minY = coords[1];
+		this.minZ = coords[2];
+	}
+	
 	/** Gets the minimum point as a Bukkit Location class. */
 	public Location getMinPoint() {
-		return new Location(plugin.getServer().getWorld(world), minX, minY, minZ);
+		return new Location(Bukkit.getServer().getWorld(world), minX, minY, minZ);
 	}
 	
 	/** Sets the location of the <b>maximum</b> point to the given location's coordinates. */
@@ -56,7 +68,38 @@ public class Jail {
 	
 	/** Gets the minimum point as a Bukkit Location class. */
 	public Location getMaxPoint() {
-		return new Location(plugin.getServer().getWorld(world), maxX, maxY, maxZ);
+		return new Location(Bukkit.getServer().getWorld(world), maxX, maxY, maxZ);
+	}
+	
+	/** Accepts an array of ints as the coord, where <strong>0 = x</strong>, <strong>1 = y</strong>, <strong>2 = z</strong>. */
+	public void setMaxPoint(int[] coords) {
+		if(coords.length != 3) return;
+		
+		this.maxX = coords[0];
+		this.maxY = coords[1];
+		this.maxZ = coords[2];
+	}
+	
+	/** Sets the {@link SimpleLocation location} of the teleport <strong>in</strong>. */
+	public void setTeleportIn(SimpleLocation location) {
+		if(this.world.isEmpty()) this.world = location.getWorldName();
+		
+		this.in = location;
+	}
+	
+	/** Gets the {@link Location location} of the teleport in. */
+	public Location getTeleportIn() {
+		return this.in.getLocation();
+	}
+	
+	/** Sets the {@link SimpleLocation location} of the teleport for the <strong>free</strong> spot. */
+	public void setTeleportFree(SimpleLocation location) {
+		this.free = location;
+	}
+	
+	/** Gets the {@link Location location} of the teleport free spot.*/
+	public Location getTeleportFree() {
+		return this.free.getLocation();
 	}
 	
 	/** Gets the amount of cells the jail. */

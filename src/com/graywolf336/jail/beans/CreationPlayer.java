@@ -63,6 +63,20 @@ public class CreationPlayer {
 		this.state = state;
 	}
 	
+	/**
+	 * Increments the current state up one.
+	 * 
+	 * <p>
+	 * 
+	 * <em>Notice:</em> Using this method can cause the state to go above four,
+	 * which might cause errors later on. Only use when you know that it won't
+	 * be used again or you know for a fact that the next state is not above four.
+	 * 
+	 */
+	public void nextState() {
+		this.state++;
+	}
+	
 	/** Sets the first corner with the given location. */
 	public void setCornerOne(Location loc) {
 		this.x1 = loc.getBlockX();
@@ -128,6 +142,11 @@ public class CreationPlayer {
 		return new Location(Bukkit.getWorld(inWorld), inX, inY, inZ, inYaw, inPitch);
 	}
 	
+	/** Gets the teleport in location in a {@link SimpleLocation}. */
+	public SimpleLocation getTeleportInSL() {
+		return new SimpleLocation(inWorld, inX, inY, inZ, inYaw, inPitch);
+	}
+	
 	/** Sets the teleport free coords from the given location. */
 	public void setTeleportFree(Location location) {
 		this.freeWorld = location.getWorld().getName();
@@ -151,6 +170,11 @@ public class CreationPlayer {
 	/** Gets the teleport free location in a {@link Location}. */
 	public Location getTeleportFree() {
 		return new Location(Bukkit.getWorld(freeWorld), freeX, freeY, freeZ, freeYaw, freePitch);
+	}
+	
+	/** Gets the teleport free location in a {@link SimpleLocation}. */
+	public SimpleLocation getTeleportFreeSL() {
+		return new SimpleLocation(freeWorld, freeX, freeY, freeZ, freeYaw, freePitch);
 	}
 	
 	/** Sets the chest's location, used mainly for cells. */

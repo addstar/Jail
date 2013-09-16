@@ -5,16 +5,26 @@ import java.util.HashSet;
 
 import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.beans.Jail;
+import com.graywolf336.jail.steps.JailCreationSteps;
 
+/**
+ * Handles all things related to jails.
+ * 
+ * @author graywolf336
+ * @since 3.0.0
+ * @version 1.0.0
+ */
 public class JailManager {
 	private HashMap<String, Jail> jails;
 	private HashMap<String, CreationPlayer> jailCreators;
 	private HashMap<String, CreationPlayer> cellCreators;
+	private JailCreationSteps jcs;
 	
 	public JailManager() {
 		this.jails = new HashMap<String, Jail>();
 		this.jailCreators = new HashMap<String, CreationPlayer>();
 		this.cellCreators = new HashMap<String, CreationPlayer>();
+		this.jcs = new JailCreationSteps();
 	}
 	
 	/** Returns a HashSet of all the jails. */
@@ -87,6 +97,11 @@ public class JailManager {
 		return this.jailCreators.get(name.toLowerCase());
 	}
 	
+	/** Removes a CreationPlayer with the given name from the jail creators. */
+	public void removeJailCreationPlayer(String name) {
+		this.jailCreators.remove(name.toLowerCase());
+	}
+	
 	/** Returns whether or not someone is creating a <strong>Cell</strong>. */
 	public boolean isCreatingACell(String name) {
 		return this.cellCreators.containsKey(name.toLowerCase());
@@ -111,5 +126,15 @@ public class JailManager {
 	/** Returns the instance of the CreationPlayer for this player, null if there was none found. */
 	public CreationPlayer getCellCreationPlayer(String name) {
 		return this.cellCreators.get(name.toLowerCase());
+	}
+	
+	/** Removes a CreationPlayer with the given name from the cell creators. */
+	public void removeCellCreationPlayer(String name) {
+		this.cellCreators.remove(name.toLowerCase());
+	}
+	
+	/** Gets the instance of the JailCreationSteps. */
+	public JailCreationSteps getJailCreationSteps() {
+		return this.jcs;
 	}
 }

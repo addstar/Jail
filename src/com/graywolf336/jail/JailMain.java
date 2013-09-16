@@ -31,4 +31,9 @@ public class JailMain extends JavaPlugin {
 		cmdHand.handleCommand(jm, sender, command.getName().toLowerCase(), args);
 		return true;//Always return true here, that way we can handle the help and command usage ourself.
 	}
+	
+	/** Gets the JailManager instance. */
+	public JailManager getJailManager() {
+		return this.jm;
+	}
 }
