@@ -42,7 +42,7 @@ public class CellCreateCommand implements Command {
 				
 				//No cell found
 				if(c == null) {
-					if(jm.addCreatingCell(name, cell)) {
+					if(jm.addCreatingCell(name, jail, cell)) {
 						jm.getCellCreationSteps().startStepping(player);
 					}else {
 						player.sendMessage(ChatColor.RED + "Appears you're creating a cell or something went wrong on our side.");

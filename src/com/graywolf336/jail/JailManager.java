@@ -163,13 +163,14 @@ public class JailManager {
 	}
 	
 	/**
-	 * Method for setting a player to be creating a Jail, returns whether or not they were added successfully.
+	 * Method for setting a player to be creating a Cell, returns whether or not they were added successfully.
 	 * 
 	 * @param player The player who is creating a jail.
+	 * @param jailName The name of the jail this cell is going.
 	 * @param cellName The name of the cell we are creating.
 	 * @return True if they were added successfully, false if they are already creating a Jail.
 	 */
-	public boolean addCreatingCell(String player, String cellName) {
+	public boolean addCreatingCell(String player, String jailName, String cellName) {
 		if(isCreatingACell(player)) {
 			return false;
 		}else {

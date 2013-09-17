@@ -126,9 +126,10 @@ public class CellCreationSteps {
 		j.addCell(c);
 		
 		jm.removeCellCreationPlayer(player.getName());
+		jm.addCreatingCell(player.getName(), j.getName(), "cell_n" + (j.getCellCount() + 1));
 		
 		player.sendMessage(ChatColor.AQUA + "---------- Jail Cell Creation ----------");
-		player.sendMessage(ChatColor.GREEN + "Cell created. If you wish to create more cells, please type /jailcellcreate again.");
+		player.sendMessage(ChatColor.GREEN + "Cell created. Now select the teleport point of the next cell, which is going to be named '" + jm.getCellCreationPlayer(player.getName()).getCellName() + "'. If you wish to stop creating cells, type /jailstop.");
 		player.sendMessage(ChatColor.AQUA + "----------------------------------------");
 	}
 }
