@@ -36,7 +36,7 @@ public class JailCreateCommand implements Command {
 				player.sendMessage(ChatColor.RED + "Jail by the name of '" + jail + "' already exist!");
 			}else {
 				if(jm.addCreatingJail(name, jail)) {
-					jm.getJailCreationSteps().startStepping(jm.getJailCreationPlayer(name), player);
+					jm.getJailCreationSteps().startStepping(player);
 				}else {
 					player.sendMessage(ChatColor.RED + "Seems like you're already creating a Jail or something went wrong on our side.");
 				}
