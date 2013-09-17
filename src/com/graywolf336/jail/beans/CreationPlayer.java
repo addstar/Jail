@@ -85,7 +85,7 @@ public class CreationPlayer {
 	/**
 	 * Sets the step of the creation.
 	 * 
-	 * @param state The state of the creation, see {@link #getState() getState} for more information.
+	 * @param step The state of the creation, see {@link #getStep() getStep} for more information.
 	 */
 	public void setStep(int step) {
 		this.step = step;
