@@ -34,6 +34,8 @@ public class PlayerListener implements Listener {
 					//One for jail cell creation
 					
 				}
+				
+				event.setCancelled(true);
 			}
 		}
 	}

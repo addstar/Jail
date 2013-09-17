@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.graywolf336.jail.JailManager;
+import com.graywolf336.jail.Util;
 import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.beans.Jail;
 
@@ -81,8 +82,11 @@ public class JailCreationSteps {
 		int[] p2 = cp.getCornerTwo();
 		Vector v1 = new Vector(p1[0], p1[1], p1[2]);
 		Vector v2 = new Vector(p2[0], p2[1], p2[2]);
+		Vector point = p.getLocation().toVector().clone();
 		
-		if(p.getLocation().toVector().isInAABB(v1, v2)) {
+		p.sendMessage("Is " + point.toString() + " inside of either '" + v1.toString() + "' or '" + v2.toString() + "' ???");
+		
+		if(Util.isInsideAB(point, v1, v2)) {
 			p.sendMessage(ChatColor.AQUA + "---------- Jail Zone Creation ----------");
 			p.sendMessage(ChatColor.GREEN + "Teleport point selected. Now go outside of the jail and right click anywhere to select your current position as the location where people will be teleported after they are released from this jail.");
 			p.sendMessage(ChatColor.AQUA + "----------------------------------------");
@@ -97,9 +101,21 @@ public class JailCreationSteps {
 	}
 	
 	private void fourthStep(JailManager jm, CreationPlayer cp, Player p) {
-		cp.setTeleportFree(p.getLocation());
+		int[] p1 = cp.getCornerOne();
+		int[] p2 = cp.getCornerTwo();
+		Vector v1 = new Vector(p1[0], p1[1], p1[2]);
+		Vector v2 = new Vector(p2[0], p2[1], p2[2]);
+		Vector point = p.getLocation().toVector().clone();
 		
-		finalStep(jm, cp, p);
+		if(Util.isInsideAB(point, v1, v2)) {
+			p.sendMessage(ChatColor.RED + "---------- Jail Zone Creation ----------");
+			p.sendMessage(ChatColor.RED + "Teleport out point NOT selected. Go outside of the jail and right click anywhere to select your current position as the location where people will be teleported after they are released from this jail.");
+			p.sendMessage(ChatColor.RED + "----------------------------------------");
+		}else {
+			cp.setTeleportFree(p.getLocation());
+			
+			finalStep(jm, cp, p);
+		}
 	}
 	
 	private void finalStep(JailManager jm, CreationPlayer cp, Player p) {
