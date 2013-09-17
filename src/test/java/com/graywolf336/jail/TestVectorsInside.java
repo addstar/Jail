@@ -27,7 +27,7 @@ public class TestVectorsInside {
 	
 	@Test
 	public void testIsOutsideAB() {
-		Vector outside = new Vector(34, 15, 350);
+		Vector outside = new Vector(350, 15, 350);
 		assertFalse(Util.isInsideAB(outside, bottomCorner, topCorner));
 	}
 	
