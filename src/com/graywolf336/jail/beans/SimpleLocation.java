@@ -9,7 +9,7 @@ import org.bukkit.World;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class SimpleLocation {
 	private String world;
@@ -23,6 +23,15 @@ public class SimpleLocation {
 		this.z = z;
 		this.yaw = yaw;
 		this.pitch = pitch;
+	}
+	
+	public SimpleLocation(Location location) {
+		this.world = location.getWorld().getName();
+		this.x = location.getX();
+		this.y = location.getY();
+		this.z = location.getZ();
+		this.yaw = location.getYaw();
+		this.pitch = location.getPitch();
 	}
 	
 	public World getWorld() {

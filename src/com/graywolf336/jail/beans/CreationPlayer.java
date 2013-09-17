@@ -1,5 +1,7 @@
 package com.graywolf336.jail.beans;
 
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -8,35 +10,54 @@ import org.bukkit.Location;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 public class CreationPlayer {
-	private String name;
-	private int state;
+	private String jailName, cellName;
+	private int step;
 	private int x1, y1, z1, x2, y2, z2;
 	private String inWorld, freeWorld;
 	private double inX, inY, inZ, freeX, freeY, freeZ;
 	private float inPitch, inYaw, freePitch, freeYaw;
+	private HashSet<SimpleLocation> signs;
 	private Location chest;
 	
 	/**
-	 * Create a new instance of a CreationPlayer, given the name of either the jail or the cell.
+	 * Create a new instance of a CreationPlayer, given the name of the jail.
 	 * 
-	 * @param name The name of the jail or cell, whichever one.
+	 * @param jailName The name of the jail.
 	 */
-	public CreationPlayer(String name) {
-		this.name = name;
-		this.state = 1; //Set the default to 1 when creating this.
-	}
-	
-	/** The name of the jail or cell, depending on how it is used. */
-	public String getName() {
-		return this.name;
+	public CreationPlayer(String jailName) {
+		this.jailName = jailName;
+		this.step = 1; //Set the default to 1 when creating this.
 	}
 	
 	/**
-	 * Returns the state, status, of the creation.
+	 * Creates a new instance of a CreationPlayer, give the name of the jail and cell.
+	 * 
+	 * @param jailName The name of the jail.
+	 * @param cellName The name of the cell.
+	 */
+	public CreationPlayer(String jailName, String cellName) {
+		this.jailName = jailName;
+		this.cellName = cellName;
+		this.signs = new HashSet<SimpleLocation>();
+		this.step = 1;
+	}
+	
+	/** Gets the name of the jail. */
+	public String getJailName() {
+		return this.jailName;
+	}
+	
+	/** Gets the name of the cell. */
+	public String getCellName() {
+		return this.cellName;
+	}
+	
+	/**
+	 * Returns the step the creation is in.
 	 * 
 	 * <p>
 	 * 
@@ -55,33 +76,33 @@ public class CreationPlayer {
 	 * 	<li>Setting the double chest.</li>
 	 * </ol>
 	 * 
-	 * @return The state of the Jail/Cell Creation as a number.
+	 * @return The step of the Jail/Cell Creation, as an integer.
 	 */
-	public int getState() {
-		return this.state;
+	public int getStep() {
+		return this.step;
 	}
 	
 	/**
-	 * Sets the state of the creation.
+	 * Sets the step of the creation.
 	 * 
 	 * @param state The state of the creation, see {@link #getState() getState} for more information.
 	 */
-	public void setState(int state) {
-		this.state = state;
+	public void setStep(int step) {
+		this.step = step;
 	}
 	
 	/**
-	 * Increments the current state up one.
+	 * Increments the current step up one.
 	 * 
 	 * <p>
 	 * 
-	 * <em>Notice:</em> Using this method can cause the state to go above four,
+	 * <em>Notice:</em> Using this method can cause the step to go above four (three for cell),
 	 * which might cause errors later on. Only use when you know that it won't
-	 * be used again or you know for a fact that the next state is not above four.
+	 * be used again or you know for a fact that the next step is not above four (three for cell).
 	 * 
 	 */
-	public void nextState() {
-		this.state++;
+	public void nextStep() {
+		this.step++;
 	}
 	
 	/** Sets the first corner with the given location. */
@@ -182,6 +203,16 @@ public class CreationPlayer {
 	/** Gets the teleport free location in a {@link SimpleLocation}. */
 	public SimpleLocation getTeleportFreeSL() {
 		return new SimpleLocation(freeWorld, freeX, freeY, freeZ, freeYaw, freePitch);
+	}
+	
+	/** Adds a sign to this cell. */
+	public void addSign(SimpleLocation sign) {
+		this.signs.add(sign);
+	}
+	
+	/** Returns all the signs, null if none (usually null when a jail is being created). */
+	public HashSet<SimpleLocation> getSigns() {
+		return this.signs == null ? null : new HashSet<SimpleLocation>(this.signs);
 	}
 	
 	/** Sets the chest's location, used mainly for cells. */

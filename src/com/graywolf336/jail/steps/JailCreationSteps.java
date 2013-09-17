@@ -15,7 +15,7 @@ import com.graywolf336.jail.beans.Jail;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class JailCreationSteps {
 	
@@ -35,7 +35,7 @@ public class JailCreationSteps {
 	 * @param location The location, null if none, being set.
 	 */
 	public void step(JailManager jm, Player player, CreationPlayer cp, Location location) {
-		switch(cp.getState()) {
+		switch(cp.getStep()) {
 			case 1:
 				firstStep(cp, player, location);
 				break;
@@ -62,7 +62,7 @@ public class JailCreationSteps {
 		p.sendMessage(ChatColor.AQUA + "---------------------------------------");
 		
 		cp.setCornerOne(location);
-		cp.nextState();
+		cp.nextStep();
 	}
 	
 	/** Applies the second step, which is setting the second corner. */
@@ -72,7 +72,7 @@ public class JailCreationSteps {
 		p.sendMessage(ChatColor.AQUA + "----------------------------------------");
 		
 		cp.setCornerTwo(location);
-		cp.nextState();
+		cp.nextStep();
 	}
 	
 	/** Applies the third step, which is setting the teleport in location. */
@@ -84,15 +84,13 @@ public class JailCreationSteps {
 		Vector v2 = new Vector(p2[0], p2[1], p2[2]);
 		Vector point = p.getLocation().toVector().clone();
 		
-		p.sendMessage("Is " + point.toString() + " inside of either '" + v1.toString() + "' or '" + v2.toString() + "' ???");
-		
 		if(Util.isInsideAB(point, v1, v2)) {
 			p.sendMessage(ChatColor.AQUA + "---------- Jail Zone Creation ----------");
 			p.sendMessage(ChatColor.GREEN + "Teleport point selected. Now go outside of the jail and right click anywhere to select your current position as the location where people will be teleported after they are released from this jail.");
 			p.sendMessage(ChatColor.AQUA + "----------------------------------------");
 			
 			cp.setTeleportIn(p.getLocation());
-			cp.nextState();
+			cp.nextStep();
 		} else {
 			p.sendMessage(ChatColor.RED + "---------- Jail Zone Creation ----------");
 			p.sendMessage(ChatColor.RED + "Teleport point NOT selected. Now go inside the jail and right click anywhere to select your current position as the teleport location for the jail. Point must be INSIDE the points selected for the Jail.");
@@ -119,7 +117,7 @@ public class JailCreationSteps {
 	}
 	
 	private void finalStep(JailManager jm, CreationPlayer cp, Player p) {
-		Jail jail = new Jail(cp.getName());
+		Jail jail = new Jail(cp.getJailName());
 		
 		jail.setMinPoint(cp.getCornerOne());
 		jail.setMaxPoint(cp.getCornerTwo());

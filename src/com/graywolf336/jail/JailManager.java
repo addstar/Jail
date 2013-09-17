@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.beans.Jail;
+import com.graywolf336.jail.steps.CellCreationSteps;
 import com.graywolf336.jail.steps.JailCreationSteps;
 
 /**
@@ -21,19 +22,21 @@ import com.graywolf336.jail.steps.JailCreationSteps;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class JailManager {
 	private HashMap<String, Jail> jails;
 	private HashMap<String, CreationPlayer> jailCreators;
 	private HashMap<String, CreationPlayer> cellCreators;
 	private JailCreationSteps jcs;
+	private CellCreationSteps ccs;
 	
 	public JailManager() {
 		this.jails = new HashMap<String, Jail>();
 		this.jailCreators = new HashMap<String, CreationPlayer>();
 		this.cellCreators = new HashMap<String, CreationPlayer>();
 		this.jcs = new JailCreationSteps();
+		this.ccs = new CellCreationSteps();
 	}
 	
 	/** Returns a HashSet of all the jails. */
@@ -86,9 +89,9 @@ public class JailManager {
 		
 		if(isCreatingACell(player)) {//Check whether it is a jail cell
 			CreationPlayer cp = this.getCellCreationPlayer(player);
-			message = "You're already creating a Cell with the name '" + cp.getName() + "' and you still need to ";
+			message = "You're already creating a Cell with the name '" + cp.getCellName() + "' and you still need to ";
 			
-			switch(cp.getState()) {
+			switch(cp.getStep()) {
 				case 1:
 					message += "set the teleport in location.";
 					break;
@@ -102,9 +105,9 @@ public class JailManager {
 			
 		}else if(isCreatingAJail(player)) {//If not a cell, then check if a jail.
 			CreationPlayer cp = this.getJailCreationPlayer(player);
-			message = "You're already creating a Jail with the name '" + cp.getName() + "' and you still need to ";
+			message = "You're already creating a Jail with the name '" + cp.getJailName() + "' and you still need to ";
 			
-			switch(cp.getState()) {
+			switch(cp.getStep()) {
 				case 1:
 					message += "select the first point.";
 					break;
@@ -185,8 +188,13 @@ public class JailManager {
 		this.cellCreators.remove(name.toLowerCase());
 	}
 	
-	/** Gets the instance of the JailCreationSteps. */
+	/** Gets the instance of the {@link JailCreationSteps}. */
 	public JailCreationSteps getJailCreationSteps() {
 		return this.jcs;
+	}
+	
+	/** Gets the instance of the {@link CellCreationSteps}. */
+	public CellCreationSteps getCellCreationSteps() {
+		return this.ccs;
 	}
 }
