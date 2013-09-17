@@ -28,6 +28,7 @@ public class JailCreationSteps {
 	/**
 	 * Applies the next step in the Jail Creation process that involves a location, null if no location is needed.
 	 * 
+	 * @param jm The {@link JailManager} instance.
 	 * @param player The player who is doing the creating.
 	 * @param cp The {@link CreationPlayer} instance
 	 * @param location The location, null if none, being set.
