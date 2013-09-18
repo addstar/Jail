@@ -14,9 +14,15 @@ public class TestVectorsInside {
 	private Vector topCorner;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		bottomCorner = new Vector(-10.50, 50.25, 100.00);
 		topCorner = new Vector(50, 100, 250);
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		bottomCorner = null;
+		topCorner = null;
 	}
 	
 	@Test
@@ -29,11 +35,5 @@ public class TestVectorsInside {
 	public void testIsOutsideAB() {
 		Vector outside = new Vector(350, 15, 350);
 		assertFalse(Util.isInsideAB(outside, bottomCorner, topCorner));
-	}
-	
-	@After
-	public void tearDown() {
-		bottomCorner = null;
-		topCorner = null;
 	}
 }
