@@ -14,6 +14,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -27,6 +28,7 @@ import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 import com.graywolf336.jail.JailMain;
@@ -34,7 +36,8 @@ import com.graywolf336.jail.JailMain;
 public class TestInstanceCreator {
 	private JailMain main;
 	private Server mockServer;
-	private CommandSender mockSender;
+	private Player mockPlayer;
+	private CommandSender mockSender, mockPlayerSender;
 	
 	public static final File pluginDirectory = new File("bin/test/server/plugins/JailTest");
 	public static final File serverDirectory = new File("bin/test/server");
@@ -184,6 +187,27 @@ public class TestInstanceCreator {
 			when(mockSender.addAttachment(main)).thenReturn(null);
 			when(mockSender.isOp()).thenReturn(true);
 			
+			// Init our player, who is op and who has all permissions (with name of graywolf336)
+			mockPlayer = mock(Player.class);
+			when(mockPlayer.getName()).thenReturn("graywolf336");
+			when(mockPlayer.getDisplayName()).thenReturn("TheGrayWolf");
+			when(mockPlayer.isPermissionSet(anyString())).thenReturn(true);
+			when(mockPlayer.isPermissionSet(Matchers.isA(Permission.class))).thenReturn(true);
+			when(mockPlayer.hasPermission(anyString())).thenReturn(true);
+			when(mockPlayer.hasPermission(Matchers.isA(Permission.class))).thenReturn(true);
+			when(mockPlayer.isOp()).thenReturn(true);
+			
+			// Init our second command sender, but this time is an instance of a player
+			mockPlayerSender = (CommandSender) mockPlayer;
+			when(mockPlayerSender.getServer()).thenReturn(mockServer);
+			when(mockPlayerSender.getName()).thenReturn("graywolf336");
+			when(mockPlayerSender.isPermissionSet(anyString())).thenReturn(true);
+			when(mockPlayerSender.isPermissionSet(Matchers.isA(Permission.class))).thenReturn(true);
+			when(mockPlayerSender.hasPermission(anyString())).thenReturn(true);
+			when(mockPlayerSender.hasPermission(Matchers.isA(Permission.class))).thenReturn(true);
+			when(mockPlayerSender.addAttachment(main)).thenReturn(null);
+			when(mockPlayerSender.isOp()).thenReturn(true);
+			
 			Bukkit.setServer(mockServer);
 			
 			// Load Jail
@@ -229,6 +253,14 @@ public class TestInstanceCreator {
 	
 	public CommandSender getCommandSender() {
 		return this.mockSender;
+	}
+	
+	public Player getPlayer() {
+		return this.mockPlayer;
+	}
+	
+	public CommandSender getPlayerCommandSender() {
+		return this.mockPlayerSender;
 	}
 	
 	private void deleteFolder(File folder) {
