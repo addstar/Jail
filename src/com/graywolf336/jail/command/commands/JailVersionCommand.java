@@ -2,7 +2,6 @@ package com.graywolf336.jail.command.commands;
 
 import org.bukkit.command.CommandSender;
 
-import com.graywolf336.jail.JailMain;
 import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.command.Command;
 import com.graywolf336.jail.command.CommandInfo;
@@ -20,7 +19,7 @@ public class JailVersionCommand implements Command{
 	
 	public boolean execute(JailManager jm, CommandSender sender, String... args) {
 		// Sends the version number to the sender
-		sender.sendMessage("Jail Version: " + JailMain.instance.getDescription().getVersion());
+		sender.sendMessage("Jail Version: " + jm.getPlugin().getDescription().getVersion());
 		
 		return true; //If they made it this far, the command is intact and ready to be processed. :)
 	}
