@@ -17,7 +17,7 @@ public class JailMain extends JavaPlugin {
 	public static JailMain instance;
 	
 	public void onEnable() {
-		jm = new JailManager();
+		jm = new JailManager(this);
 		cmdHand = new CommandHandler(this);
 		instance = this;
 		

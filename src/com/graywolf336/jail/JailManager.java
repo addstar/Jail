@@ -25,18 +25,25 @@ import com.graywolf336.jail.steps.JailCreationSteps;
  * @version 1.1.0
  */
 public class JailManager {
+	private JailMain plugin;
 	private HashMap<String, Jail> jails;
 	private HashMap<String, CreationPlayer> jailCreators;
 	private HashMap<String, CreationPlayer> cellCreators;
 	private JailCreationSteps jcs;
 	private CellCreationSteps ccs;
 	
-	public JailManager() {
+	public JailManager(JailMain plugin) {
+		this.plugin = plugin;
 		this.jails = new HashMap<String, Jail>();
 		this.jailCreators = new HashMap<String, CreationPlayer>();
 		this.cellCreators = new HashMap<String, CreationPlayer>();
 		this.jcs = new JailCreationSteps();
 		this.ccs = new CellCreationSteps();
+	}
+	
+	/** Returns the instance of the plugin main class. */
+	public JailMain getPlugin() {
+		return this.plugin;
 	}
 	
 	/** Returns a HashSet of all the jails. */
