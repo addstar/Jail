@@ -21,6 +21,7 @@ Features
 ===
 * New Command system, better handling of commands
 * Fixed the teleport in location being able to be set outside of the Jail region.
+* Replaced "Delete" commands with "Remove" (eg. /jaildeletecell is now /jailremovecell)
 
 [Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
 ====

@@ -10,8 +10,8 @@ commands:
         description: Creates a new jail zone.
     jailcreatecells:
         description: Creates cells in existing jail zone.
-    jaildelete:
-        description: Delete existing jail zone
+    jailremove:
+        description: Remove existing jail zone
     jail:
         description: Jail specified player for specified amount of time.
         usage: /jail [player name] (time) (jail name):(cell name) (reason)
@@ -22,7 +22,7 @@ commands:
     jailclear:
         description: Unjail every player on the server. Use with caution!
     jailclearforce:
-        description: Delete every player from the jail database.
+        description: Remove every player from the jail database.
     jailtransfer:
         description: Transfer player from current jail to another
     jailtransferall:
@@ -47,16 +47,16 @@ commands:
     jailpay:
         description: Pay money to be released early.
         usage: /jailpay (amount) (prisoner name)
-    jaildeletecells:
-        description: Delete all cells from specified jail.
+    jailremovecells:
+        description: Remove all cells from specified jail.
     jaillistcells:
         description: List all named cells from specified jail.
     jailstick:
         description: Toggle jailstick feature.
     jailcreatewe:
         description: Create a new jail zone based on existing world guard region.
-    jaildeletecell:
-        description: Delete one cell.
+    jailremovecell:
+        description: Remove one cell.
     jailreload:
         description: Reload jail data
     jailrecord:
@@ -83,8 +83,8 @@ permissions:
         children:
             jail.command.jailcreate: true
             jail.command.jailcreatecells: true
-            jail.command.jaildelete: true
-            jail.command.jaildeletecells: true
+            jail.command.jailremove: true
+            jail.command.jailremovecells: true
             jail.command.jail: true
             jail.command.unjail: true
             jail.command.jailtransfer: true
@@ -101,7 +101,7 @@ permissions:
             jail.command.jailstop: true
             jail.command.jailset: true
             jail.command.jailcreatewe: true
-            jail.command.jaildeletecell: true
+            jail.command.jailremovecell: true
             jail.command.jailreload: true
             jail.command.jailrecord: true
             jail.command.handcuff: true
@@ -120,9 +120,9 @@ permissions:
         default: op
     jail.command.jailcreatecells:
         default: op
-    jail.command.jaildelete:
+    jail.command.jailremove:
         default: op
-    jail.command.jaildeletecells:
+    jail.command.jailremovecells:
         default: op
     jail.command.unjail:
         default: op
@@ -154,7 +154,7 @@ permissions:
         default: op
     jail.command.jailcreatewe:
         default: op
-    jail.command.jaildeletecell:
+    jail.command.jailremovecell:
         default: op
     jail.command.jailreload:
         default: op
