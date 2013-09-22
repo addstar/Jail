@@ -36,5 +36,6 @@ public class TestJailStuff {
 	public void testForJails() {
 		assertNotNull("The JailManager is null.", main.getJailManager());
 		assertNotNull("The HashSet for jails return is null.", main.getJailManager().getJails());
+		assertEquals(main, main.getJailManager().getPlugin());
 	}
 }
