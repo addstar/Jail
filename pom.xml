@@ -141,7 +141,6 @@
 				<configuration>
 					<archive>
 						<manifestEntries />
-
 					</archive>
 				</configuration>
 			</plugin>
