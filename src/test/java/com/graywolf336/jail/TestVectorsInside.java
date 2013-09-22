@@ -36,4 +36,10 @@ public class TestVectorsInside {
 		Vector outside = new Vector(350, 15, 350);
 		assertFalse(Util.isInsideAB(outside, bottomCorner, topCorner));
 	}
+	
+	@Test
+	public void testHalfInHalfOutsideAB() {
+		Vector halfAndHalf = new Vector(25, 75, 99);
+		assertFalse(Util.isInsideAB(halfAndHalf, bottomCorner, topCorner));
+	}
 }
