@@ -47,7 +47,7 @@ public class TestJailCommandInfo {
 		CommandSender sender = creator.getCommandSender();
 		
 		assertTrue(main.onCommand(sender, command, "thisisnotavalidcommand", args));
-		verify(sender).sendMessage("No commands registered by the name of " + command.getName() + ".");
+		verify(sender).sendMessage("No commands registered by the name of thisisnotavalidcommand.");
 	}
 	
 	@Test
