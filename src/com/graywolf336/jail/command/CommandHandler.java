@@ -135,13 +135,13 @@ public class CommandHandler {
 	/** Loads all the commands into the hashmap. */
 	private void loadCommands() {
 		load(CellCreateCommand.class);
-		load(JailCommand.class);
-		load(JailCreateCommand.class);
-		load(JailStopCommand.class);
 		load(JailCheckCommand.class);
 		load(JailClearCommand.class);
-		load(JailVersionCommand.class);
+		load(JailCommand.class);
+		load(JailCreateCommand.class);
 		load(JailRemoveCellCommand.class);
+		load(JailStopCommand.class);
+		load(JailVersionCommand.class);
 	}
 
 	private void load(Class<? extends Command> c) {

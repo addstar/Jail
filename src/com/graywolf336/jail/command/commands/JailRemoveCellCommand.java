@@ -14,7 +14,6 @@ import com.graywolf336.jail.command.CommandInfo;
 		permission = "jail.command.jailremovecell",
 		usage = "/jailremovecell [Jail Name] (Cell Name)"
 	)
-
 public class JailRemoveCellCommand implements Command{
 
 	// Remove the specified Cell from the Specified Jail, if no cell specified will delete nearest cell

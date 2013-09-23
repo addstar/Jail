@@ -14,7 +14,6 @@ import com.graywolf336.jail.command.CommandInfo;
 		permission = "jail.command.jailcheck",
 		usage = "/jailcheck (Player name)"
 	)
-
 public class JailCheckCommand implements Command{
 
 	// Checks the status of the specified prisoner, if no args, will display all players currently jailed

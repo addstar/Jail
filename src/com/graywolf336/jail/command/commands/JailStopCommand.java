@@ -1,7 +1,6 @@
 package com.graywolf336.jail.command.commands;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.graywolf336.jail.JailManager;
 import com.graywolf336.jail.command.Command;
@@ -18,14 +17,11 @@ import com.graywolf336.jail.command.CommandInfo;
 public class JailStopCommand implements Command {
 
 	public boolean execute(JailManager jm, CommandSender sender, String... args) {
-		Player player = (Player) sender;
+		jm.removeJailCreationPlayer(sender.getName());
+		jm.removeCellCreationPlayer(sender.getName());
 		
-		jm.removeJailCreationPlayer(player.getName());
-		jm.removeCellCreationPlayer(player.getName());
-		
-		player.sendMessage("Any creations, jail or cell, have been stopped.");
-		
+		sender.sendMessage("Any creations, jail or cell, have been stopped.");
 		return true;
 	}
-
+	
 }
