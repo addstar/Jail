@@ -10,7 +10,7 @@ import org.bukkit.block.Chest;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.1.0
+ * @version 1.1.1
  */
 public class Cell {
 	private String name;
@@ -36,6 +36,15 @@ public class Cell {
 	/** Gets the prisoner being held in this cell. */
 	public Prisoner getPrisoner() {
 		return this.p;
+	}
+	
+	public void removePrisoner() {
+		this.p = null;
+	}
+	
+	/** Returns true if there is currently a prisoner in this cell. */
+	public boolean hasPrisoner() {
+		return this.p != null; //Return true if prison is not null, as when it isn't null we have a prisoner in this cell
 	}
 	
 	/** Adds all the given signs to the cell. */

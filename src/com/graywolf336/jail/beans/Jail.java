@@ -10,7 +10,7 @@ import org.bukkit.Location;
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class Jail {
 	private HashMap<String, Cell> cells;
@@ -113,6 +113,17 @@ public class Jail {
 		return this.cells.get(name);
 	}
 	
+	/** Returns the first empty cell, returns null if there aren't any cells or any free cells. */
+	public Cell getEmptyCell() {
+		for(Cell c : getCells())
+			if(c.hasPrisoner())
+				continue;
+			else
+				return c;
+		
+		return null;
+	}
+	
 	/** Gets the amount of cells the jail. */
 	public int getCellCount() {
 		return this.cells.size();
@@ -127,7 +138,7 @@ public class Jail {
 	public HashSet<Prisoner> getAllPrisoners() {
 		HashSet<Prisoner> all = new HashSet<Prisoner>(nocellPrisoners); //initalize the temp one to return with the prisoners not in any cells
 		
-		for(Cell c : getCells())
+		for(Cell c : cells.values())
 			if(c.getPrisoner() != null)
 				all.add(c.getPrisoner());
 		
