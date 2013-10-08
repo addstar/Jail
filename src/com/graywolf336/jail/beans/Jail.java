@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import com.graywolf336.jail.JailMain;
-import com.graywolf336.jail.Settings;
 
 /** Represents a Jail, contains the prisoners and the cells.
  * 

@@ -23,7 +23,7 @@ public class TestJailStuff {
 	@Before
 	public void setUp() throws Exception {
 		creator = new TestInstanceCreator();
-		assertTrue(creator.setup());
+		creator.setup();
 		main = creator.getMain();
 	}
 
@@ -34,6 +34,10 @@ public class TestJailStuff {
 
 	@Test
 	public void testForJails() {
+		assertNotNull("The JailMain is null.", main);
+		assertNotNull("The JailIO instance is null.", main.getJailIO());
+		assertNotNull("The GlobalConfig is null.", main.getJailIO().getGlobalConfig());
+		assertNotNull("The JailsConfig is null.", main.getJailIO().getJailsConfig());
 		assertNotNull("The JailManager is null.", main.getJailManager());
 		assertNotNull("The HashSet for jails return is null.", main.getJailManager().getJails());
 		assertEquals(main, main.getJailManager().getPlugin());

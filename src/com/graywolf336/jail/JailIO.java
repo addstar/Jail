@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.matejdro.bukkit.jail.Setting;
-import com.matejdro.bukkit.jail.Settings;
 
 /**
  * Handles all things related to configs and saving/loading the {@link com.graywolf336.jail.beans.Jail jails}, {@link com.graywolf336.jail.beans.Cell cells}, and {@link com.graywolf336.jail.beans.Prisoner prisoners}.
@@ -74,8 +72,33 @@ public class JailIO {
 	}
 	    
 	private void loadJailStickParameters() {
-		for (String i : Settings.getGlobalString(Setting.JailStickParameters).split(";")) {
+		for (String i : getGlobalString(Setting.JailStickParameters).split(";")) {
 			jailStickParameters.put(Integer.parseInt(i.substring(0, i.indexOf(","))), i.split(","));
 		}
+	}
+	
+	public Object getGlobalProperty(Setting setting) {
+		Object property = getGlobalConfig().get(setting.getString());
+		if (property == null) {
+			property = setting.getDefault();
+		}
+
+		return property;
+	}
+
+	public Boolean getGlobalBoolean(Setting setting) {
+		return 	(Boolean) getGlobalProperty(setting);
+	}
+
+	public Integer getGlobalInt(Setting setting) {
+		return 	(Integer) getGlobalProperty(setting);
+	}
+
+	public String getGlobalString(Setting setting) {
+		return 	(String) getGlobalProperty(setting);
+	}
+
+	public List<?> getGlobalList(Setting setting) {
+		return 	(List<?>) getGlobalProperty(setting);
 	}
 }

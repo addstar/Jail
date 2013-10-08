@@ -1,10 +1,10 @@
-package com.graywolf336.jail;
+package com.graywolf336.jail.beans;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import com.graywolf336.jail.beans.Jail;
+import com.graywolf336.jail.Setting;
 
 public class Settings {
 	private Jail jail;
@@ -17,7 +17,7 @@ public class Settings {
 		Object property;
 		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
 		if (property == null)
-			property = getGlobalProperty(setting);
+			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (Integer) property;
 	}
 
@@ -25,7 +25,7 @@ public class Settings {
 		Object property;
 		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
 		if (property == null)
-			property = getGlobalProperty(setting);
+			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		if (!(property instanceof Double)) property = Double.parseDouble(property.toString());
 		return (Double) property;
 	}
@@ -34,7 +34,7 @@ public class Settings {
 		Object property;
 		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
 		if (property == null)
-			property = getGlobalProperty(setting);
+			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (String) property;
 	}
 
@@ -42,7 +42,7 @@ public class Settings {
 		Object property;
 		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
 		if (property == null)
-			property = getGlobalProperty(setting);
+			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (Boolean) property;
 	}
 
@@ -50,7 +50,7 @@ public class Settings {
 		Object property;
 		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
 		if (property == null)
-			property = getGlobalProperty(setting);
+			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 
 		return (List<?>) property;
 	}
@@ -62,30 +62,5 @@ public class Settings {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Object getGlobalProperty(Setting setting) {
-		Object property = jail.getPlugin().getJailIO().getGlobalConfig().get(setting.getString());
-		if (property == null) {
-			property = setting.getDefault();
-		}
-
-		return property;
-	}
-
-	public Boolean getGlobalBoolean(Setting setting) {
-		return 	(Boolean) getGlobalProperty(setting);
-	}
-
-	public Integer getGlobalInt(Setting setting) {
-		return 	(Integer) getGlobalProperty(setting);
-	}
-
-	public String getGlobalString(Setting setting) {
-		return 	(String) getGlobalProperty(setting);
-	}
-
-	public List<?> getGlobalList(Setting setting) {
-		return 	(List<?>) getGlobalProperty(setting);
 	}
 }
