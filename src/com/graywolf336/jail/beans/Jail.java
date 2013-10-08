@@ -114,7 +114,7 @@ public class Jail {
 	}
 	
 	/** Returns the first empty cell, returns null if there aren't any cells or any free cells. */
-	public Cell getEmptyCell() {
+	public Cell getFirstEmptyCell() {
 		for(Cell c : getCells())
 			if(c.hasPrisoner())
 				continue;
@@ -139,7 +139,7 @@ public class Jail {
 		HashSet<Prisoner> all = new HashSet<Prisoner>(nocellPrisoners); //initalize the temp one to return with the prisoners not in any cells
 		
 		for(Cell c : cells.values())
-			if(c.getPrisoner() != null)
+			if(c.hasPrisoner())
 				all.add(c.getPrisoner());
 		
 		return all;
@@ -150,7 +150,7 @@ public class Jail {
 		HashSet<Prisoner> all = new HashSet<Prisoner>();
 		
 		for(Cell c : getCells())
-			if(c.getPrisoner() != null)
+			if(c.hasPrisoner())
 				all.add(c.getPrisoner());
 		
 		return all;
