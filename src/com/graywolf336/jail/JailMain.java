@@ -11,10 +11,12 @@ import com.graywolf336.jail.listeners.EntityListener;
 import com.graywolf336.jail.listeners.PlayerListener;
 
 public class JailMain extends JavaPlugin {
+	private JailIO io;
 	private JailManager jm;
 	private CommandHandler cmdHand;
 	
 	public void onEnable() {
+		io = new JailIO(this);
 		jm = new JailManager(this);
 		cmdHand = new CommandHandler(this);
 		
@@ -41,7 +43,12 @@ public class JailMain extends JavaPlugin {
 		return true;//Always return true here, that way we can handle the help and command usage ourself.
 	}
 	
-	/** Gets the JailManager instance. */
+	/** Gets the instance of the {@link JailIO} which contains all the settings and handles the saving/loading. */
+	public JailIO getJailIO() {
+		return this.io;
+	}
+	
+	/** Gets the {@link JailManager} instance. */
 	public JailManager getJailManager() {
 		return this.jm;
 	}

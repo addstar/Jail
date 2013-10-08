@@ -6,23 +6,35 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import com.graywolf336.jail.JailMain;
+import com.graywolf336.jail.Settings;
+
 /** Represents a Jail, contains the prisoners and the cells.
  * 
  * @author graywolf336
  * @since 3.0.0
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class Jail {
+	private JailMain plugin;
 	private HashMap<String, Cell> cells;
 	private HashSet<Prisoner> nocellPrisoners;//prisoners who aren't in a cell
 	private String name = "", world = "";
 	private int minX, minY, minZ, maxX, maxY, maxZ;
 	private SimpleLocation in, free;
+	private Settings settings;
 	
-	public Jail(String name) {
+	public Jail(JailMain plugin, String name) {
+		this.plugin = plugin;
 		this.name = name;
 		cells = new HashMap<String, Cell>();
 		nocellPrisoners = new HashSet<Prisoner>();
+		this.settings = new Settings(this);
+	}
+	
+	/** Gets the instance of the plugin's main class. */
+	public JailMain getPlugin() {
+		return this.plugin;
 	}
 	
 	/** Sets the name of the jail. */
@@ -33,6 +45,11 @@ public class Jail {
 	/** Gets the name of the jail. */
 	public String getName() {
 		return this.name;
+	}
+	
+	/** Returns the settings getter/setter for this Jail. */
+	public Settings getSettings() {
+		return this.settings;
 	}
 	
 	/** Sets the location of the <b>minimum</b> point to the given location's coordinates. */

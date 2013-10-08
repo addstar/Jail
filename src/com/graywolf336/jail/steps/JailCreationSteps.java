@@ -117,7 +117,7 @@ public class JailCreationSteps {
 	}
 	
 	private void finalStep(JailManager jm, CreationPlayer cp, Player p) {
-		Jail jail = new Jail(cp.getJailName());
+		Jail jail = new Jail(jm.getPlugin(), cp.getJailName());
 		
 		jail.setMinPoint(cp.getCornerOne());
 		jail.setMaxPoint(cp.getCornerTwo());
