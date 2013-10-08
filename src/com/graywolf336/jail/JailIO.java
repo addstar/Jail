@@ -52,8 +52,8 @@ public class JailIO {
 			jails.load(new File(plugin.getDataFolder(),"jails.yml"));
 			
 			for (Setting s : Setting.values())
-				if (global.get(s.getString()) == null)
-					global.set(s.getString(), s.getDefault());
+				if (global.get(s.getPath()) == null)
+					global.set(s.getPath(), s.getDefault());
 			
 			loadJailStickParameters();
 			
@@ -78,7 +78,7 @@ public class JailIO {
 	}
 	
 	public Object getGlobalProperty(Setting setting) {
-		Object property = getGlobalConfig().get(setting.getString());
+		Object property = getGlobalConfig().get(setting.getPath());
 		if (property == null) {
 			property = setting.getDefault();
 		}

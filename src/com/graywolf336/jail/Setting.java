@@ -140,16 +140,16 @@ public enum Setting {
     JailSwearTime("Jail Swear.Time", 10),
     BannedWords("Jail Swear.Banned Words", Arrays.asList(new String[] {"shit", "crap", "fuck", "cunt"}));
 
-	private String name;
+	private String path;
 	private Object def;
 	
-	private Setting(String Name, Object Def) {
-		name = Name;
-		def = Def;
+	private Setting(String path, Object def) {
+		this.path = path;
+		this.def = def;
 	}
 	
-	public String getString() {
-		return name;
+	public String getPath() {
+		return path;
 	}
 	
 	public Object getDefault() {

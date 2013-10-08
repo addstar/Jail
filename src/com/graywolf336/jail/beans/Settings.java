@@ -15,7 +15,7 @@ public class Settings {
 
 	public Integer getInt(Setting setting) {
 		Object property;
-		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
+		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath());
 		if (property == null)
 			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (Integer) property;
@@ -23,7 +23,7 @@ public class Settings {
 
 	public Double getDouble(Setting setting) {
 		Object property;
-		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
+		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath());
 		if (property == null)
 			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		if (!(property instanceof Double)) property = Double.parseDouble(property.toString());
@@ -32,7 +32,7 @@ public class Settings {
 
 	public String getString(Setting setting) {
 		Object property;
-		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
+		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath());
 		if (property == null)
 			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (String) property;
@@ -40,7 +40,7 @@ public class Settings {
 
 	public Boolean getBoolean(Setting setting) {
 		Object property;
-		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
+		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath());
 		if (property == null)
 			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 		return (Boolean) property;
@@ -48,7 +48,7 @@ public class Settings {
 
 	public List<?> getList(Setting setting) {
 		Object property;
-		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString());
+		property = jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath());
 		if (property == null)
 			property = jail.getPlugin().getJailIO().getGlobalProperty(setting);
 
@@ -56,7 +56,7 @@ public class Settings {
 	}
 
 	public void setProperty(Setting setting, Object object) {
-		jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getString(), object);
+		jail.getPlugin().getJailIO().getJailsConfig().get(jail.getName() + "." + setting.getPath(), object);
 		try {
 			jail.getPlugin().getJailIO().getJailsConfig().save(new File("plugins" + File.separator + "Jail","jails.yml"));
 		} catch (IOException e) {
