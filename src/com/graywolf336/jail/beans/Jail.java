@@ -6,7 +6,7 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-/** Represents a Jail (formerly JailZone).
+/** Represents a Jail, contains the prisoners and the cells.
  * 
  * @author graywolf336
  * @since 3.0.0

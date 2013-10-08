@@ -15,6 +15,7 @@ import com.graywolf336.jail.steps.JailCreationSteps;
  * 
  * Stores the following:
  * <ul>
+ * 	<li>The {@link Jail jails}, which contains the prisoners and cells.</li>
  * 	<li>Players creating jails, see {@link CreationPlayer}.</li>
  * 	<li>Players creating jail cells, see {@link CreationPlayer}.</li>
  * 	<li>An instance of {@link JailCreationSteps} for stepping players through the Jail creation process.</li>
