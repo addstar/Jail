@@ -106,7 +106,7 @@
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
 		<sourceDirectory>${basedir}/src</sourceDirectory>
-		<defaultGoal>clean install</defaultGoal>
+		<defaultGoal>clean install test</defaultGoal>
 
 		<resources>
 			<resource>
@@ -167,4 +167,17 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<distributionManagement>
+		<repository>
+			<id>repo-release</id>
+			<name>repo.bukkit.org Releases</name>
+			<url>http://repo.graywolf336.com/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo-snapshot</id>
+			<name>repo.bukkit.org Snapshots</name>
+			<url>http://repo.graywolf336.com/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
