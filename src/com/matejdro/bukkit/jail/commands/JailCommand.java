@@ -107,7 +107,7 @@ public class JailCommand extends BaseCommand {
             String message;
             JailLog logger = new JailLog();
             
-            if(player == null) {//If the player isn't online, then let's handle him seperately
+            if(player == null) {//If the player isn't online, then let's handle him separately
             	if(!Util.playerExists(playerName)) {
             		Util.Message(Settings.getGlobalString(Setting.MessageNeverOnThisServer).replace("<Player>", playerName), sender);
                     return true;
