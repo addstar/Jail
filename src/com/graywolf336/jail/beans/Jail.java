@@ -21,14 +21,12 @@ public class Jail {
 	private String name = "", world = "";
 	private int minX, minY, minZ, maxX, maxY, maxZ;
 	private SimpleLocation in, free;
-	private Settings settings;
 	
 	public Jail(JailMain plugin, String name) {
 		this.plugin = plugin;
 		this.name = name;
 		cells = new HashMap<String, Cell>();
 		nocellPrisoners = new HashSet<Prisoner>();
-		this.settings = new Settings(this);
 	}
 	
 	/** Gets the instance of the plugin's main class. */
@@ -44,11 +42,6 @@ public class Jail {
 	/** Gets the name of the jail. */
 	public String getName() {
 		return this.name;
-	}
-	
-	/** Returns the settings getter/setter for this Jail. */
-	public Settings getSettings() {
-		return this.settings;
 	}
 	
 	/** Sets the location of the <b>minimum</b> point to the given location's coordinates. */
