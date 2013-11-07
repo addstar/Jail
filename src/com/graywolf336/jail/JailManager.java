@@ -78,6 +78,44 @@ public class JailManager {
 	}
 	
 	/**
+	 * Gets the {@link Jail jail} the given player is in.
+	 * 
+	 * @param name The name of the player whos jail we are getting.
+	 * @return The jail the player is in, <strong>CAN BE NULL</strong>.
+	 */
+	public Jail getJailPlayerIsIn(String name) {
+		Jail re = null;
+		
+		for(Jail j : jails.values()) {
+			if(j.isPlayerAPrisoner(name)) {
+				re = j;
+				break;
+			}
+		}
+		
+		return re;
+	}
+	
+	/**
+	 * Gets if the given player is jailed or not, in all the jails and cells.
+	 * 
+	 * @param name The name of the player to check.
+	 * @return true if they are jailed, false if not.
+	 */
+	public boolean isPlayerJailed(String name) {
+		boolean r = false;
+		
+		for(Jail j : jails.values()) {
+			if(j.isPlayerAPrisoner(name)) {
+				r = true;
+				break;
+			}
+		}
+		
+		return r;
+	}
+	
+	/**
 	 * Returns whether or not the player is creating a jail or a cell.
 	 * 
 	 * <p>

@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import com.graywolf336.jail.JailMain;
 
@@ -168,5 +169,63 @@ public class Jail {
 	/** Gets a HashSet of the prisoners <b>not</b> in cells.*/
 	public HashSet<Prisoner> getPrisonersNotInCells() {
 		return this.nocellPrisoners;
+	}
+	
+	/**
+	 * Returns whether the player is a prisoner in the system, whether in a cell or no cell.
+	 * 
+	 * @param player The {@link Player player instance} of the person we're checking.
+	 * @return true if is jailed, false if not.
+	 */
+	public boolean isPlayerJailed(Player player) {
+		return this.isPlayerAPrisoner(player.getName());
+	}
+	
+	/**
+	 * Returns whether the name of a player is a prisoner in the system, whether in a cell or no cell.
+	 * 
+	 * @param player The name of the person we're checking.
+	 * @return true if is jailed, false if not.
+	 */
+	public boolean isPlayerJailed(String name) {
+		return this.isPlayerAPrisoner(name);
+	}
+	
+	/**
+	 * Returns whether the name of a player is a prisoner in the system, whether in a cell or no cell.
+	 * 
+	 * @param name The name of the person we're checking.
+	 * @return true if is a prisoner, false if not.
+	 */
+	public boolean isPlayerAPrisoner(String name) {
+		boolean is = false;
+		
+		for(Prisoner p : this.getAllPrisoners()) {
+			if(p.getName().equalsIgnoreCase(name)) {
+				is = true;
+				break;
+			}
+		}
+		
+		return is;
+	}
+	
+	/**
+	 * Gets the {@link Prisoner prisoner} instance for the given name.
+	 * 
+	 * @param name The name of the prisoner to get.
+	 * @return the prisoner instance, can be null
+	 */
+	public Prisoner getPrisoner(String name) {
+		Prisoner r = null;
+		
+		for(Prisoner p : this.getAllPrisoners()) {
+			if(p.getName().equalsIgnoreCase(name)) {
+				r = p;
+				break;
+			}
+		}
+		
+		return r;
 	}
 }
