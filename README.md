@@ -2,7 +2,9 @@
 ====
 This plugins adds Jail to your minecraft server. Admins can define several jails and then jail/unjail people or jail them on time basis. Plugin also offers wide variety of protections, so players won't escape out of your jail.
 
-[![Build Status](http://git.graywolf336.com:8080/job/Jail/badge/icon)](http://git.graywolf336.com:8080/job/Jail/)
+Bugs
+===
+This is for bug fixes only.
 
 Features
 ===
@@ -18,12 +20,3 @@ Features
 * Allows players to handcuff other players, stopping them from being able to move
 * Throws custom events when a player is jailed
 * - OnlinePlayerJailedEvent for when an online player is jailed
-
-[Jail 3.0](http://git.graywolf336.com:8080/job/Jail/)
-===
-* New Command system, better handling of commands
-* Fixed the teleport in location being able to be set outside of the Jail region.
-* Replaced "Delete" commands with "Remove" (eg. /jaildeletecell is now /jailremovecell)
-
-[Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
-====

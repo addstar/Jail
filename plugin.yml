@@ -11,8 +11,8 @@ commands:
         description: Creates a new jail zone.
     jailcreatecells:
         description: Creates cells in existing jail zone.
-    jailremove:
-        description: Remove existing jail zone
+    jaildelete:
+        description: Deletes existing jail zone
     jail:
         description: Jail specified player for specified amount of time.
         usage: /jail [player name] (time) (jail name):(cell name) (reason)
@@ -48,16 +48,16 @@ commands:
     jailpay:
         description: Pay money to be released early.
         usage: /jailpay (amount) (prisoner name)
-    jailremovecells:
-        description: Remove all cells from specified jail.
+    jaildeletecells:
+        description: Deletes all cells from specified jail.
     jaillistcells:
         description: List all named cells from specified jail.
     jailstick:
         description: Toggle jailstick feature.
     jailcreatewe:
         description: Create a new jail zone based on existing world guard region.
-    jailremovecell:
-        description: Remove one cell.
+    jaildeletecell:
+        description: Deletes one cell.
     jailreload:
         description: Reload jail data
     jailrecord:
