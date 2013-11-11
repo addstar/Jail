@@ -209,6 +209,10 @@ public class PrisonerManager {
 		
 		player.setSleepingIgnored(false);
 		
+		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) player.teleport(prisoner.getReleaseTeleportLocation());
+		
+		if(prisoner.getPreviousGameMode() != null) player.setGameMode(prisoner.getPreviousGameMode());
+		
 		JailCell cell = prisoner.getCell();
 		if (cell != null)
 		{
@@ -222,13 +226,13 @@ public class PrisonerManager {
 					else{
 						ItemStack item = chest.getInventory().getItem(i);
 						
-						if(item.getType().toString().toLowerCase().contains("helmet") && player.getInventory().getHelmet() == null)
+						if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
 							player.getInventory().setHelmet(item);
-						else if(item.getType().toString().toLowerCase().contains("chest") && player.getInventory().getChestplate() == null)
+						else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
 							player.getInventory().setChestplate(item);
-						else if(item.getType().toString().toLowerCase().contains("leg") && player.getInventory().getLeggings() == null)
+						else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
 							player.getInventory().setLeggings(item);
-						else if(item.getType().toString().toLowerCase().contains("boots") && player.getInventory().getBoots() == null)
+						else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
 							player.getInventory().setBoots(item);
 						else
 							player.getInventory().addItem(item);
@@ -243,7 +247,6 @@ public class PrisonerManager {
 				sign.setLine(2, "");
 				sign.setLine(3, "");
 				sign.update();
-
 			}
 			
 			cell.setPlayerName("");
@@ -252,14 +255,9 @@ public class PrisonerManager {
 			prisoner.restoreInventory(player);
 		}
 		
-		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) player.teleport(prisoner.getReleaseTeleportLocation());
-		
-		if(prisoner.getPreviousGameMode() != null) player.setGameMode(prisoner.getPreviousGameMode());
-		
 		prisoner.delete();
 		
-		for (Object o : jail.getSettings().getList(Setting.ExecutedCommandsOnRelease))
-		{
+		for (Object o : jail.getSettings().getList(Setting.ExecutedCommandsOnRelease)) {
 			String s = (String) o;
 			Server cs = (Server) Jail.instance.getServer();
 			CommandSender coms = Jail.instance.getServer().getConsoleSender();
