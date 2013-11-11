@@ -148,9 +148,6 @@ public class PrisonerManager {
 			
 		}
 		
-		if (jail.getSettings().getBoolean(Setting.SpoutChangeSkin))
-			Util.changeSkin(player, jail.getSettings().getString(Setting.SpoutSkinChangeURL));
-		
 		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions))
 		{
 			prisoner.setOldPermissions(Util.getPermissionsGroups(player.getName(), jail.getTeleportLocation().getWorld().getName()));

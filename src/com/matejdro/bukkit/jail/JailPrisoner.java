@@ -559,8 +559,7 @@ public class JailPrisoner {
 	 * Converts specified inventory into inventory string and stores it. Previous inventory string will be deleted. 
 	 * @param playerinv inventory that will be stored
 	 */
-	public void storeInventory(String name, PlayerInventory playerinv)
-	{
+	public void storeInventory(String name, PlayerInventory playerinv) {
 		for(int i=0; i < playerinv.getSize(); i++){
 			if(playerinv.getItem(i) != null){
 				if(!Jail.prisonerInventories.containsKey(name)){
