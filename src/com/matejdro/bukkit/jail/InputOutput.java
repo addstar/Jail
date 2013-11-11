@@ -530,9 +530,7 @@ public class InputOutput {
 			if (p.getJail() == null)
 			{
 				ps.setString(2, "");
-			}
-			else
-			{
+			} else {
 				ps.setString(2, p.getJail().getName());
 			}
 			ps.setBoolean(3, p.offlinePending());

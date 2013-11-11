@@ -2,6 +2,7 @@ package com.matejdro.bukkit.jail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -560,14 +561,13 @@ public class JailPrisoner {
 	 * @param playerinv inventory that will be stored
 	 */
 	public void storeInventory(String name, PlayerInventory playerinv) {
-		for(int i=0; i < playerinv.getSize(); i++){
-			if(playerinv.getItem(i) != null){
-				if(!Jail.prisonerInventories.containsKey(name)){
-					Jail.prisonerInventories.put(name, new ArrayList<ItemStack>());
-				}
-				Jail.prisonerInventories.get(name).add(playerinv.getItem(i));
-			}
+		if(!Jail.prisonerInventories.containsKey(name)) {
+			Jail.prisonerInventories.put(name, new HashMap<String, ItemStack[]>());
 		}
+		
+		Jail.prisonerInventories.get(name).put("armor", playerinv.getArmorContents());
+		Jail.prisonerInventories.get(name).put("content", playerinv.getContents());
+		
 		InputOutput.UpdatePrisoner(this);
 	}
 	
@@ -575,12 +575,27 @@ public class JailPrisoner {
 	 * Restores items from inventory stored in ArrayList
 	 * @param player player that will receive items
 	 */
-	public void restoreInventory(Player player)
-	{
+	public void restoreInventory(Player player) {
 		if(Jail.prisonerInventories.containsKey(player.getName())){
-			for(ItemStack item: Jail.prisonerInventories.get(player.getName())){
-				player.getInventory().addItem(item);
+			ItemStack[] armor = Jail.prisonerInventories.get(player.getName()).get("armor");
+			ItemStack[] contents = Jail.prisonerInventories.get(player.getName()).get("content");
+			
+			for(ItemStack item : armor) {
+				if (player.getInventory().firstEmpty() == -1)
+					player.getWorld().dropItem(player.getLocation(), item);
+				else{
+					player.getInventory().addItem(item);
+				}
 			}
+			
+			for(ItemStack item : contents) {
+				if (player.getInventory().firstEmpty() == -1)
+					player.getWorld().dropItem(player.getLocation(), item);
+				else{
+					player.getInventory().addItem(item);
+				}
+			}
+			
 			Jail.prisonerInventories.remove(player.getName());
 		}else{
 			Util.debug("Cant find " + player.getName() + "'s inventory!");
