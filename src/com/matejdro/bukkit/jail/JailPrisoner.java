@@ -586,7 +586,16 @@ public class JailPrisoner {
 				if (player.getInventory().firstEmpty() == -1)
 					player.getWorld().dropItem(player.getLocation(), item);
 				else{
-					player.getInventory().addItem(item);
+					if(item.getType().toString().toLowerCase().contains("helmet"))
+						player.getInventory().setHelmet(item);
+					else if(item.getType().toString().toLowerCase().contains("chest"))
+						player.getInventory().setChestplate(item);
+					else if(item.getType().toString().contains("leg"))
+						player.getInventory().setLeggings(item);
+					else if(item.getType().toString().toLowerCase().contains("boots"))
+						player.getInventory().setBoots(item);
+					else
+						player.getInventory().addItem(item);
 				}
 			}
 			
