@@ -212,12 +212,11 @@ public class PrisonerManager {
 		JailCell cell = prisoner.getCell();
 		if (cell != null)
 		{
-			if (cell.getChest() != null)
-			{
+			if (cell.getChest() != null) {
 				Chest chest = cell.getChest();
-				for (int i = 0;i<chest.getInventory().getSize();i++)
-				{
+				for (int i = 0; i < chest.getInventory().getSize(); i++) {
 					if (chest.getInventory().getItem(i) == null || chest.getInventory().getItem(i).getType() == Material.AIR) continue;
+					
 					if (player.getInventory().firstEmpty() == -1)
 						player.getWorld().dropItem(player.getLocation(), chest.getInventory().getItem(i));
 					else{
@@ -237,8 +236,8 @@ public class PrisonerManager {
 				}
 				chest.getInventory().clear();				
 			}
-			for (Sign sign : cell.getSigns())
-			{
+			
+			for (Sign sign : cell.getSigns()) {
 				sign.setLine(0, "");
 				sign.setLine(1, "");
 				sign.setLine(2, "");
@@ -246,16 +245,17 @@ public class PrisonerManager {
 				sign.update();
 
 			}
+			
 			cell.setPlayerName("");
 			cell.update();
-
+		}else {
+			prisoner.restoreInventory(player);
 		}
 		
 		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) player.teleport(prisoner.getReleaseTeleportLocation());
 		
 		if(prisoner.getPreviousGameMode() != null) player.setGameMode(prisoner.getPreviousGameMode());
 		
-		prisoner.restoreInventory(player);
 		prisoner.delete();
 		
 		for (Object o : jail.getSettings().getList(Setting.ExecutedCommandsOnRelease))

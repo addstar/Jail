@@ -771,6 +771,8 @@ public class JailPrisoner {
 			cell.setPlayerName("");
 		}
 		
+		Jail.prisonerInventories.remove(getName());
+		
 		for (LivingEntity e : guards)
 		{
 			e.remove();
