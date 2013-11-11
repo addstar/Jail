@@ -221,22 +221,20 @@ public class PrisonerManager {
 				for (int i = 0; i < chest.getInventory().getSize(); i++) {
 					if (chest.getInventory().getItem(i) == null || chest.getInventory().getItem(i).getType() == Material.AIR) continue;
 					
-					if (player.getInventory().firstEmpty() == -1)
+					ItemStack item = chest.getInventory().getItem(i);
+					
+					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
+						player.getInventory().setHelmet(item);
+					else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
+						player.getInventory().setChestplate(item);
+					else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
+						player.getInventory().setLeggings(item);
+					else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
+						player.getInventory().setBoots(item);
+					else if (player.getInventory().firstEmpty() == -1)
 						player.getWorld().dropItem(player.getLocation(), chest.getInventory().getItem(i));
-					else{
-						ItemStack item = chest.getInventory().getItem(i);
-						
-						if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
-							player.getInventory().setHelmet(item);
-						else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
-							player.getInventory().setChestplate(item);
-						else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
-							player.getInventory().setLeggings(item);
-						else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
-							player.getInventory().setBoots(item);
-						else
-							player.getInventory().addItem(item);
-					}
+					else
+						player.getInventory().addItem(item);
 				}
 				chest.getInventory().clear();				
 			}
