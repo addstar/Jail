@@ -223,13 +223,13 @@ public class PrisonerManager {
 					else{
 						ItemStack item = chest.getInventory().getItem(i);
 						
-						if(item.getType().toString().toLowerCase().contains("helmet"))
+						if(item.getType().toString().toLowerCase().contains("helmet") && player.getInventory().getHelmet() == null)
 							player.getInventory().setHelmet(item);
-						else if(item.getType().toString().toLowerCase().contains("chest"))
+						else if(item.getType().toString().toLowerCase().contains("chest") && player.getInventory().getChestplate() == null)
 							player.getInventory().setChestplate(item);
-						else if(item.getType().toString().toLowerCase().contains("leg"))
+						else if(item.getType().toString().toLowerCase().contains("leg") && player.getInventory().getLeggings() == null)
 							player.getInventory().setLeggings(item);
-						else if(item.getType().toString().toLowerCase().contains("boots"))
+						else if(item.getType().toString().toLowerCase().contains("boots") && player.getInventory().getBoots() == null)
 							player.getInventory().setBoots(item);
 						else
 							player.getInventory().addItem(item);
