@@ -184,7 +184,7 @@ public class Jail {
 	/**
 	 * Returns whether the name of a player is a prisoner in the system, whether in a cell or no cell.
 	 * 
-	 * @param player The name of the person we're checking.
+	 * @param name The name of the person we're checking.
 	 * @return true if is jailed, false if not.
 	 */
 	public boolean isPlayerJailed(String name) {
