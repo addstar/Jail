@@ -9,7 +9,6 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -132,24 +131,16 @@ public class PrisonerManager {
 				player.getInventory().clear();
 			}
 			cell.update();
-		}
-		else
-		{
+		} else {
 			player.teleport(prisoner.getTeleportLocation());
-		}
-		
-		if (jail.getSettings().getBoolean(Setting.StoreInventory)) 
-		{
-			prisoner.storeInventory(player.getName(), player.getInventory());
-			for (int i = 0;i<40;i++)
-			{
-				player.getInventory().clear(i);
-			}
 			
+			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
+				prisoner.storeInventory(player.getName(), player.getInventory());
+				player.getInventory().clear();
+			}
 		}
 		
-		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions))
-		{
+		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions)) {
 			prisoner.setOldPermissions(Util.getPermissionsGroups(player.getName(), jail.getTeleportLocation().getWorld().getName()));
 			Util.setPermissionsGroups(player.getName(), (ArrayList<String>) jail.getSettings().getList(Setting.PrisonersPermissionsGroups), jail.getTeleportLocation().getWorld().getName());
 		}
@@ -167,12 +158,9 @@ public class PrisonerManager {
 		
 		int minFood = jail.getSettings().getInt(Setting.FoodControlMinimumFood);
 		int maxFood = jail.getSettings().getInt(Setting.FoodControlMaximumFood);
-		if (player.getFoodLevel() <  minFood)
-		{
+		if (player.getFoodLevel() <  minFood) {
 			player.setFoodLevel(minFood);
-		}
-		else if (player.getFoodLevel() > maxFood)
-		{
+		} else if (player.getFoodLevel() > maxFood) {
 			player.setFoodLevel(maxFood);
 		}
 		
@@ -218,10 +206,8 @@ public class PrisonerManager {
 		{
 			if (cell.getChest() != null) {
 				Chest chest = cell.getChest();
-				for (int i = 0; i < chest.getInventory().getSize(); i++) {
-					if (chest.getInventory().getItem(i) == null || chest.getInventory().getItem(i).getType() == Material.AIR) continue;
-					
-					ItemStack item = chest.getInventory().getItem(i);
+				for (ItemStack item : chest.getInventory().getContents()) {
+					if (item == null || item.getType() == Material.AIR) continue;
 					
 					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
 						player.getInventory().setHelmet(item);
@@ -232,11 +218,12 @@ public class PrisonerManager {
 					else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
 						player.getInventory().setBoots(item);
 					else if (player.getInventory().firstEmpty() == -1)
-						player.getWorld().dropItem(player.getLocation(), chest.getInventory().getItem(i));
+						player.getWorld().dropItem(player.getLocation(), item);
 					else
 						player.getInventory().addItem(item);
 				}
-				chest.getInventory().clear();				
+				
+				chest.getInventory().clear();
 			}
 			
 			for (Sign sign : cell.getSigns()) {
@@ -311,7 +298,6 @@ public class PrisonerManager {
 		
 		if (prisoner.getCell() != null)
 		{
-			Inventory inventory = player.getInventory();
 			JailCell cell = prisoner.getCell();
 			cell.setPlayerName("");
 			for (Sign sign : cell.getSigns())
@@ -323,14 +309,26 @@ public class PrisonerManager {
 				sign.update();
 			}
 			
-			if (cell.getChest() != null) 
-			{
-				for (ItemStack i: cell.getChest().getInventory().getContents())
-				{
-					if (i == null || i.getType() == Material.AIR) continue;
-					inventory.addItem(i);
+			if (cell.getChest() != null) {
+				Chest chest = cell.getChest();
+				for (ItemStack item : chest.getInventory().getContents()) {
+					if (item == null || item.getType() == Material.AIR) continue;
+					
+					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
+						player.getInventory().setHelmet(item);
+					else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
+						player.getInventory().setChestplate(item);
+					else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
+						player.getInventory().setLeggings(item);
+					else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
+						player.getInventory().setBoots(item);
+					else if (player.getInventory().firstEmpty() == -1)
+						player.getWorld().dropItem(player.getLocation(), item);
+					else
+						player.getInventory().addItem(item);
 				}
-				cell.getChest().getInventory().clear();
+				
+				chest.getInventory().clear();
 			}
 			prisoner.setCell(null);
 		}
@@ -352,40 +350,49 @@ public class PrisonerManager {
 		Jail.prisoners.put(prisoner.getName(),prisoner);
 
 		JailCell cell = jail.getRequestedCell(prisoner);
-		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) 
-		{
+		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
 			cell = null;
 			cell = jail.getEmptyCell();
 		}
-		if (cell != null)
-		{
+		
+		if (cell != null) {
 			cell.setPlayerName(player.getName());
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
-			if (jail.getSettings().getBoolean(Setting.StoreInventory) && cell.getChest() != null)
-			{
+			
+			if (jail.getSettings().getBoolean(Setting.StoreInventory) && cell.getChest() != null) {
 				Chest chest = cell.getChest();
 				chest.getInventory().clear();
-				for (int i = 0;i<40;i++)
-				{
+				
+				ItemStack[] inventory = player.getInventory().getContents();
+				ItemStack[] armor = player.getInventory().getArmorContents();
+				
+				for(ItemStack item : inventory) {
 					if (chest.getInventory().getSize() <= Util.getNumberOfOccupiedItemSlots(chest.getInventory().getContents())) break;
-					if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR) continue;
-					chest.getInventory().addItem(player.getInventory().getItem(i));
-					player.getInventory().clear(i);
-				}		
+					if(item != null) {
+						chest.getInventory().addItem(item);
+					}
+				}
+				
+				for(ItemStack item : armor) {
+					if (chest.getInventory().getSize() <= Util.getNumberOfOccupiedItemSlots(chest.getInventory().getContents())) break;
+					if(item != null) {
+						chest.getInventory().addItem(item);
+					}
+				}
+				
+				player.getInventory().clear();
 			}
+			
 			cell.update();
-		}
-		else
-		{
+		} else {
 			player.teleport(prisoner.getTeleportLocation());
-		}
-		
-		if (jail.getSettings().getBoolean(Setting.StoreInventory)) 
-		{
-			prisoner.storeInventory(player.getName(), player.getInventory());
-			player.getInventory().clear();
+			
+			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
+				prisoner.storeInventory(player.getName(), player.getInventory());
+				player.getInventory().clear();
+			}
 		}
 		
 		prisoner.SetBeingReleased(false);
