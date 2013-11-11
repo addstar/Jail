@@ -45,7 +45,10 @@ public class PrisonerManager {
 		if (Settings.getGlobalBoolean(Setting.LogJailingIntoConsole))
 		{
 			String times;
-			if (prisoner.getRemainingTime() < 0) times = "forever"; else times = "for " + String.valueOf(prisoner.getRemainingTime()) + " minutes";
+			if (prisoner.getRemainingTime() < 0)
+				times = "forever";
+			else
+				times = "for " + String.valueOf(prisoner.getRemainingTime()) + " minutes";
 			
 			Jail.log.info("Player " + prisoner.getName() + " was jailed by " + prisoner.getJailer() + " " + times);
 		}
@@ -98,25 +101,35 @@ public class PrisonerManager {
 			cell = null;
 			cell = jail.getEmptyCell();
 		}
-		if (cell != null)
-		{
+		
+		if (cell != null) {
 			Util.debug(prisoner, "Found cell!");
 			cell.setPlayerName(player.getName());
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
-			if (jail.getSettings().getBoolean(Setting.StoreInventory) && cell.getChest() != null)
-			{
+			if (jail.getSettings().getBoolean(Setting.StoreInventory) && cell.getChest() != null) {
 				Chest chest = cell.getChest();
 				chest.getInventory().clear();
-				for (int i = 0;i<40;i++)
-				{
+				
+				ItemStack[] inventory = player.getInventory().getContents();
+				ItemStack[] armor = player.getInventory().getArmorContents();
+				
+				for(ItemStack item : inventory) {
 					if (chest.getInventory().getSize() <= Util.getNumberOfOccupiedItemSlots(chest.getInventory().getContents())) break;
-					if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR) continue;
-					chest.getInventory().setItem(i, player.getInventory().getItem(i));
-					chest.getInventory().getItem(i).setItemMeta(player.getInventory().getItem(i).getItemMeta());
-					player.getInventory().clear(i);
-				}								
+					if(item != null) {
+						chest.getInventory().addItem(item);
+					}
+				}
+				
+				for(ItemStack item : armor) {
+					if (chest.getInventory().getSize() <= Util.getNumberOfOccupiedItemSlots(chest.getInventory().getContents())) break;
+					if(item != null) {
+						chest.getInventory().addItem(item);
+					}
+				}
+				
+				player.getInventory().clear();
 			}
 			cell.update();
 		}
