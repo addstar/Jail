@@ -221,7 +221,18 @@ public class PrisonerManager {
 					if (player.getInventory().firstEmpty() == -1)
 						player.getWorld().dropItem(player.getLocation(), chest.getInventory().getItem(i));
 					else{
-						player.getInventory().addItem(chest.getInventory().getItem(i));
+						ItemStack item = chest.getInventory().getItem(i);
+						
+						if(item.getType().toString().toLowerCase().contains("helmet"))
+							player.getInventory().setHelmet(item);
+						else if(item.getType().toString().toLowerCase().contains("chest"))
+							player.getInventory().setChestplate(item);
+						else if(item.getType().toString().toLowerCase().contains("leg"))
+							player.getInventory().setLeggings(item);
+						else if(item.getType().toString().toLowerCase().contains("boots"))
+							player.getInventory().setBoots(item);
+						else
+							player.getInventory().addItem(item);
 					}
 				}
 				chest.getInventory().clear();				
