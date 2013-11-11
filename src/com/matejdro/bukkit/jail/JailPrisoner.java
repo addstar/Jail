@@ -581,6 +581,8 @@ public class JailPrisoner {
 			ItemStack[] contents = Jail.prisonerInventories.get(player.getName()).get("content");
 			
 			for(ItemStack item : armor) {
+				if(item == null) continue;
+				
 				if (player.getInventory().firstEmpty() == -1)
 					player.getWorld().dropItem(player.getLocation(), item);
 				else{
@@ -589,6 +591,8 @@ public class JailPrisoner {
 			}
 			
 			for(ItemStack item : contents) {
+				if(item == null) continue;
+				
 				if (player.getInventory().firstEmpty() == -1)
 					player.getWorld().dropItem(player.getLocation(), item);
 				else{
