@@ -590,7 +590,7 @@ public class JailPrisoner {
 						player.getInventory().setHelmet(item);
 					else if(item.getType().toString().toLowerCase().contains("chest"))
 						player.getInventory().setChestplate(item);
-					else if(item.getType().toString().contains("leg"))
+					else if(item.getType().toString().toLowerCase().contains("leg"))
 						player.getInventory().setLeggings(item);
 					else if(item.getType().toString().toLowerCase().contains("boots"))
 						player.getInventory().setBoots(item);
