@@ -1,5 +1,5 @@
 name: Jail
-main: com.graywolf336.jail.JailMain
+main: com.matejdro.bukkit.jail.Jail
 version: ${project.version}-b${BUILD_NUMBER}
 description: Ban too harsh? Kick/mute/whatever not enough? Jail bad players!
 authors: [matejdro,multidude,graywolf336]
