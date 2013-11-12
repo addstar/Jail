@@ -2,9 +2,12 @@
 ====
 This plugins adds Jail to your minecraft server. Admins can define several jails and then jail/unjail people or jail them on time basis. Plugin also offers wide variety of protections, so players won't escape out of your jail.
 
-Bugs
+Bugs Fixed
 ===
-This is for bug fixes only.
+* Not being able to delete jails, cell, or cells.
+* Players being sent to the wrong Jail (dev versions, but fixed NPEs)
+* Unable to jail certain players who were in other worlds
+* Unable to jail offline players, something about NPEs and stack traces.
 
 Features
 ===
