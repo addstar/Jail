@@ -14,17 +14,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class PrisonerManager {
 	
-	public static void PrepareJail(JailPrisoner prisoner, Player player)
-	{
-		if (player == null)
-		{
+	public static void PrepareJail(JailPrisoner prisoner, Player player) {
+		if (player == null) {
 			prisoner.setOfflinePending(true);
-			if (prisoner.getJail() != null)
-			{
+			if (prisoner.getJail() != null) {
 				Util.debug(prisoner, "Searching for requested cell");
 				JailCell cell = prisoner.getJail().getRequestedCell(prisoner);
-				if (cell != null && (cell.getPlayerName() == null || cell.getPlayerName().trim().equals("")))
-				{
+				if (cell != null && (cell.getPlayerName() == null || cell.getPlayerName().trim().equals(""))) {
 					Util.debug(prisoner, "Found requested cell");
 					cell.setPlayerName(prisoner.getName());
 					cell.update();
@@ -33,16 +29,13 @@ public class PrisonerManager {
 			
 			InputOutput.InsertPrisoner(prisoner);
 			Jail.prisoners.put(prisoner.getName(), prisoner);			
-		}
-		else
-		{
+		} else {
 			prisoner.setOfflinePending(false);
 			Jail(prisoner, player);			
 		}
 		
 		//Log jailing into console
-		if (Settings.getGlobalBoolean(Setting.LogJailingIntoConsole))
-		{
+		if (Settings.getGlobalBoolean(Setting.LogJailingIntoConsole)) {
 			String times;
 			if (prisoner.getRemainingTime() < 0)
 				times = "forever";
@@ -61,31 +54,29 @@ public class PrisonerManager {
 	 * @param player Player that will be teleported
 	 */
 	@SuppressWarnings("unchecked")
-	public static void Jail(JailPrisoner prisoner, Player player)
-	{
+	public static void Jail(JailPrisoner prisoner, Player player) {
 		if (!prisoner.getName().equals(player.getName().toLowerCase())) return;
 		prisoner.SetBeingReleased(true);
 		JailZone jail = prisoner.getJail();
-		if (jail == null)
-		{
+		if (jail == null) {
 			Util.debug(prisoner, "searching for nearest jail");
 			jail = JailZoneManager.findNearestJail(player.getLocation());
 			prisoner.setJail(jail);
 		}
-		if (jail == null)
-		{
+		
+		if (jail == null) {
 			Util.Message("You are lucky! The server admin was too lazy to set up a jail. Go now!", player);
-			Jail.log.info("[Jail] There is no jail to pick! Make sure, you have build at least one jail and at least one jail is set to automatic!");
+			Jail.log.severe("[Jail] There is no jail to pick! Make sure, you have build at least one jail and at least one jail is set to automatic!");
 			return;
 		}
+		
 		prisoner.setOfflinePending(false);
 		if (prisoner.getReason().isEmpty())
 			Util.Message(ChatColor.RED + jail.getSettings().getString(Setting.MessageJail), player);
 		else
 			Util.Message(ChatColor.RED + jail.getSettings().getString(Setting.MessageJailReason).replace("<Reason>", prisoner.getReason()), player);
 
-		if (jail.getSettings().getBoolean(Setting.DeleteInventoryOnJail)) 
-		{
+		if (jail.getSettings().getBoolean(Setting.DeleteInventoryOnJail)) {
 			player.getInventory().clear();
 			player.getInventory().setArmorContents(new ItemStack[] { null, null, null, null });
 			
@@ -94,8 +85,7 @@ public class PrisonerManager {
 		prisoner.setPreviousPosition(player.getLocation());
 		
 		JailCell cell = jail.getRequestedCell(prisoner);
-		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) 
-		{
+		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().trim().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
 			Util.debug(prisoner, "No requested cell. searching for empty cell");
 			cell = null;
 			cell = jail.getEmptyCell();
@@ -107,6 +97,7 @@ public class PrisonerManager {
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
+			
 			if (jail.getSettings().getBoolean(Setting.StoreInventory) && cell.getChest() != null) {
 				Chest chest = cell.getChest();
 				chest.getInventory().clear();
@@ -130,12 +121,13 @@ public class PrisonerManager {
 				
 				player.getInventory().clear();
 			}
+			
 			cell.update();
 		} else {
 			player.teleport(prisoner.getTeleportLocation());
 			
 			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				prisoner.storeInventory(player.getName(), player.getInventory());
+				prisoner.storeInventory(player.getName().toLowerCase(), player.getInventory());
 				player.getInventory().clear();
 			}
 		}
@@ -149,27 +141,28 @@ public class PrisonerManager {
 			 player.setSleepingIgnored(true);
 
 		
-		if (Jail.prisoners.containsKey(prisoner.getName()))
+		if (Jail.prisoners.containsKey(prisoner.getName().toLowerCase()))
 			InputOutput.UpdatePrisoner(prisoner);
 		else
 			InputOutput.InsertPrisoner(prisoner);
-		Jail.prisoners.put(prisoner.getName(), prisoner);
+		
+		Jail.prisoners.put(prisoner.getName().toLowerCase(), prisoner);
 		prisoner.SetBeingReleased(false);
 		
 		int minFood = jail.getSettings().getInt(Setting.FoodControlMinimumFood);
 		int maxFood = jail.getSettings().getInt(Setting.FoodControlMaximumFood);
+		
 		if (player.getFoodLevel() <  minFood) {
 			player.setFoodLevel(minFood);
 		} else if (player.getFoodLevel() > maxFood) {
 			player.setFoodLevel(maxFood);
 		}
 		
-		for (Object o : jail.getSettings().getList(Setting.ExecutedCommandsOnJail))
-		{
+		for (Object o : jail.getSettings().getList(Setting.ExecutedCommandsOnJail)) {
 			String s = (String) o;
 			Server cs = (Server) Jail.instance.getServer();
 			CommandSender coms = Jail.instance.getServer().getConsoleSender();
-			cs.dispatchCommand(coms,prisoner.parseTags(s));
+			cs.dispatchCommand(coms, prisoner.parseTags(s));
 		}
 		
 	}
@@ -181,8 +174,7 @@ public class PrisonerManager {
 	 * @param prisoner prisoner that will be released
 	 * @param player Player that will be teleported
 	 */
-	public static void UnJail(JailPrisoner prisoner, Player player)
-	{
+	public static void UnJail(JailPrisoner prisoner, Player player) {
 		prisoner.SetBeingReleased(true);
 		JailZone jail = prisoner.getJail();	
 		Util.Message(ChatColor.GREEN + jail.getSettings().getString(Setting.MessageUnJail), player);
@@ -190,37 +182,45 @@ public class PrisonerManager {
 		if (jail.getSettings().getBoolean(Setting.SpoutChangeSkin))
 			Util.changeSkin(player, null);
 		
-		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions) && !jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners))
-		{
+		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions) && !jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners)) {
 			Util.setPermissionsGroups(player.getName(), prisoner.getOldPermissions(), jail.getTeleportLocation().getWorld().getName());
 		}
 		
 		player.setSleepingIgnored(false);
 		
-		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) player.teleport(prisoner.getReleaseTeleportLocation());
+		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease))
+			player.teleport(prisoner.getReleaseTeleportLocation());
 		
-		if(prisoner.getPreviousGameMode() != null) player.setGameMode(prisoner.getPreviousGameMode());
+		if(prisoner.getPreviousGameMode() != null)
+			player.setGameMode(prisoner.getPreviousGameMode());
 		
 		JailCell cell = prisoner.getCell();
-		if (cell != null)
-		{
+		if (cell != null) {
 			if (cell.getChest() != null) {
 				Chest chest = cell.getChest();
+				
 				for (ItemStack item : chest.getInventory().getContents()) {
 					if (item == null || item.getType() == Material.AIR) continue;
 					
-					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
+					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR)) {
 						player.getInventory().setHelmet(item);
-					else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
+						player.sendMessage("Restored your helmet: " + item.getType().toString());
+					} else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR)) {
 						player.getInventory().setChestplate(item);
-					else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
+						player.sendMessage("Restored your chestplate: " + item.getType().toString());
+					} else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR)) {
 						player.getInventory().setLeggings(item);
-					else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR))
+						player.sendMessage("Restored your leggings: " + item.getType().toString());
+					} else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR)) {
 						player.getInventory().setBoots(item);
-					else if (player.getInventory().firstEmpty() == -1)
+						player.sendMessage("Restored your boots: " + item.getType().toString());
+					} else if (player.getInventory().firstEmpty() == -1) {
 						player.getWorld().dropItem(player.getLocation(), item);
-					else
+						player.sendMessage("Dropping the item on the group, inventory is full. " + item.getType().toString());
+					} else {
 						player.getInventory().addItem(item);
+						player.sendMessage("Added the item to your inventory. " + item.getType().toString());
+					}
 				}
 				
 				chest.getInventory().clear();

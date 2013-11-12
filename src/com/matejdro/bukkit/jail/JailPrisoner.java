@@ -561,6 +561,7 @@ public class JailPrisoner {
 	 * @param playerinv inventory that will be stored
 	 */
 	public void storeInventory(String name, PlayerInventory playerinv) {
+		name = name.toLowerCase();
 		if(!Jail.prisonerInventories.containsKey(name)) {
 			Jail.prisonerInventories.put(name, new HashMap<String, ItemStack[]>());
 		}
@@ -576,27 +577,29 @@ public class JailPrisoner {
 	 * @param player player that will receive items
 	 */
 	public void restoreInventory(Player player) {
-		if(Jail.prisonerInventories.containsKey(player.getName())){
-			ItemStack[] armor = Jail.prisonerInventories.get(player.getName()).get("armor");
-			ItemStack[] contents = Jail.prisonerInventories.get(player.getName()).get("content");
+		String name = player.getName().toLowerCase();
+		
+		if(Jail.prisonerInventories.containsKey(name)){
+			ItemStack[] armor = Jail.prisonerInventories.get(name).get("armor");
+			ItemStack[] contents = Jail.prisonerInventories.get(name).get("content");
+			
+			player.sendMessage("Restoring all your inventory (you wasn't in a jail cell).");
 			
 			for(ItemStack item : armor) {
-				if(item == null) continue;
-				
-				if (player.getInventory().firstEmpty() == -1)
+				if(item == null)
+					continue;
+				else if(item.getType().toString().toLowerCase().contains("helmet"))
+					player.getInventory().setHelmet(item);
+				else if(item.getType().toString().toLowerCase().contains("chest"))
+					player.getInventory().setChestplate(item);
+				else if(item.getType().toString().toLowerCase().contains("leg"))
+					player.getInventory().setLeggings(item);
+				else if(item.getType().toString().toLowerCase().contains("boots"))
+					player.getInventory().setBoots(item);
+				else if (player.getInventory().firstEmpty() == -1)
 					player.getWorld().dropItem(player.getLocation(), item);
-				else{
-					if(item.getType().toString().toLowerCase().contains("helmet"))
-						player.getInventory().setHelmet(item);
-					else if(item.getType().toString().toLowerCase().contains("chest"))
-						player.getInventory().setChestplate(item);
-					else if(item.getType().toString().toLowerCase().contains("leg"))
-						player.getInventory().setLeggings(item);
-					else if(item.getType().toString().toLowerCase().contains("boots"))
-						player.getInventory().setBoots(item);
-					else
-						player.getInventory().addItem(item);
-				}
+				else
+					player.getInventory().addItem(item);
 			}
 			
 			for(ItemStack item : contents) {
@@ -609,10 +612,11 @@ public class JailPrisoner {
 				}
 			}
 			
-			Jail.prisonerInventories.remove(player.getName());
+			Jail.prisonerInventories.remove(name);
 		}else{
 			Util.debug("Cant find " + player.getName() + "'s inventory!");
 		}
+		
 		InputOutput.UpdatePrisoner(this);
 	}
 	
