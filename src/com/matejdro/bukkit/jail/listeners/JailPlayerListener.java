@@ -99,45 +99,38 @@ public class JailPlayerListener implements Listener {
 			event.getPlayer().sendMessage(ChatColor.BLUE + "There is an update for the jail plugin!");
 		}
 		
-		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()))
-		 {
+		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
 			 JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
 			 if(prisoner != null){
-				 if(prisoner.getCell() == null){
+				 if(prisoner.getJail() == null) {
 					 JailZone jail = JailZoneManager.findNearestJail(event.getPlayer().getLocation());
 					 prisoner.setJail(jail);
 					 event.getPlayer().teleport(jail.getTeleportLocation());
 				 }else {
-					 event.getPlayer().teleport(prisoner.getCell().getTeleportLocation());
+					 if(prisoner.getCell() == null) {
+						 event.getPlayer().teleport(prisoner.getJail().getTeleportLocation());
+					 }else {
+						 event.getPlayer().teleport(prisoner.getCell().getTeleportLocation());
+					 } 
 				 }
 				 
 				 event.getPlayer().setGameMode(GameMode.SURVIVAL);
-		}
+			 }
 			 
-			 if (prisoner.offlinePending())
-			 {
-				 if (prisoner.getTransferDestination().isEmpty())
-				 {
-					 if (prisoner.getRemainingTime() != 0)
-					 {
+			 if (prisoner.offlinePending()) {
+				 if (prisoner.getTransferDestination().isEmpty()) {
+					 if (prisoner.getRemainingTime() != 0) {
 						 PrisonerManager.Jail(prisoner, event.getPlayer());
-					 }
-					 else if (prisoner.getJail() != null)
-					 {
+					 } else if (prisoner.getJail() != null) {
 						 PrisonerManager.UnJail(prisoner, event.getPlayer());
 						 return;
-					 } 
-					 else
-					 {
+					 } else {
 						 prisoner.delete();
 						 return;
 					 }
-				 }
-				 else
-				 {
+				 } else {
 					 PrisonerManager.Transfer(prisoner, event.getPlayer());
 				 }
-				 
 			 }
 			 
 			 if (prisoner.getJail().getSettings().getBoolean(Setting.IgnorePrisonersSleepingState))

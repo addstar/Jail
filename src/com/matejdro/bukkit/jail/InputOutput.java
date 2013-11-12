@@ -133,10 +133,7 @@ public class InputOutput {
 			set = ps.executeQuery();
 			//conn.commit();
 			Jail.zones.clear();
-			while (set.next())
-			{
-				
-				
+			while (set.next()) {
 				String name = set.getString("name").toLowerCase();
 				double X1 = set.getDouble("X1");
 				double Y1 = set.getDouble("Y1");
@@ -163,9 +160,9 @@ public class InputOutput {
 			try {
 				jails.save(new File(Jail.instance.getDataFolder(),"jails.yml"));
 			} catch (IOException e) {
-				
 				e.printStackTrace();
 			}
+			
 			set.close();
 			ps.close();
 			Jail.log.log(Level.INFO,"[Jail] Loaded " + String.valueOf(Jail.zones.size()) + " jail zones.");
@@ -175,11 +172,9 @@ public class InputOutput {
 			
 			e.printStackTrace();
 		}
-
     }
     
-    public void LoadPrisoners()
-    {
+    public void LoadPrisoners() {
     	try {
 			Connection conn;
 			PreparedStatement ps = null;
@@ -190,9 +185,7 @@ public class InputOutput {
 			set = ps.executeQuery();
 			//conn.commit();
 			Jail.prisoners.clear();
-			while (set.next())
-			{
-				
+			while (set.next()) {
 				String name = set.getString("PlayerName").toLowerCase();
 				int remaintime = set.getInt("RemainTime");
 				String jailname = set.getString("JailName");
@@ -205,7 +198,7 @@ public class InputOutput {
 				String previousPosition = set.getString("PreviousPosition");
 				Boolean muted = set.getBoolean("muted");
 				
-				JailPrisoner p = new JailPrisoner(name, remaintime, jailname, null, offline, transferDest, reason, muted,  inventory, jailer, permissions, GameMode.SURVIVAL);
+				JailPrisoner p = new JailPrisoner(name, remaintime, jailname, null, offline, transferDest, reason, muted, inventory, jailer, permissions, GameMode.SURVIVAL);
 			
 				p.setPreviousPosition(previousPosition);
 				
@@ -218,7 +211,6 @@ public class InputOutput {
 
 		} catch (SQLException e) {
 			Jail.log.log(Level.SEVERE, "[Jail] Error while loading prisoners from the database! - " + e.getMessage() );
-			
 			e.printStackTrace();
 		}
     }
@@ -235,24 +227,22 @@ public class InputOutput {
 			set = ps.executeQuery();
 			//conn.commit();
 			int count = 0;
-			while (set.next())
-			{
+			while (set.next()) {
 				String jailname = set.getString("JailName");
 				String teleport = set.getString("Teleport");
 				String sign = set.getString("Sign");
 				String chest = set.getString("Chest");
-				String player = set.getString("Player");
+				String player = set.getString("Player").toLowerCase();
 				String name = set.getString("Name");
 				
 				JailPrisoner prisoner = Jail.prisoners.get(player);
 				if (prisoner == null)
 					player = "";
 				
-				JailCell cell = new JailCell(jailname,  player, name);
+				JailCell cell = new JailCell(jailname, player, name);
 				cell.setTeleportLocation(teleport);
 
-				if (!Jail.zones.containsKey(jailname))
-				{
+				if (!Jail.zones.containsKey(jailname)) {
 					final JailCell fcell = cell;
 					Jail.instance.getServer().getScheduler().scheduleSyncDelayedTask(Jail.instance, new Runnable() {
 
@@ -271,8 +261,10 @@ public class InputOutput {
 				cell.getJail().getCellList().add(cell);
 				count++;
 						
-				if (prisoner != null)
+				if (prisoner != null) {
+					prisoner.setJail(jailname);
 					prisoner.setCell(cell);
+				}
 			}
 			
 			set.close();
