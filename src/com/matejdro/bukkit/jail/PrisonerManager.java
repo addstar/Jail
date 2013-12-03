@@ -253,8 +253,7 @@ public class PrisonerManager {
 	/**
 	 * Initiate transfer of every prisoner in specified jail zone to another nearest jail zone
 	 */
-	public static void PrepareTransferAll(JailZone jail)
-	{
+	public static void PrepareTransferAll(JailZone jail) {
 		PrepareTransferAll(jail, "find nearest");
 	}
 	
