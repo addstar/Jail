@@ -151,6 +151,7 @@ public class JailCommand extends BaseCommand {
 
                     Bukkit.broadcastMessage(Settings.getGlobalString(Setting.MessagePrisonerJailed) + " Reason: " + reason1);
                 }
+                
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
                     logger.logToFile(player, time, reason, sender.getName(), player.getName());
                 }

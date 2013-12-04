@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,25 +15,16 @@ import org.bukkit.entity.Player;
  * @author Luke
  */
 public class JailLog {
-    
-    public JailLog()
-    {
-        
-    }
-    
-    public void logToFile(Player player, Integer time, String reason, String sender, String name)
-    {
+    public void logToFile(Player player, Integer time, String reason, String sender, String name) {
         try{
             File dataFolder = Jail.instance.getDataFolder();
 
-            if(!dataFolder.exists())
-            {
+            if(!dataFolder.exists()) {
                 dataFolder.mkdir();
             }
 
             File jailLogFile = new File(Jail.instance.getDataFolder(), "jailLog.txt");
-            if(!jailLogFile.exists())
-            {
+            if(!jailLogFile.exists()) {
                 jailLogFile.createNewFile();
             }
             
@@ -45,10 +35,11 @@ public class JailLog {
             Date date = new Date();
             
             if(player != null){
-            	pw.println("[" + dateFormat.format(date) + "] " + ChatColor.BLUE + player.getName() + ChatColor.WHITE + " jailed by " + ChatColor.BLUE + sender + ChatColor.WHITE + ". Reason: " + ChatColor.BLUE + reason);
+            	pw.println("[" + dateFormat.format(date) + "] " + player.getName().toLowerCase() + " jailed by " + sender.toLowerCase() + ". Reason: " + reason);
             }else{
-            	pw.println("[" + dateFormat.format(date) + "] " + ChatColor.BLUE + name + ChatColor.WHITE + " jailed by " + ChatColor.BLUE + sender + ChatColor.WHITE + ". Reason: " + ChatColor.BLUE + reason);
+            	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + ". Reason: " + reason);
             }
+            
             pw.flush();
             pw.close();
             

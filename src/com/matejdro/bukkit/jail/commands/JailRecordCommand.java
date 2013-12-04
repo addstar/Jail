@@ -42,7 +42,7 @@ public class JailRecordCommand extends BaseCommand{
 	            while(scanner.hasNextLine()){
 	            	String line = scanner.nextLine();
 	            	System.out.println(line);
-	            	if(line.contains(args[0] + " ")){
+	            	if(line.contains(args[0].toLowerCase())){
 	            		timesJailed++;
 	            		sender.sendMessage(line);
 	            		messageNumber ++;
