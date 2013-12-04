@@ -174,10 +174,12 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 
 		if (Jail.instance.handcuffed.contains(event.getPlayer().getName())) {
-			event.getPlayer().teleport(event.getFrom());
+			event.setCancelled(true);
+			
 			if(last.containsKey(event.getPlayer().getName())) {
 				if(System.currentTimeMillis() >= last.get(event.getPlayer().getName())) {
 					event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
+					last.put(event.getPlayer().getName(), System.currentTimeMillis() + 5000);
 				}
 			}else {
 				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
@@ -191,7 +193,10 @@ public class JailPlayerProtectionListener implements Listener {
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if (event.isCancelled()) return;
-		onPlayerMove((PlayerMoveEvent) event);
+		
+		PlayerMoveEvent move = new PlayerMoveEvent(event.getPlayer(), event.getFrom(), event.getTo());
+		onPlayerMove(move);
+		if(move.isCancelled()) event.setCancelled(true);
 	}
 		 
 	@EventHandler
