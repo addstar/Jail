@@ -70,7 +70,7 @@ public class Jail extends JavaPlugin {
     public static HashMap<String,JailPrisoner> prisoners = new HashMap<String,JailPrisoner>();
     public static HashMap<String, HashMap<String, ItemStack[]>> prisonerInventories = new HashMap<String, HashMap<String, ItemStack[]>>();
     public static HashMap<Creature, JailPrisoner> guards = new HashMap<Creature, JailPrisoner>();
-    public static HashMap<Player, Boolean> jailStickToggle = new HashMap<Player, Boolean>();
+    public static HashMap<String, Boolean> jailStickToggle = new HashMap<String, Boolean>();
     private Timer timer;
 
     protected UpdateChecker updateChecker;

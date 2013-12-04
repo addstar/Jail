@@ -50,15 +50,14 @@ public class JailPlayerListener implements Listener {
 		
 		String[] param = InputOutput.jailStickParameters.get(damager.getItemInHand().getTypeId());
 		
-		if(!Jail.jailStickToggle.containsKey(damager)){
-			Jail.jailStickToggle.put(damager, false);
+		if(!Jail.jailStickToggle.containsKey(damager.getName().toLowerCase())){
+			Jail.jailStickToggle.put(damager.getName().toLowerCase(), false);
 		}
 
 		if(Util.permission(damager, "jail.usejailstick." + String.valueOf(damager.getItemInHand().getTypeId()), PermissionDefault.OP) && Jail.jailStickToggle.get(damager)){
             if(player != null){
-                JailPrisoner prisoner = new JailPrisoner(player.getName(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", "", "", player.getGameMode());
+                JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "", player.getGameMode());
                 PrisonerManager.PrepareJail(prisoner, player);
-                PrisonerManager.Jail(prisoner, player);
                 JailLog logger = new JailLog();
                 damager.sendMessage(ChatColor.RED + "You jailed " + ChatColor.GREEN + player.getName() + ChatColor.RED +  " for " + ChatColor.GREEN + Integer.parseInt(param[2]) + ChatColor.RED + " minutes");
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
