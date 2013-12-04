@@ -523,8 +523,6 @@ public class JailPrisoner {
 			ItemStack[] armor = Jail.prisonerInventories.get(name).get("armor");
 			ItemStack[] contents = Jail.prisonerInventories.get(name).get("content");
 			
-			player.sendMessage("Restoring all your inventory (you wasn't in a jail cell).");
-			
 			for(ItemStack item : armor) {
 				if(item == null)
 					continue;
