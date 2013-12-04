@@ -58,6 +58,7 @@ public class PrisonerManager {
 		if (!prisoner.getName().equals(player.getName().toLowerCase())) return;
 		prisoner.SetBeingReleased(true);
 		JailZone jail = prisoner.getJail();
+		
 		if (jail == null) {
 			Util.debug(prisoner, "searching for nearest jail");
 			jail = JailZoneManager.findNearestJail(player.getLocation());
@@ -93,7 +94,7 @@ public class PrisonerManager {
 		
 		if (cell != null) {
 			Util.debug(prisoner, "Found cell!");
-			cell.setPlayerName(player.getName());
+			cell.setPlayerName(player.getName().toLowerCase());
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
