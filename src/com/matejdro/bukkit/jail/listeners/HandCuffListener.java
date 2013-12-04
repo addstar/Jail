@@ -52,10 +52,7 @@ public class HandCuffListener implements Listener {
 		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			event.setCancelled(true);
-			if(System.currentTimeMillis() >= pl.getHandCuffManager().getNextMessageTime(event.getPlayer().getName())) {
-				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
-				pl.getHandCuffManager().updateNextTime(event.getPlayer().getName());
-			}
+			event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
 		}
 	}
 }
