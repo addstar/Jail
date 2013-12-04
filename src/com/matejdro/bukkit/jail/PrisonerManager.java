@@ -376,6 +376,10 @@ public class PrisonerManager {
 			cell.update();
 		} else {
 			player.teleport(prisoner.getTeleportLocation());
+			
+			if(jail.getSettings().getBoolean(Setting.StoreInventory))
+				if(!Jail.prisonerInventories.containsKey(player.getName().toLowerCase()))
+					prisoner.storeInventory(player.getInventory());
 		}
 		
 		prisoner.SetBeingReleased(false);
