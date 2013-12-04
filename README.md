@@ -11,6 +11,7 @@ Bugs Fixed
 * Players inventory is now better managed, although if you shutdown the server you will lose players inventories who are not stored in chests
 * JailRecord now works like it was supposed to.
 * Adding any argument after the player on /jailrecord will list out all the times they've been jailed.
+* Fixed JailStick not working.
 
 Features
 ===
