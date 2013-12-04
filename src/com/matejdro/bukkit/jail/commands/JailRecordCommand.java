@@ -21,9 +21,7 @@ public class JailRecordCommand extends BaseCommand{
 	
 	@Override
 	public Boolean run(CommandSender sender, String[] args) {
-		if(args.length < 1){
-			sender.sendMessage(ChatColor.RED + "You must specify a player!");
-		}else{
+		if(args.length == 1) {
 			try{
 				File dataFolder = Jail.instance.getDataFolder();
 				if(!dataFolder.exists()) {
@@ -40,11 +38,8 @@ public class JailRecordCommand extends BaseCommand{
 	            int timesJailed = 0;
 	            
 	            while(scanner.hasNextLine()){
-	            	String line = scanner.nextLine();
-	            	System.out.println(line);
-	            	if(line.contains(args[0].toLowerCase())){
+	            	if(scanner.nextLine().contains(args[0].toLowerCase())){
 	            		timesJailed++;
-	            		sender.sendMessage(line);
 	            		messageNumber ++;
 	            	}
 	            }
@@ -65,8 +60,51 @@ public class JailRecordCommand extends BaseCommand{
 			}catch(IOException e){
 				e.printStackTrace();
 			}
+		} else if(args.length == 2) {
+			try{
+				File dataFolder = Jail.instance.getDataFolder();
+				if(!dataFolder.exists()) {
+	                dataFolder.mkdir();
+	            }
+				
+				File jailLogFile = new File(Jail.instance.getDataFolder(), "jailLog.txt");
+	            if(!jailLogFile.exists()) {
+	                jailLogFile.createNewFile();
+	            }
+	            
+	            Scanner scanner = new Scanner(jailLogFile);
+	            
+	            int timesJailed = 0;
+	            
+	            while(scanner.hasNextLine()){
+	            	String line = scanner.nextLine();
+	            	if(line.contains(args[0].toLowerCase())){
+	            		sender.sendMessage(line);
+	            		timesJailed++;
+	            		messageNumber ++;
+	            	}
+	            }
+	            
+	            if(messageNumber == 0){
+	            	sender.sendMessage(ChatColor.RED + "This player has not been jailed!");
+	            }else{
+	            	sender.sendMessage(ChatColor.RED + "This player has been jailed " + ChatColor.GREEN + timesJailed + ChatColor.RED + " times");
+	            	messageNumber = 0;
+	            }
+	            
+	            if(timesJailed !=  0){
+	            	timesJailed = 0;
+	            }
+	            
+	            scanner.close();
+	            
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		} else {
+			sender.sendMessage(ChatColor.RED + "You must specify a player!");
 		}
+		
 		return true;
 	}
-
 }
