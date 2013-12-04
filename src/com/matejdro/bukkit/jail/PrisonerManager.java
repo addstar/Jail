@@ -40,7 +40,7 @@ public class PrisonerManager {
 			if (prisoner.getRemainingTime() < 0)
 				times = "forever";
 			else
-				times = "for " + String.valueOf(prisoner.getRemainingTime()) + " minutes";
+				times = "for " + String.valueOf(prisoner.getRemainingTimeMinutes()) + " minutes";
 			
 			Jail.log.info("Player " + prisoner.getName() + " was jailed by " + prisoner.getJailer() + " " + times);
 		}

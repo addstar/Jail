@@ -159,7 +159,7 @@ public class JailCommand extends BaseCommand {
 
             
             if(Jail.instance.notificationsPlugin != null){
-                Notification jailNotification = new Notification("Jail", playerName + " was jailed by " + sender.getName(), "For " + time + " mins", Color.ORANGE, Color.RED, Color.RED);
+                Notification jailNotification = new Notification("Jail", playerName + " was jailed by " + sender.getName(), "For " + prisoner.getRemainingTimeMinutes() + " mins", Color.ORANGE, Color.RED, Color.RED);
                 Jail.instance.notificationsPlugin.showNotification(jailNotification);
             }
             
