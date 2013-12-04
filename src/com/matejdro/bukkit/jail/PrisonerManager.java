@@ -120,6 +120,11 @@ public class PrisonerManager {
 					}
 				}
 				
+				player.getInventory().setArmorContents(null);
+				player.getInventory().clear();
+			}else if(jail.getSettings().getBoolean(Setting.StoreInventory)) {
+				prisoner.storeInventory(player.getInventory());
+				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
 			}
 			
@@ -129,6 +134,7 @@ public class PrisonerManager {
 			
 			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
 				prisoner.storeInventory(player.getInventory());
+				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
 			}
 		}
@@ -262,27 +268,18 @@ public class PrisonerManager {
 	 * Initiate transfer of every prisoner in specified jail zone to another jail zone
 	 * @param target Name of the destination jail zone
 	 */
-	public static void PrepareTransferAll(JailZone zone, String target)
-	{
-		for (JailPrisoner prisoner : zone.getPrisoners())
-		{
+	public static void PrepareTransferAll(JailZone zone, String target) {
+		for (JailPrisoner prisoner : zone.getPrisoners()) {
 			prisoner.setTransferDestination(target);
 			Player player = Jail.instance.getServer().getPlayerExact(prisoner.getName());
-			if (player == null)
-			{
-				
+			if (player == null) {
 				prisoner.setOfflinePending(true);
 				InputOutput.UpdatePrisoner(prisoner);
 				Jail.prisoners.put(prisoner.getName(), prisoner);
-				
-			}
-			else
-			{
+			} else {
 				Transfer(prisoner, player);
-				
 			}
 		}
-		
 	}
 	
 	/**
@@ -378,6 +375,10 @@ public class PrisonerManager {
 					}
 				}
 				
+				player.getInventory().setArmorContents(null);
+				player.getInventory().clear();
+			}else if(jail.getSettings().getBoolean(Setting.StoreInventory)) {
+				prisoner.storeInventory(player.getInventory());
 				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
 			}
