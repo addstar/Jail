@@ -14,7 +14,7 @@ public class JailRecordCommand extends BaseCommand{
 	private int messageNumber = 0;
 	
 	public JailRecordCommand(){
-		needPlayer = true;
+		needPlayer = false;
 		adminCommand = true;
 		permission = "jail.command.jailrecord";
 	}
