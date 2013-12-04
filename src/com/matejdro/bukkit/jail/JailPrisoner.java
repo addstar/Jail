@@ -26,28 +26,18 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public class JailPrisoner {
 	private String name;
-	private int remaintime;
-	private int afktime;
+	private int remaintime, afktime;
 	private JailZone jail;
-	private Boolean offline;
-	private String transferDest = "";
-	private Boolean releasing = false;
-	private Boolean muted = false;
-	private String reason = "";
 	private JailCell cell;
-	private String inventory = "";
+	private Boolean offline, releasing = false, muted = false, canSpawnGuards = true;
+	private String inventory = "", jailer = "", requestedCell, transferDest = "", reason = "", previousPositionWorld;
 	private GameMode previousGameMode;
-	private String jailer = "";
 	private HashSet<Creature> guards = new HashSet<Creature>();
 	private HashSet<LivingEntity> guardTargets = new HashSet<LivingEntity>();
-	private String requestedCell;
 	private List<String> oldPermissions = new ArrayList<String>();
-	private String previousPositionWorld;
 	private Location previousPosition;
-	private boolean canSpawnGuards = true;
 	
-	public JailPrisoner()
-	{
+	public JailPrisoner() {
 		offline = false;
 		transferDest = "";
 		releasing = false;
@@ -65,8 +55,7 @@ public class JailPrisoner {
 	 * @param Inventory Inventory string for this prisoner
 	 * @param Jailer Who jailed this prisoner
 	 */
-	public JailPrisoner(String Name, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions, GameMode Gamemode)
-	{
+	public JailPrisoner(String Name, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions, GameMode Gamemode) {
 		name = Name.toLowerCase();
 		remaintime = Remaintime;
 		setJail(Jail);
@@ -85,16 +74,14 @@ public class JailPrisoner {
 	/**
 	 * @return Name of this prisoner (player name)
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 		
 	/**
 	 * @return Remaining jail time of this prisoner in tens of seconds (1 means 10 seconds)
 	 */
-	public int getRemainingTime()
-	{
+	public int getRemainingTime() {
 		return remaintime;
 	}
 	
@@ -102,17 +89,15 @@ public class JailPrisoner {
 	 * Sets the remaining jail time of this prisoner
 	 * @param input new remaining time in tens of seconds (1 means 10 seconds)
 	 */
-	public void setRemainingTime(int input)
-	{
-		remaintime = input ;
+	public void setRemainingTime(int input) {
+		remaintime = input;
 		updateSign();
 	}
 	
 	/**
 	 * @return remaining jail time of this prisoner in minutes
 	 */
-	public double getRemainingTimeMinutes()
-	{
+	public double getRemainingTimeMinutes() {
 		return remaintime / 6.0;
 	}
 	
@@ -120,16 +105,14 @@ public class JailPrisoner {
 	 * Sets the remaining jail time of this prisoner
 	 * @param input remaining jail time in minutes
 	 */
-	public void setRemainingTimeMinutes(double input)
-	{
+	public void setRemainingTimeMinutes(double input) {
 		setRemainingTime((int) Math.round(input * 6.0));
 	}
 	
 	/**
 	 * @return jail zone, where this prisoner is jailed
 	 */
-	public JailZone getJail()
-	{
+	public JailZone getJail() {
 		return jail;
 	}
 		
@@ -140,8 +123,7 @@ public class JailPrisoner {
 	 * since he have new jail zone defined.
 	 * @param input new jail zone
 	 */
-	public void setJail(JailZone input)
-	{
+	public void setJail(JailZone input) {
 		jail = input;
 	}
 	
@@ -152,16 +134,14 @@ public class JailPrisoner {
 	 * since he have new jail zone defined.
 	 * @param jailname name of the new jail zone
 	 */
-	public void setJail(String jailname)
-	{
+	public void setJail(String jailname) {
 		jail = Jail.zones.get(jailname);
 	}
 	
 	/**
 	 * @return True if this is prisoner scheduled for any actions such as jailing or transfering when he logs in. Otherwise, return false.
 	 */
-	public Boolean offlinePending()
-	{
+	public Boolean offlinePending() {
 		return offline;
 	}
 	
@@ -169,16 +149,14 @@ public class JailPrisoner {
 	 * When this is enabled, events will trigger when prisoner logs in, thus making things such as offline (un)jailing or transfering possible.
 	 * @param input should events be triggered on next log in?
 	 */
-	public void setOfflinePending(Boolean input)
-	{
+	public void setOfflinePending(Boolean input) {
 		offline = input;
 	}
 	
 	/**
 	 * @return Destination jail zone, if this prisoner is waiting for transfer.
 	 */
-	public String getTransferDestination()
-	{
+	public String getTransferDestination() {
 		return transferDest;
 	}
 	
@@ -186,16 +164,14 @@ public class JailPrisoner {
 	 * Change destination jail zone, when this prisoner is waiting for transfer.
 	 * @param input transfer destination
 	 */
-	public void setTransferDestination(String input)
-	{
+	public void setTransferDestination(String input) {
 		transferDest = input;
 	}
 	
 	/**
 	 * @return True, if this prisoner is under transfer or being released. Do not trigger any movement based protections when this is true.
 	 */
-	public Boolean isBeingReleased()
-	{
+	public Boolean isBeingReleased() {
 		return releasing;
 	}
 	
@@ -204,16 +180,14 @@ public class JailPrisoner {
 	 * Activate this, when you are teleporting prisoner around and don't want movement protections to kick in.
 	 * @param input protection state
 	 */
-	public void SetBeingReleased(Boolean input)
-	{
+	public void SetBeingReleased(Boolean input) {
 		releasing = input;
 	}
 	
 	/**
 	 * @return reason for jailing that prisoner
 	 */
-	public String getReason()
-	{
+	public String getReason() {
 		return reason;
 	}
 	
@@ -221,16 +195,14 @@ public class JailPrisoner {
 	 * Sets reason for jailing this prisoner
 	 * @param input new reason
 	 */
-	public void setReason(String input)
-	{
+	public void setReason(String input) {
 		reason = input;
 	}
 	
 	/**
 	 * @return Is this prisoner muted (cannot speak in jail)
 	 */
-	public Boolean isMuted()
-	{
+	public Boolean isMuted() {
 		return muted;
 	}
 	
@@ -238,16 +210,14 @@ public class JailPrisoner {
 	 * This will mute prisoner, preventing him to speak inside jail. Use that to silence players that are spamming chat from jail.
 	 * @param input new mute state. True = muted, False = can speak.
 	 */
-	public void setMuted(Boolean input)
-	{
+	public void setMuted(Boolean input) {
 		muted = input;
 	}
 	
 	/**
 	 * @return cell that belongs to this prisoner. Returns null if prisoner does not have its own cell.
 	 */
-	public JailCell getCell()
-	{
+	public JailCell getCell() {
 		return cell;
 	}
 	
@@ -255,16 +225,14 @@ public class JailPrisoner {
 	 * Sets cell that belongs to this prisoner. 
 	 * @param input new cell that will belong to this prisoner.
 	 */
-	public void setCell(JailCell input)
-	{
+	public void setCell(JailCell input) {
 		cell = input;
 	}
 	
 	/**
 	 * @return Name of the cell that was requested when prisoner was jailed.
 	 */
-	public String getRequestedCell()
-	{
+	public String getRequestedCell() {
 		return requestedCell;
 	}
 	
@@ -272,16 +240,14 @@ public class JailPrisoner {
 	 * Sets the name of the cell where prisoner will be jailed.
 	 * @param input name of the cell.
 	 */
-	public void setRequestedCell(String input)
-	{
+	public void setRequestedCell(String input) {
 		requestedCell = input;
 	}
 	
 	/**
 	 * @return Inventory string of this prisoner. Format is: id,amount,durability,data;
 	 */
-	public String getInventory()
-	{
+	public String getInventory() {
 		return inventory;
 	}
 	
@@ -289,16 +255,14 @@ public class JailPrisoner {
 	 * Sets the inventory string of this prisoner.
 	 * @param input New inventory string. Format is: id,amount,durability,data;
 	 */
-	public void setInventory(String input)
-	{
+	public void setInventory(String input) {
 		inventory = input;
 	}
 	
 	/**
 	 * @return name of the person who jailed this prisoner
 	 */
-	public String getJailer()
-	{
+	public String getJailer() {
 		return jailer;
 	}
 	
@@ -307,24 +271,21 @@ public class JailPrisoner {
 	 * Sets name of the person who jailed this prisoner
 	 * @param input name
 	 */
-	public void setJailer(String input)
-	{
+	public void setJailer(String input) {
 		jailer = input;
 	}
 	
 	/**
 	 * @return Editable list of permission groups that will be given to the player after he is released
 	 */
-	public List<String> getOldPermissions()
-	{
+	public List<String> getOldPermissions() {
 		return oldPermissions;
 	}
 	
 	/**
 	 * @return List of permission groups that will be given to the player after he is released in String, separated by commas (,)
 	 */
-	public String getOldPermissionsString()
-	{
+	public String getOldPermissionsString() {
 		String perms = "";
 		for (String s : oldPermissions)
 			perms += s + ",";
@@ -335,8 +296,7 @@ public class JailPrisoner {
 	 * Sets list of permission groups that will be given to the player after he is released
 	 * @param permissions String in format "group,group2,group3"
 	 */
-	public void setOldPermissions(String permissions)
-	{
+	public void setOldPermissions(String permissions) {
 		if (permissions == null) 
 			oldPermissions = new ArrayList<String>();
 		else
@@ -347,8 +307,7 @@ public class JailPrisoner {
 	 * Sets list of permission groups that will be given to the player after he is released
 	 * @param permissions List of com.platymuus.bukkit.permissions.Group
 	 */
-	public void setOldPermissions(List<String> permissions)
-	{
+	public void setOldPermissions(List<String> permissions) {
 		oldPermissions = permissions;
 	}
 	
@@ -356,8 +315,7 @@ public class JailPrisoner {
 	 * @return Location, where player will be teleported after triggering move protection
 	 * (teleport location of player's jail zone or his cell if he have one) 
 	 */
-	public Location getTeleportLocation()
-	{
+	public Location getTeleportLocation() {
 		if (getCell() != null)
 			return getCell().getTeleportLocation();
 		else
@@ -368,8 +326,7 @@ public class JailPrisoner {
 	 * @return Location, where player will be teleported after releasing 
 	 * (release location of player's jail zone or his before-jailing location if config is set so) 
 	 */
-	public Location getReleaseTeleportLocation()
-	{
+	public Location getReleaseTeleportLocation() {
 		if (getJail().getSettings().getBoolean(Setting.ReleaseBackToPreviousPosition) && previousPosition != null)
 			return getPreviousPosition();
 		else
@@ -379,8 +336,7 @@ public class JailPrisoner {
 	/**
 	 * @return time, for how much was prisoner AFK of this prisoner in ten of seconds (1 means 10 seconds)
 	 */
-	public int getAFKTime()
-	{
+	public int getAFKTime() {
 		return afktime;
 	}
 	
@@ -388,21 +344,18 @@ public class JailPrisoner {
 	 * Sets the time, for how much was prisoner AFK.
 	 * @param input new time in tens of seconds (1 means 10 seconds)
 	 */
-	public void setAFKTime(int input)
-	{
+	public void setAFKTime(int input) {
 		afktime = input ;
 	}
 	
 	/*
 	 * @return time, for how much was prisoner AFK of this prisoner in minutes
 	 */
-	public double getAFKTimeMinutes()
-	{
+	public double getAFKTimeMinutes() {
 		return afktime / 6.0;
 	}
 
-	public void setAFKTimeMinutes(double input)
-	{
+	public void setAFKTimeMinutes(double input) {
 		setAFKTime((int) Math.round(input * 6.0));
 	}
 
@@ -410,40 +363,35 @@ public class JailPrisoner {
 	/**
 	 * @return List of guards that belong to this prisoner
 	 */
-	public HashSet<Creature> getGuards()
-	{
+	public HashSet<Creature> getGuards() {
 		return guards;
 	}
 	
 	/**
 	 * @return Editable list of entities that guards can target
 	 */
-	public HashSet<LivingEntity> getPossibleGuardTargets()
-	{
+	public HashSet<LivingEntity> getPossibleGuardTargets() {
 		return guardTargets;
 	}
 	
 	/**
 	 * @return Can you spawn guards to this prisoner? This will be false, if server is unable to spawn guards for example due to protection.
 	 */
-	public Boolean canGuardsBeSpawned()
-	{
+	public Boolean canGuardsBeSpawned() {
 		return canSpawnGuards;
 	}
 	
 	/**
 	 * @param input Set this to false to skip guard spawning for this player and teleport him instead.
 	 */
-	public void setGuardCanBeSpawned(Boolean input)
-	{
+	public void setGuardCanBeSpawned(Boolean input) {
 		canSpawnGuards = input;
 	}
 	
 	/**
 	 * @return Position, where player was before he got jailed.
 	 */
-	public Location getPreviousPosition()
-	{
+	public Location getPreviousPosition() {
 		if (previousPosition == null) return null;
 		if (previousPosition.getWorld() == null) previousPosition.setWorld(Jail.instance.getServer().getWorld(previousPositionWorld));
 		return previousPosition;
@@ -452,8 +400,7 @@ public class JailPrisoner {
 	/**
 	 * Sets position, where player was before he got jailed.
 	 */
-	public void setPreviousPosition(Location pos)
-	{
+	public void setPreviousPosition(Location pos) {
 		previousPosition = pos;
 	}
 	
@@ -461,8 +408,7 @@ public class JailPrisoner {
 	 * Sets position, where player was before he got jailed.
 	 * @param input string in format "world,x,y,z"
 	 */
-	public void setPreviousPosition(String input)
-	{
+	public void setPreviousPosition(String input) {
 		if (input == null || input.trim().equals("")) return;
 		String[] str = input.split(",");
 		Location loc = new Location(null , Double.parseDouble(str[1]), Double.parseDouble(str[2]),Double.parseDouble(str[3]));
@@ -479,35 +425,34 @@ public class JailPrisoner {
 	 * @param player Player, associated with this JailPrisoner
 	 */
 	@SuppressWarnings({ "unchecked"})
-	public void spawnGuards(int num, Location location, Player player)
-	{
+	public void spawnGuards(int num, Location location, Player player) {
 		List<BlockFace> checkedCorners = new ArrayList<BlockFace>();					
-		for (int i = 0; i < num; i++)
-		{
+		for (int i = 0; i < num; i++) {
 			Location spawn = null;
-			for (int ci = 0; ci < 4; ci++)
-			{
+			for (int ci = 0; ci < 4; ci++) {
 				Block block = location.getBlock().getRelative(BlockFace.values()[ci]);
-				if (!checkedCorners.contains(BlockFace.values()[ci]) && (block.getType() == Material.AIR || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.WATER))
-				{
+				if (!checkedCorners.contains(BlockFace.values()[ci])
+						&& (block.getType() == Material.AIR
+						|| block.getType() == Material.STATIONARY_WATER
+						|| block.getType() == Material.WATER)) {
 					spawn = block.getLocation();
 					checkedCorners.add(BlockFace.values()[ci]);
 					break;
 				}
 
 			}
-			if (spawn == null)
-			{
+			
+			if (spawn == null) {
 				checkedCorners.clear();
-				for (int ci = 0; ci < 3; ci++)
-				{
-					if (!checkedCorners.contains(BlockFace.values()[ci]) && location.getBlock().getRelative(BlockFace.values()[ci]).getType() == Material.AIR || location.getBlock().getRelative(BlockFace.values()[ci]).getType() == Material.STATIONARY_WATER)
-					{
+				for (int ci = 0; ci < 3; ci++) {
+					if (!checkedCorners.contains(BlockFace.values()[ci])
+							&& location.getBlock().getRelative(BlockFace.values()[ci]).getType() == Material.AIR
+							|| location.getBlock().getRelative(BlockFace.values()[ci]).getType() == Material.STATIONARY_WATER) {
 						spawn = location.getBlock().getRelative(BlockFace.NORTH).getLocation();
 						checkedCorners.add(BlockFace.values()[ci]);
 					}
-
 				}
+				
 				if (spawn == null) spawn = location;
 			}
 			
@@ -516,8 +461,7 @@ public class JailPrisoner {
 			
 			EntityType type = EntityType.fromName(pickedType);				
 			
-			if (type == null || !type.isSpawnable() || !Creature.class.isAssignableFrom(type.getEntityClass()))
-			{
+			if (type == null || !type.isSpawnable() || !Creature.class.isAssignableFrom(type.getEntityClass())) {
 				Jail.log.severe("[Jail] Invalid GuardTypes config! " + pickedType + " cannot be spawned.");
 				type = EntityType.CHICKEN;
 			}
@@ -525,8 +469,7 @@ public class JailPrisoner {
 			Creature guard = (Creature) location.getWorld().spawn(spawn, type.getEntityClass());
 			
 			
-			if (!(guard.getWorld().getEntities().contains(guard)))
-			{
+			if (!(guard.getWorld().getEntities().contains(guard))) {
 				canSpawnGuards=false;
 				return;
 			}
@@ -544,10 +487,8 @@ public class JailPrisoner {
 		}
 	}
 	
-	public void killGuards()
-	{
-		for (Creature c : guards.toArray(new Creature[0]))
-		{
+	public void killGuards() {
+		for (Creature c : guards.toArray(new Creature[0])) {
 				guards.remove(c);
 				Jail.guards.remove(c);
 				c.remove();
@@ -623,23 +564,19 @@ public class JailPrisoner {
 	/**
 	 * Update text of the sign that belongs to prisoner's cell if he have one.
 	 */
-	public void updateSign()
-	{
-		if (cell != null) 
-		{
-			for (Sign sign : cell.getSigns())
-			{
+	public void updateSign() {
+		if (cell != null) {
+			for (Sign sign : cell.getSigns()) {
 				String set = getJail().getSettings().getString(Setting.SignText) ;
 				set = Util.getColorfulMessage(set);
 				String[] lines = set.split("\\[NEWLINE\\]");
 				int max = lines.length;
 				if (max > 4) max = 4;
 				
-				for (int i = 0;i<max;i++)
-				{
+				for (int i = 0;i<max;i++) {
 					sign.setLine(i, parseTags(lines[i]));
-					
 				}
+				
 				sign.update();
 			}			
 		}
@@ -650,8 +587,7 @@ public class JailPrisoner {
 	 * @param str input string
 	 * @return parsed string
 	 */
-	public String parseTags(String str)
-	{
+	public String parseTags(String str) {
 		str = str.replace("<Player>", getName());
 		str = str.replace("<Reason>", getReason());
 		str = str.replace("<Jailer>", getJailer());
@@ -673,8 +609,7 @@ public class JailPrisoner {
 		else
 			str = str.replace("<Cell>", getCell().getName());
 		
-		if (str.contains("<TimeS>"))
-		{
+		if (str.contains("<TimeS>")) {
 			if (time > -1)
 				str = str.replace("<TimeS>", parseTags(getJail().getSettings().getString(Setting.MessageMinutes).replace("<TimeS>", "")));
 			else
@@ -689,18 +624,14 @@ public class JailPrisoner {
 	 * If player is online, he will be released instantly, 
 	 * otherwise he will be released when he logs in.
 	 */
-	public void release()
-	{
+	public void release() {
 		Player player = Jail.instance.getServer().getPlayerExact(getName());
 		
-		if (player == null)
-		{
+		if (player == null) {
 			setOfflinePending(true);
 			setRemainingTime(0);
 			update();
-		}
-		else
-		{
+		} else {
 			PrisonerManager.UnJail(this, player);
 		}
 
@@ -711,8 +642,7 @@ public class JailPrisoner {
 	 * If player is online, he will be transfered instantly, 
 	 * otherwise he will be transfered when he logs in.
 	 */
-	public void transfer()
-	{
+	public void transfer() {
 		transfer(null);
 	}
 	
@@ -722,22 +652,18 @@ public class JailPrisoner {
 	 * otherwise he will be transfered when he logs in.
 	 * @param targetjail Name of the destination jail zone
 	 */
-	public void transfer(String targetjail)
-	{
+	public void transfer(String targetjail) {
 		if (targetjail == null) 
 			targetjail = "find nearest";
 				
 		setTransferDestination(targetjail);
 		Player player = Jail.instance.getServer().getPlayerExact(getName());
 		
-		if (player == null)
-		{
+		if (player == null) {
 			setOfflinePending(true);
 			update();
 			Jail.prisoners.put(getName(), this);
-		}
-		else
-		{
+		} else {
 			PrisonerManager.Transfer(this, player);
 		}
 
@@ -746,24 +672,20 @@ public class JailPrisoner {
 	/**
 	 * Update data of this prisoner into database. 
 	 */
-	public void update()
-	{
+	public void update() {
 		InputOutput.UpdatePrisoner(this);
 	}
 	
 	/**
 	 * Delete prisoner from the database. No teleporting is involved.
 	 */
-	public void delete()
-	{
+	public void delete() {
 		SetBeingReleased(true);
 		JailCell cell = getCell();
 		InputOutput.DeletePrisoner(this);
 		Jail.prisoners.remove(getName());
-		if (cell != null) 
-		{
-			for (Sign sign : cell.getSigns())
-			{
+		if (cell != null) {
+			for (Sign sign : cell.getSigns()) {
 				sign.setLine(0, "");
 				sign.setLine(1, "");
 				sign.setLine(2, "");
@@ -771,23 +693,22 @@ public class JailPrisoner {
 				sign.update();
 
 			}
+			
 			if (cell.getChest() != null) cell.getChest().getInventory().clear();
 			cell.setPlayerName("");
 		}
 		
 		Jail.prisonerInventories.remove(getName());
 		
-		for (LivingEntity e : guards)
-		{
+		for (LivingEntity e : guards) {
 			e.remove();
 			Jail.guards.remove(e);
 		}
 			
-		if (getJail() != null && jail.getSettings().getBoolean(Setting.EnableChangingPermissions) && jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners))
-		{
+		if (getJail() != null && jail.getSettings().getBoolean(Setting.EnableChangingPermissions)
+				&& jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners)) {
 			Util.setPermissionsGroups(getName(), getOldPermissions(), jail.getTeleportLocation().getWorld().getName());
 		}
-
 	}
 
 	public GameMode getPreviousGameMode() {
@@ -797,5 +718,4 @@ public class JailPrisoner {
 	public void setPreviousGameMode(GameMode previousGameMode) {
 		this.previousGameMode = previousGameMode;
 	}
-	
-	}
+}
