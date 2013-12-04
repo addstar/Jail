@@ -1,7 +1,5 @@
 package com.matejdro.bukkit.jail.listeners;
 
-import java.util.HashMap;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -34,11 +32,9 @@ import com.matejdro.bukkit.jail.Util;
 @SuppressWarnings("deprecation")
 public class JailPlayerProtectionListener implements Listener {
 	private Jail plugin;
-	private HashMap<String, Long> last;
 
 	public JailPlayerProtectionListener(Jail instance) {
 		plugin = instance;
-		last = new HashMap<String, Long>();
 	}
 	
 	@EventHandler()
@@ -115,8 +111,7 @@ public class JailPlayerProtectionListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (event.isCancelled())
-			return;
+		if (event.isCancelled()) return;
 
 		if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
 			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
@@ -173,20 +168,13 @@ public class JailPlayerProtectionListener implements Listener {
 			}
 		}
 
-		if (Jail.instance.handcuffed.contains(event.getPlayer().getName())) {
-			event.setCancelled(true);
+		if (Jail.instance.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
+			event.getPlayer().teleport(Jail.instance.getHandCuffManager().getLocation(event.getPlayer().getName()));
 			
-			if(last.containsKey(event.getPlayer().getName())) {
-				if(System.currentTimeMillis() >= last.get(event.getPlayer().getName())) {
-					event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
-					last.put(event.getPlayer().getName(), System.currentTimeMillis() + 5000);
-				}
-			}else {
+			if(System.currentTimeMillis() >= Jail.instance.getHandCuffManager().getNextMessageTime(event.getPlayer().getName())) {
 				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
-				last.put(event.getPlayer().getName(), System.currentTimeMillis() + 5000);
+				Jail.instance.getHandCuffManager().updateNextTime(event.getPlayer().getName());
 			}
-		}else {
-			if(last.containsKey(event.getPlayer().getName())) last.remove(event.getPlayer().getName());
 		}
 	}
 	

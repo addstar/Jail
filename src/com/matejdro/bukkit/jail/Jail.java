@@ -11,7 +11,6 @@ import javax.swing.Timer;
 import me.muizers.Notifications.Notifications;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -58,7 +57,8 @@ import com.matejdro.bukkit.jail.listeners.JailPlayerProtectionListener;
 
 public class Jail extends JavaPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
-
+	
+	private HandCuffManager handcuffs;
 	private JailPlayerListener playerListener;
 	private JailBlockListener blockListener;
 	private JailPlayerProtectionListener playerPreventListener;
@@ -84,8 +84,6 @@ public class Jail extends JavaPlugin {
     public static boolean updateNeeded = false;
 
     private HashMap<String, BaseCommand> commands = new HashMap<String, BaseCommand>();
-
-    public ArrayList<String> handcuffed = new ArrayList<String>();
     
     public ArrayList<Material> helmets = new ArrayList<Material>();
 	public ArrayList<Material> chestPlates = new ArrayList<Material>();
@@ -94,6 +92,9 @@ public class Jail extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		if(this.handcuffs != null)
+			this.handcuffs = null;
+		
 		if (timer != null)
 			timer.stop();
 		InputOutput.freeConnection();
@@ -195,6 +196,8 @@ public class Jail extends JavaPlugin {
 				manager.displayJailTime();
 			}
 		}, 10, 50);
+		
+		this.handcuffs = new HandCuffManager();
 
 		log.info("[Jail] " + getDescription().getFullName() + " loaded!");
 	}
@@ -206,29 +209,8 @@ public class Jail extends JavaPlugin {
 		return false;
 	}
 	
-	public ChatColor getChatColor(String color){
-		if(color.equalsIgnoreCase("red")){
-			return ChatColor.RED;
-		}else if(color.equalsIgnoreCase("blue")){
-			return ChatColor.BLUE;
-		}else if(color.equalsIgnoreCase("green")){
-			return ChatColor.GREEN;
-		}else if(color.equalsIgnoreCase("aqua")){
-			return ChatColor.AQUA;
-		}else if(color.equalsIgnoreCase("gold")){
-			return ChatColor.GOLD;
-		}else if(color.equalsIgnoreCase("black")){
-			return ChatColor.BLACK;
-		}else if(color.equalsIgnoreCase("darkred'")){
-			return ChatColor.DARK_RED;
-		}else if(color.equalsIgnoreCase("bold")){
-			return ChatColor.BOLD;
-		}else if(color.equalsIgnoreCase("darkblue")){
-			return ChatColor.DARK_BLUE;
-		}
-		else{
-			return ChatColor.WHITE;
-		}
+	public HandCuffManager getHandCuffManager() {
+		return this.handcuffs;
 	}
 
 	class TimeEvent implements Runnable {

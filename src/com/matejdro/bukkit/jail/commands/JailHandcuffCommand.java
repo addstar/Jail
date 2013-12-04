@@ -28,11 +28,11 @@ public class JailHandcuffCommand extends BaseCommand{
 				return true;
 			}
 			
-			if(Jail.instance.handcuffed.contains(player.getName())){
+			if(Jail.instance.getHandCuffManager().isHandCuffed(player.getName())){
 				Util.Message(ChatColor.GREEN + "That player is already handcuffed, releasing them now!", sender);
-				Jail.instance.handcuffed.remove(player.getName());
+				Jail.instance.getHandCuffManager().removeHandCuffs(player.getName());
 			}else{
-				Jail.instance.handcuffed.add(player.getName());
+				Jail.instance.getHandCuffManager().addHandCuffs(player.getName(), player.getLocation());
 				Util.Message(ChatColor.BLUE + player.getName() + ChatColor.GREEN + " has been handcuffed!", sender);
 			}
 		}
