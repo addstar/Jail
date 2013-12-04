@@ -310,7 +310,7 @@ public class PrisonerManager {
 					
 					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR))
 						player.getInventory().setHelmet(item);
-					else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
+					else if(item.getType().toString().toLowerCase().contains("chestplate") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR))
 						player.getInventory().setChestplate(item);
 					else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR))
 						player.getInventory().setLeggings(item);

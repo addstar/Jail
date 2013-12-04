@@ -26,10 +26,8 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		players.put(player.getName(), new CreationPlayer(name));
 	}
 	
-	public static void select(Player player, Block block)
-	{
-		switch (players.get(player.getName()).state)
-		{
+	public static void select(Player player, Block block) {
+		switch (players.get(player.getName()).state) {
 			case 1:
 				telepoint(player,block);
 				break;
@@ -41,23 +39,19 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 				break;
 			case 4:
 				noname(player, block);
-			
-			
 		}
 	}
 	
-	public static Boolean chatmessage(Player player, String message)
-	{
-		if (players.get(player.getName()).state == 4) 
-		{
+	public static Boolean chatmessage(Player player, String message) {
+		if (players.get(player.getName()).state == 4) {
 			name(player, message);
 			return true;
 		}
+		
 		return false;
 	}
 	
-	private static void telepoint(Player player, Block block)
-	{
+	private static void telepoint(Player player, Block block) {
 		Util.Message(ChatColor.AQUA + "---------- Jail Cell Creation ----------", player);
 		Util.Message(ChatColor.GREEN + "Teleport point selected. Now select signs associated with this cell. You may select multiple signs. After you are done with the sign selection, right click on any non-sign block.", player);
 		Util.Message(ChatColor.AQUA + "----------------------------------------", player);
@@ -67,36 +61,28 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		
 	}
 
-	private static void sign(Player player, Block block)
-	{
+	private static void sign(Player player, Block block) {
 		CreationPlayer cr = players.get(player.getName());
-		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
-		{
+		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
 			cr.cell.addSign(block.getLocation());
 			Util.Message(ChatColor.GREEN + "Sign selected.", player);
-		}
-		else
-		{
+		} else {
 			Util.Message(ChatColor.AQUA + "---------- Jail Cell Creation ----------", player);
 			Util.Message(ChatColor.GREEN + "Sign selection completed. Now select a double chest associated with this cell. If there is no such chest click on any non-chest block. (please note that having no chest may result in players items being lost)", player);
 			Util.Message(ChatColor.AQUA + "----------------------------------------", player);
 			cr.state++;
 		}
-		
-		
 	}
 	
 	
-	private static void chest(Player player, Block block)
-	{
+	private static void chest(Player player, Block block) {
 		CreationPlayer cr = players.get(player.getName());
 		Material bpos1 = block.getLocation().add(-1, 0, 0).getBlock().getType();
 	    Material bpos2 = block.getLocation().add(+1, 0, 0).getBlock().getType();
 	    Material bpos3 = block.getLocation().add(0, 0, -1).getBlock().getType();
 	    Material bpos4 = block.getLocation().add(0, 0, +1).getBlock().getType();
 		
-		if (block.getType() == Material.CHEST)
-		{
+		if (block.getType() == Material.CHEST) {
 			if(bpos1 == Material.CHEST || bpos2 == Material.CHEST || bpos3 == Material.CHEST || bpos4 == Material.CHEST){
 				cr.cell.setChest(block.getLocation());
 				cr.state ++;
@@ -111,8 +97,7 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		Util.Message(ChatColor.AQUA + "----------------------------------------", player);
 	}
 	
-	private static void noname(Player player, Block block)
-	{
+	private static void noname(Player player, Block block) {
 		CreationPlayer cr = players.get(player.getName());
 		Util.Message(ChatColor.AQUA + "---------- Jail Cell Creation -----------", player);
 		Util.Message(ChatColor.GREEN + "Cell created. Now select the teleport point of the next cell. To stop creating cells, type /jailstop.", player);
@@ -120,8 +105,7 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		finish(cr, player);
 	}
 	
-	private static void name(Player player, String name)
-	{
+	private static void name(Player player, String name) {
 		CreationPlayer cr = players.get(player.getName());
 		
 		cr.cell.setName(name);
@@ -132,27 +116,20 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		finish(cr, player);
 	}
 	
-	private static void finish(CreationPlayer cr, Player player)
-	{
+	private static void finish(CreationPlayer cr, Player player) {
 		cr.cell.getJail().getCellList().add(cr.cell);
 		InputOutput.InsertCell(cr.cell);
 		players.remove(player.getName());
 		players.put(player.getName(), new CreationPlayer(cr.cell.getJail().getName()));
-
 	}
 	
-
-	
-	private static class CreationPlayer
-	{
+	private static class CreationPlayer {
 		public int state;
 		
 		private JailCell cell;		
-		public CreationPlayer(String name)
-		{
+		public CreationPlayer(String name) {
 			state = 1;
 			cell = new JailCell(name, "", "");
 		}
-}
-
+	}
 }
