@@ -8,6 +8,7 @@ Bugs Fixed
 * Players being sent to the wrong Jail (dev versions, but fixed NPEs)
 * Unable to jail certain players who were in other worlds
 * Unable to jail offline players, something about NPEs and stack traces.
+* Players inventory is now better managed, although if you shutdown the server you will lose players inventories who are not stored in chests
 
 Features
 ===
