@@ -26,14 +26,12 @@ public class JailRecordCommand extends BaseCommand{
 		}else{
 			try{
 				File dataFolder = Jail.instance.getDataFolder();
-				if(!dataFolder.exists())
-	            {
+				if(!dataFolder.exists()) {
 	                dataFolder.mkdir();
 	            }
 				
 				File jailLogFile = new File(Jail.instance.getDataFolder(), "jailLog.txt");
-	            if(!jailLogFile.exists())
-	            {
+	            if(!jailLogFile.exists()) {
 	                jailLogFile.createNewFile();
 	            }
 	            
@@ -43,18 +41,18 @@ public class JailRecordCommand extends BaseCommand{
 	            
 	            while(scanner.hasNextLine()){
 	            	String line = scanner.nextLine();
+	            	System.out.println(line);
 	            	if(line.contains(args[0] + " ")){
-	            		timesJailed ++;
+	            		timesJailed++;
 	            		sender.sendMessage(line);
 	            		messageNumber ++;
 	            	}
 	            }
 	            
-	            sender.sendMessage(ChatColor.RED + "This player has been jailed " + ChatColor.GREEN + timesJailed + ChatColor.RED + " times");
-	            
 	            if(messageNumber == 0){
 	            	sender.sendMessage(ChatColor.RED + "This player has not been jailed!");
 	            }else{
+	            	sender.sendMessage(ChatColor.RED + "This player has been jailed " + ChatColor.GREEN + timesJailed + ChatColor.RED + " times");
 	            	messageNumber = 0;
 	            }
 	            
