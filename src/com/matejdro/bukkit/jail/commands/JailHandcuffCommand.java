@@ -11,7 +11,7 @@ import com.matejdro.bukkit.jail.Util;
 public class JailHandcuffCommand extends BaseCommand{
 
 	public JailHandcuffCommand(){
-			needPlayer = true;
+			needPlayer = false;
 			adminCommand = true;
 			permission = "jail.command.handcuff";
 	}
