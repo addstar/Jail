@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -327,6 +328,7 @@ public class JailPrisoner {
 	 * (release location of player's jail zone or his before-jailing location if config is set so) 
 	 */
 	public Location getReleaseTeleportLocation() {
+		Bukkit.getLogger().info("The old location was: " + previousPosition);
 		if (getJail().getSettings().getBoolean(Setting.ReleaseBackToPreviousPosition) && previousPosition != null)
 			return getPreviousPosition();
 		else

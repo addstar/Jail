@@ -2,6 +2,7 @@ package com.matejdro.bukkit.jail;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -195,8 +196,10 @@ public class PrisonerManager {
 		
 		player.setSleepingIgnored(false);
 		
-		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease))
+		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) {
+			Bukkit.getLogger().info("The release location is: " + prisoner.getReleaseTeleportLocation());
 			player.teleport(prisoner.getReleaseTeleportLocation());
+		}
 		
 		if(prisoner.getPreviousGameMode() != null)
 			player.setGameMode(prisoner.getPreviousGameMode());
