@@ -1,5 +1,7 @@
 package com.matejdro.bukkit.jail.listeners;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -32,22 +34,22 @@ import com.matejdro.bukkit.jail.Util;
 @SuppressWarnings("deprecation")
 public class JailPlayerProtectionListener implements Listener {
 	private Jail plugin;
+	private HashMap<String, Long> last;
 
-	public JailPlayerProtectionListener(Jail instance)
-	{
+	public JailPlayerProtectionListener(Jail instance) {
 		plugin = instance;
+		last = new HashMap<String, Long>();
 	}
 	
 	@EventHandler()
-	public void onPlayerChat (PlayerChatEvent event)
-	{
+	public void onPlayerChat (PlayerChatEvent event) {
 		if (event.isCancelled()) return;
 		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
-		if (prisoner != null && prisoner.isMuted())
-		{
+		if (prisoner != null && prisoner.isMuted()) {
 			Util.Message(prisoner.getJail().getSettings().getString(Setting.MessageMute), event.getPlayer());
 			event.setCancelled(true);
 		}
+		
 		for(String playerName: Jail.prisoners.keySet()){
 			if(!Settings.getGlobalBoolean(Setting.PrisonersRecieveMessages)){
 				event.getRecipients().remove(Jail.instance.getServer().getPlayer(playerName));
@@ -111,88 +113,81 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 	}
 	
-	@EventHandler()
-	 public void onPlayerMove(PlayerMoveEvent event) {
-		 if (event.isCancelled()) return;
-		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()))
-			{
-				JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
-				if (prisoner.isBeingReleased() || prisoner.getJail() == null) return;
-				
-				if (event.getFrom().getX() != event.getTo().getX() && event.getFrom().getZ() != event.getTo().getZ()) prisoner.setAFKTime(0);
-				
-				JailZone jail = prisoner.getJail();
-				if (!jail.getSettings().getBoolean(Setting.EnablePlayerMoveProtection)) return;
-				if (!jail.isInside(event.getTo()))
-				{
-					if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards") && prisoner.canGuardsBeSpawned() && event.getPlayer().getGameMode() == GameMode.SURVIVAL)
-					{
-						if (prisoner.getGuards().size() > 0)
-						{
-							for (Creature w : prisoner.getGuards().toArray(new Creature[0]))
-							{
-								if (w == null || w.isDead())
-								{
-									prisoner.getGuards().remove(w);
-									Jail.guards.remove(w);
-									continue;
-								}
-								if (w.getTarget() == null) w.setTarget(event.getPlayer());
-								if (jail.getSettings().getInt(Setting.GuardTeleportDistance) > 0 && (w.getWorld() != w.getTarget().getWorld() || w.getLocation().distanceSquared(w.getTarget().getLocation()) > jail.getSettings().getInt(Setting.GuardTeleportDistance)))
-									w.teleport(w.getTarget().getLocation());
-							}
-						}
-						else
-							prisoner.spawnGuards(jail.getSettings().getInt(Setting.NumbefOfGuards), event.getTo(), event.getPlayer());
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		if (event.isCancelled())
+			return;
 
-					}
-					
-					else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("escape"))
-					{
-						prisoner.delete();
-						plugin.getServer().broadcastMessage(event.getPlayer().getName() + " has escaped from jail!");
-						return;
-					}
-					else 
-					{
-						if (!prisoner.canGuardsBeSpawned()) 
-						{
-							Jail.log.warning("[Jail] Unable to spawn guards for prisoner " + prisoner.getName() + "! Is this area protected against mobs?");
-							prisoner.setGuardCanBeSpawned(true);
+		if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
+			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+			if (prisoner.isBeingReleased() || prisoner.getJail() == null)
+				return;
+
+			if (event.getFrom().getX() != event.getTo().getX() && event.getFrom().getZ() != event.getTo().getZ())
+				prisoner.setAFKTime(0);
+
+			JailZone jail = prisoner.getJail();
+			if (!jail.getSettings().getBoolean(Setting.EnablePlayerMoveProtection))
+				return;
+			
+			if (!jail.isInside(event.getTo())) {
+				if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards") && prisoner.canGuardsBeSpawned() && event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+					if (prisoner.getGuards().size() > 0) {
+						for (Creature w : prisoner.getGuards().toArray(new Creature[0])) {
+							if (w == null || w.isDead()) {
+								prisoner.getGuards().remove(w);
+								Jail.guards.remove(w);
+								continue;
+							}
+							if (w.getTarget() == null) w.setTarget(event.getPlayer());
+							if (jail.getSettings().getInt(Setting.GuardTeleportDistance) > 0 && (w.getWorld() != w.getTarget().getWorld() || w.getLocation().distanceSquared(w.getTarget().getLocation()) > jail.getSettings().getInt(Setting.GuardTeleportDistance)))
+								w.teleport(w.getTarget().getLocation());
 						}
-						
-						if (jail.getSettings().getInt(Setting.PlayerMoveProtectionPenalty) > 0  && prisoner.getRemainingTime() > 0 && Settings.getGlobalBoolean(Setting.EnablePlayerMoveProtection))
-						{
-							
-							Util.Message(ChatColor.RED + jail.getSettings().getString(Setting.MessageEscapePenalty), event.getPlayer());
-							prisoner.setRemainingTime(prisoner.getRemainingTime() + jail.getSettings().getInt(Setting.PlayerMoveProtectionPenalty) * 6);
-							InputOutput.UpdatePrisoner(prisoner);
-						}
-					else
-						{
-							Util.Message(jail.getSettings().getString(Setting.MessageEscapeNoPenalty), event.getPlayer());
-						}	
-					
+					} else {
+						prisoner.spawnGuards(jail.getSettings().getInt(Setting.NumbefOfGuards), event.getTo(), event.getPlayer());
+					}
+				} else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("escape")) {
+					prisoner.delete();
+					plugin.getServer().broadcastMessage(event.getPlayer().getName() + " has escaped from jail!");
+					return;
+				} else {
+					if (!prisoner.canGuardsBeSpawned()) {
+						Jail.log.warning("[Jail] Unable to spawn guards for prisoner " + prisoner.getName() + "! Is this area protected against mobs?");
+						prisoner.setGuardCanBeSpawned(true);
+					}
+
+					if (jail.getSettings().getInt(Setting.PlayerMoveProtectionPenalty) > 0 && prisoner.getRemainingTime() > 0 && Settings.getGlobalBoolean(Setting.EnablePlayerMoveProtection)) {
+						Util.Message(ChatColor.RED + jail.getSettings().getString(Setting.MessageEscapePenalty), event.getPlayer());
+						prisoner.setRemainingTime(prisoner.getRemainingTime() + jail.getSettings().getInt(Setting.PlayerMoveProtectionPenalty) * 6);
+						InputOutput.UpdatePrisoner(prisoner);
+					} else {
+						Util.Message(jail.getSettings().getString(Setting.MessageEscapeNoPenalty), event.getPlayer());
+					}
+
 					Location teleport;
 					teleport = prisoner.getTeleportLocation();
 					event.setTo(teleport);
-					}					
 				}
-				else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards"))
-				{
-						prisoner.killGuards();
-				}
+			} else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards")) {
+				prisoner.killGuards();
 			}
-		 
-		 if(Jail.instance.handcuffed.contains(event.getPlayer().getName())){
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
-		 }
-				
-	 }
-	 
-	 
-	 
+		}
+
+		if (Jail.instance.handcuffed.contains(event.getPlayer().getName())) {
+			event.getPlayer().teleport(event.getFrom());
+			if(last.containsKey(event.getPlayer().getName())) {
+				if(System.currentTimeMillis() >= last.get(event.getPlayer().getName())) {
+					event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
+				}
+			}else {
+				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
+				last.put(event.getPlayer().getName(), System.currentTimeMillis() + 5000);
+			}
+		}else {
+			if(last.containsKey(event.getPlayer().getName())) last.remove(event.getPlayer().getName());
+		}
+	}
+	
 	@EventHandler()
 	 public void onPlayerTeleport(PlayerTeleportEvent event) {
 		 if (event.isCancelled()) return;
