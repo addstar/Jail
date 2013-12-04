@@ -12,6 +12,7 @@ Bugs Fixed
 * JailRecord now works like it was supposed to.
 * Adding any argument after the player on /jailrecord will list out all the times they've been jailed.
 * Fixed JailStick not working.
+* Fix handcuff acting strange.
 
 Features
 ===
