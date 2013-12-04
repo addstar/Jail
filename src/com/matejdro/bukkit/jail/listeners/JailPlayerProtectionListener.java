@@ -167,15 +167,6 @@ public class JailPlayerProtectionListener implements Listener {
 				prisoner.killGuards();
 			}
 		}
-
-		if (Jail.instance.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
-			event.getPlayer().teleport(Jail.instance.getHandCuffManager().getLocation(event.getPlayer().getName()));
-			
-			if(System.currentTimeMillis() >= Jail.instance.getHandCuffManager().getNextMessageTime(event.getPlayer().getName())) {
-				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
-				Jail.instance.getHandCuffManager().updateNextTime(event.getPlayer().getName());
-			}
-		}
 	}
 	
 	@EventHandler

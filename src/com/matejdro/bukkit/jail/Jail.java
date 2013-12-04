@@ -50,6 +50,7 @@ import com.matejdro.bukkit.jail.commands.JailVersionCommand;
 import com.matejdro.bukkit.jail.commands.JailVoteCommand;
 import com.matejdro.bukkit.jail.commands.UnJailCommand;
 import com.matejdro.bukkit.jail.commands.UnJailForceCommand;
+import com.matejdro.bukkit.jail.listeners.HandCuffListener;
 import com.matejdro.bukkit.jail.listeners.JailBlockListener;
 import com.matejdro.bukkit.jail.listeners.JailEntityListener;
 import com.matejdro.bukkit.jail.listeners.JailPlayerListener;
@@ -138,19 +139,15 @@ public class Jail extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(entityListener, this);
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		getServer().getPluginManager().registerEvents(playerPreventListener, this);
+		getServer().getPluginManager().registerEvents(new HandCuffListener(this), this);
 		
 		//Init timers
 		lastCheckTime = System.currentTimeMillis();
-		if (Settings.getGlobalBoolean(Setting.UseBukkitSchedulerTimer))
-		{
+		if (Settings.getGlobalBoolean(Setting.UseBukkitSchedulerTimer)) {
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeEvent(), 20, 20);
-		}
-		else
-		{
-			timer = new Timer(1000,new ActionListener ()
-			{
-				public void actionPerformed (ActionEvent event)
-				{
+		} else {
+			timer = new Timer(1000,new ActionListener () {
+				public void actionPerformed (ActionEvent event) {
 					getServer().getScheduler().scheduleSyncDelayedTask(Jail.instance, new TimeEvent());
 				};
 			});
