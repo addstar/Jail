@@ -161,10 +161,8 @@ public class JailPlayerProtectionListener implements Listener {
 					} else {
 						Util.Message(jail.getSettings().getString(Setting.MessageEscapeNoPenalty), event.getPlayer());
 					}
-
-					Location teleport;
-					teleport = prisoner.getTeleportLocation();
-					event.setTo(teleport);
+					
+					event.setTo(prisoner.getTeleportLocation());
 				}
 			} else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards")) {
 				prisoner.killGuards();
