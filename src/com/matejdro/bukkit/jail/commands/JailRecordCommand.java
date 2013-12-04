@@ -40,7 +40,7 @@ public class JailRecordCommand extends BaseCommand{
 	            while(scanner.hasNextLine()){
 	            	if(scanner.nextLine().contains(args[0].toLowerCase())){
 	            		timesJailed++;
-	            		messageNumber ++;
+	            		messageNumber++;
 	            	}
 	            }
 	            
@@ -81,7 +81,7 @@ public class JailRecordCommand extends BaseCommand{
 	            	if(line.contains(args[0].toLowerCase())){
 	            		sender.sendMessage(line);
 	            		timesJailed++;
-	            		messageNumber ++;
+	            		messageNumber++;
 	            	}
 	            }
 	            
