@@ -182,4 +182,8 @@ public class Util {
 		
 		return false;
     }
+    
+    public static String getColorfulMessage(String message) {
+		return message.replaceAll("(?i)&([0-9abcdefklmnor])", "\u00A7$1");
+	}
 }
