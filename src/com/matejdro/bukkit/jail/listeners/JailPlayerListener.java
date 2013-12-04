@@ -54,7 +54,7 @@ public class JailPlayerListener implements Listener {
 			Jail.jailStickToggle.put(damager.getName().toLowerCase(), false);
 		}
 
-		if(Util.permission(damager, "jail.usejailstick." + String.valueOf(damager.getItemInHand().getTypeId()), PermissionDefault.OP) && Jail.jailStickToggle.get(damager)){
+		if(Util.permission(damager, "jail.usejailstick." + String.valueOf(damager.getItemInHand().getTypeId()), PermissionDefault.OP) && Jail.jailStickToggle.get(damager.getName().toLowerCase())){
             if(player != null){
                 JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "", player.getGameMode());
                 PrisonerManager.PrepareJail(prisoner, player);
