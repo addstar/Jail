@@ -188,13 +188,13 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 	}
 	
-	@EventHandler()
-	 public void onPlayerTeleport(PlayerTeleportEvent event) {
-		 if (event.isCancelled()) return;
-		 onPlayerMove((PlayerMoveEvent) event);
-     }
+	@EventHandler
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		if (event.isCancelled()) return;
+		onPlayerMove((PlayerMoveEvent) event);
+	}
 		 
-	@EventHandler()
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST && (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) || !Util.permission(event.getPlayer(), "jail.openchest", PermissionDefault.OP)))
 				{
