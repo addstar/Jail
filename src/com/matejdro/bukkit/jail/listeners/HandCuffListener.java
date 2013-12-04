@@ -3,6 +3,7 @@ package com.matejdro.bukkit.jail.listeners;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -41,6 +42,19 @@ public class HandCuffListener implements Listener {
 					event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
 					pl.getHandCuffManager().updateNextTime(event.getPlayer().getName());
 				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void playerChat(AsyncPlayerChatEvent event) {
+		if(event.isCancelled()) return;
+		
+		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
+			event.setCancelled(true);
+			if(System.currentTimeMillis() >= pl.getHandCuffManager().getNextMessageTime(event.getPlayer().getName())) {
+				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and cant move!");
+				pl.getHandCuffManager().updateNextTime(event.getPlayer().getName());
 			}
 		}
 	}

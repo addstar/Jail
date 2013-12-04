@@ -13,6 +13,7 @@ Bugs Fixed
 * Adding any argument after the player on /jailrecord will list out all the times they've been jailed.
 * Fixed JailStick not working.
 * Fix handcuff acting strange.
+* Players are now muted when handcuffed.
 * JailRecord and Handcuff no longer require only a player instance of the sender, console can do them now
 
 Features
