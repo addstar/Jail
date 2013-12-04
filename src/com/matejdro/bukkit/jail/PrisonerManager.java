@@ -377,21 +377,11 @@ public class PrisonerManager {
 				
 				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
-			}else if(jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				prisoner.storeInventory(player.getInventory());
-				player.getInventory().setArmorContents(null);
-				player.getInventory().clear();
 			}
 			
 			cell.update();
 		} else {
 			player.teleport(prisoner.getTeleportLocation());
-			
-			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				prisoner.storeInventory(player.getInventory());
-				player.getInventory().setArmorContents(null);
-				player.getInventory().clear();
-			}
 		}
 		
 		prisoner.SetBeingReleased(false);

@@ -20,26 +20,24 @@ public class JailTransferCommand extends BaseCommand {
 
 
 	public Boolean run(CommandSender sender, String[] args) {		
-		if (args.length < 1)
-		{
+		if (args.length < 1) {
 			Util.Message("Usage: /jailtransfer [Player Name] (New Jail Name:New Cell Name)", sender);
 			return true;
 		}
-		if (!Jail.prisoners.containsKey(args[0].toLowerCase()))
-		{
+		
+		if (!Jail.prisoners.containsKey(args[0].toLowerCase())) {
 			Util.Message("That player is not jailed!", sender);
 			return true;
 		}
 		
-		if(args[1].equals(null)){
+		if(args[1].equals(null)) {
 			Util.Message("You must specify a jail!", sender);
 		}
 		
 		String jailname = args[1].toLowerCase();
 		if (jailname.contains(":")) jailname = jailname.split(":")[0];		
 		
-		if (args.length > 1 && !Jail.zones.containsKey(jailname))
-		{
+		if (args.length > 1 && !Jail.zones.containsKey(jailname)) {
 			Util.Message("Target jail does not exist!", sender);
 			return true;
 		}
@@ -50,23 +48,18 @@ public class JailTransferCommand extends BaseCommand {
 			newjail = null;
 		else
 			newjail = args[1].toLowerCase();
+		
 		JailPrisoner prisoner = Jail.prisoners.get(playername);
 		prisoner.transfer(newjail);
 
-		if (Jail.instance.getServer().getPlayer(playername) == null)
-		{
+		if (Jail.instance.getServer().getPlayer(playername) == null) {
 			Util.Message("Player is offline. He will be automatically transfered when he connnects.", sender);
-			
-		}
-		else
-		{
+		} else {
 			Util.Message("Player transfered.", sender);
-			
 		}
 		
 		//Log transfer into console
-		if (Settings.getGlobalBoolean(Setting.LogJailingIntoConsole))
-		{
+		if (Settings.getGlobalBoolean(Setting.LogJailingIntoConsole)) {
 			String jailer;
 			if (sender instanceof Player)
 				jailer = ((Player) sender).getName();
@@ -77,10 +70,7 @@ public class JailTransferCommand extends BaseCommand {
 			
 			Jail.log.info("Player " + playername + " was transferred by " + jailer);
 		}
-
-
-			return true;
-
+		
+		return true;
 	}
-
 }
