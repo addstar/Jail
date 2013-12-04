@@ -128,7 +128,7 @@ public class PrisonerManager {
 			player.teleport(prisoner.getTeleportLocation());
 			
 			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				prisoner.storeInventory(player.getName().toLowerCase(), player.getInventory());
+				prisoner.storeInventory(player.getInventory());
 				player.getInventory().clear();
 			}
 		}
@@ -292,16 +292,13 @@ public class PrisonerManager {
 	 * @param prisoner Prisoner that will be transfered
 	 * @param player Player that will be teleported
 	 */
-	public static void Transfer(JailPrisoner prisoner, Player player)
-	{
+	public static void Transfer(JailPrisoner prisoner, Player player) {
 		if ("find nearest".equals(prisoner.getTransferDestination())) prisoner.setTransferDestination(JailZoneManager.findNearestJail(player.getLocation(), prisoner.getJail().getName()).getName());
 		
-		if (prisoner.getCell() != null)
-		{
+		if (prisoner.getCell() != null) {
 			JailCell cell = prisoner.getCell();
 			cell.setPlayerName("");
-			for (Sign sign : cell.getSigns())
-			{
+			for (Sign sign : cell.getSigns()) {
 				sign.setLine(0, "");
 				sign.setLine(1, "");
 				sign.setLine(2, "");
@@ -336,8 +333,7 @@ public class PrisonerManager {
 		prisoner.SetBeingReleased(true);
 		
 		String targetJail = prisoner.getTransferDestination();
-		if (targetJail.contains(":"))
-		{
+		if (targetJail.contains(":")) {
 			prisoner.setRequestedCell(targetJail.split(":")[1]);
 			targetJail = targetJail.split(":")[0];			
 		}
@@ -382,6 +378,7 @@ public class PrisonerManager {
 					}
 				}
 				
+				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
 			}
 			
@@ -390,7 +387,8 @@ public class PrisonerManager {
 			player.teleport(prisoner.getTeleportLocation());
 			
 			if (jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				prisoner.storeInventory(player.getName(), player.getInventory());
+				prisoner.storeInventory(player.getInventory());
+				player.getInventory().setArmorContents(null);
 				player.getInventory().clear();
 			}
 		}

@@ -501,8 +501,7 @@ public class JailPrisoner {
 	 * Converts specified inventory into inventory string and stores it. Previous inventory string will be deleted. 
 	 * @param playerinv inventory that will be stored
 	 */
-	public void storeInventory(String name, PlayerInventory playerinv) {
-		name = name.toLowerCase();
+	public void storeInventory(PlayerInventory playerinv) {
 		if(!Jail.prisonerInventories.containsKey(name)) {
 			Jail.prisonerInventories.put(name, new HashMap<String, ItemStack[]>());
 		}
