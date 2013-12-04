@@ -113,7 +113,7 @@ public class JailPlayerListener implements Listener {
 					 } 
 				 }
 				 
-				 event.getPlayer().setGameMode(GameMode.SURVIVAL);
+				 event.getPlayer().setGameMode(GameMode.ADVENTURE);
 			 }
 			 
 			 if (prisoner.offlinePending()) {

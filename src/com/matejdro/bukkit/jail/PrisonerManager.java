@@ -79,11 +79,11 @@ public class PrisonerManager {
 
 		if (jail.getSettings().getBoolean(Setting.DeleteInventoryOnJail)) {
 			player.getInventory().clear();
-			player.getInventory().setArmorContents(new ItemStack[] { null, null, null, null });
-			
+			player.getInventory().setArmorContents(null);
 		}
 		
 		prisoner.setPreviousPosition(player.getLocation());
+		Jail.log.info(prisoner.getName() + " old position is: " + prisoner.getPreviousPosition());
 		
 		JailCell cell = jail.getRequestedCell(prisoner);
 		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().trim().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
