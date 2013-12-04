@@ -211,22 +211,16 @@ public class PrisonerManager {
 					
 					if(item.getType().toString().toLowerCase().contains("helmet") && (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType() == Material.AIR)) {
 						player.getInventory().setHelmet(item);
-						player.sendMessage("Restored your helmet: " + item.getType().toString());
-					} else if(item.getType().toString().toLowerCase().contains("chest") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR)) {
+					} else if(item.getType().toString().toLowerCase().contains("chestplate") && (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() == Material.AIR)) {
 						player.getInventory().setChestplate(item);
-						player.sendMessage("Restored your chestplate: " + item.getType().toString());
 					} else if(item.getType().toString().toLowerCase().contains("leg") && (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType() == Material.AIR)) {
 						player.getInventory().setLeggings(item);
-						player.sendMessage("Restored your leggings: " + item.getType().toString());
 					} else if(item.getType().toString().toLowerCase().contains("boots") && (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType() == Material.AIR)) {
 						player.getInventory().setBoots(item);
-						player.sendMessage("Restored your boots: " + item.getType().toString());
 					} else if (player.getInventory().firstEmpty() == -1) {
 						player.getWorld().dropItem(player.getLocation(), item);
-						player.sendMessage("Dropping the item on the group, inventory is full. " + item.getType().toString());
 					} else {
 						player.getInventory().addItem(item);
-						player.sendMessage("Added the item to your inventory. " + item.getType().toString());
 					}
 				}
 				
