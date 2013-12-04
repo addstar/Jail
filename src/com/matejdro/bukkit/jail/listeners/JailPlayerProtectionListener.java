@@ -115,7 +115,10 @@ public class JailPlayerProtectionListener implements Listener {
 
 		if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
 			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
-			if (prisoner.isBeingReleased() || prisoner.getJail() == null)
+			if (prisoner.isBeingReleased())
+				return;
+			
+			if(prisoner.getJail() == null)
 				return;
 
 			if (event.getFrom().getX() != event.getTo().getX() && event.getFrom().getZ() != event.getTo().getZ())
