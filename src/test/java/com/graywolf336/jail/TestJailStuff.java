@@ -35,6 +35,7 @@ public class TestJailStuff {
 
 	@Test
 	public void testForJails() {
+		assertNotNull("The JailIO is null.", main.getJailIO());
 		assertNotNull("The JailManager is null.", main.getJailManager());
 		assertNotNull("The HashSet for jails return is null.", main.getJailManager().getJails());
 		assertThat(main, is(main.getJailManager().getPlugin()));
