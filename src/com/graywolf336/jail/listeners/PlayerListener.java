@@ -1,10 +1,12 @@
 package com.graywolf336.jail.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.graywolf336.jail.JailMain;
@@ -36,6 +38,16 @@ public class PlayerListener implements Listener {
 				}
 				
 				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void chatting(AsyncPlayerChatEvent event) {
+		if(pl.getJailManager().isPlayerJailed(event.getPlayer().getName())) {
+			if(pl.getJailManager().getPrisoner(event.getPlayer().getName()).isMuted()) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "Stop talking, you're currently jailed and muted.");
 			}
 		}
 	}

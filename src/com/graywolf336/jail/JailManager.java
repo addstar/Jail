@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.graywolf336.jail.beans.CreationPlayer;
 import com.graywolf336.jail.beans.Jail;
+import com.graywolf336.jail.beans.Prisoner;
 import com.graywolf336.jail.steps.CellCreationSteps;
 import com.graywolf336.jail.steps.JailCreationSteps;
 
@@ -118,6 +119,22 @@ public class JailManager {
 		}
 		
 		return r;
+	}
+	
+	/** 
+	 * Gets the {@link Prisoner} data from for this user, if they are jailed.
+	 * 
+	 * @param name The name of prisoner who's data to get
+	 * @return {@link Prisoner prisoner} data.
+	 */
+	public Prisoner getPrisoner(String name) {
+		Jail j = getJailPlayerIsIn(name);
+		
+		if(j != null) {
+			return j.getPrisoner(name);
+		}else {
+			return null;
+		}
 	}
 	
 	/**
