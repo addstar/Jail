@@ -14,5 +14,5 @@ Done
 * New command system, internally we handle commands a lot better
 * Delete commands are now remove
 
-[Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
+[Jail 3.0 JavaDoc](http://ci.graywolf336.com/job/Jail/javadoc)
 ====
