@@ -19,7 +19,7 @@
 
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://ci.graywolf336.com/Jail</url>
+		<url>http://ci.graywolf336.com/job/Jail/</url>
 	</ciManagement>
 
 	<scm>

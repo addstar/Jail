@@ -1,29 +1,18 @@
-[Jail](http://dev.bukkit.org/bukkit-plugins/jail/)
+[Jail 3.0](http://ci.graywolf336.com/job/Jail/)
 ====
-This plugins adds Jail to your minecraft server. Admins can define several jails and then jail/unjail people or jail them on time basis. Plugin also offers wide variety of protections, so players won't escape out of your jail.
+This plugins adds Jail to your Minecraft server. Admins can define several jails and then jail/unjail people or jail them on time basis. Plugin also offers wide variety of protections, so players won't escape out of your jail.
 
-[![Build Status](http://git.graywolf336.com:8080/job/Jail/badge/icon)](http://git.graywolf336.com:8080/job/Jail/)
+[![Build Status](http://ci.graywolf336.com/job/Jail/badge/icon)](http://ci.graywolf336.com/job/Jail/)
 
-Features
+ToDo
 ===
-* Jail online and offline players
-* Wide variety of protections to prevent escaping or simply to create more interesting escape route on role play server.
-* Protection penalties (increase jail sentence if player is not behaving well)
-* Guards that will kill player if he tries to escape
-* Data is stored in either SQLite or MySQL.
-* Supports multiple worlds
-* Jailing without commands via item
-* Supports escaping for role play servers.
-* Allows players to vote a player to be jailed
-* Allows players to handcuff other players, stopping them from being able to move
-* Throws custom events when a player is jailed
-* - OnlinePlayerJailedEvent for when an online player is jailed
+* About everything
 
-[Jail 3.0](http://git.graywolf336.com:8080/job/Jail/)
+Done
 ===
-* New Command system, better handling of commands
-* Fixed the teleport in location being able to be set outside of the Jail region.
-* Replaced "Delete" commands with "Remove" (eg. /jaildeletecell is now /jailremovecell)
+* Muted Prisoners are now muted
+* New command system, internally we handle commands a lot better
+* Delete commands are now remove
 
 [Jail 3.0 JavaDoc](http://git.graywolf336.com:8080/job/Jail/javadoc)
 ====
