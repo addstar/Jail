@@ -31,6 +31,7 @@ public class JailMain extends JavaPlugin {
 	
 	public void onDisable() {
 		cmdHand = null;
+		jm = null;
 	}
 	
 	/* Majority of the new command system was heavily influenced by the MobArena.
