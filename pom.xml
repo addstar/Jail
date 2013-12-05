@@ -120,7 +120,7 @@
 				<directory>${basedir}/</directory>
 				<includes>
 					<include>plugin.yml</include>
-					<include>global.yml</include>
+					<include>config.yml</include>
 				</includes>
 			</resource>
 		</resources>
