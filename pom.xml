@@ -12,9 +12,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<issueManagement>
+		<system>Dev Bukkit</system>
+		<url>http://dev.bukkit.org/bukkit-plugins/jail/tickets/</url>
+	</issueManagement>
+
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://graywolfsolutions.com:8080/Jail</url>
+		<url>http://ci.graywolf336.com/Jail</url>
 	</ciManagement>
 
 	<scm>

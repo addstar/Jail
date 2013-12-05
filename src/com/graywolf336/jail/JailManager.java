@@ -52,6 +52,11 @@ public class JailManager {
 		return new HashSet<Jail>(jails.values());
 	}
 	
+	/** Returns an array of all the names of the jails. */
+	public String[] getJailNames() {
+		return this.jails.keySet().toArray(new String[jails.size()]);
+	}
+	
 	/** Adds a jail to the collection of them. */
 	public void addJail(Jail jail) {
 		this.jails.put(jail.getName(), jail);
