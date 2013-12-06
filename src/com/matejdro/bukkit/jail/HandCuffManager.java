@@ -14,7 +14,7 @@ public class HandCuffManager {
 	}
 	
 	public void addHandCuffs(String name, Location loc) {
-		this.handcuffed.put(name.toLowerCase(), System.currentTimeMillis() + 5000);
+		this.handcuffed.put(name.toLowerCase(), System.currentTimeMillis());
 		this.locs.put(name.toLowerCase(), loc);
 	}
 	
@@ -31,7 +31,7 @@ public class HandCuffManager {
 	}
 
 	public void updateNextTime(String name) {
-		this.handcuffed.put(name.toLowerCase(), System.currentTimeMillis() + 5000);
+		this.handcuffed.put(name.toLowerCase(), System.currentTimeMillis() + 10000);
 	}
 	
 	public Location getLocation(String name) {
