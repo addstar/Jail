@@ -69,8 +69,10 @@ public class HandCuffListener implements Listener {
 		if(event.isCancelled()) return;
 		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to talk!");
+			if(!event.getPlayer().hasPermission("jail.command.handcuff")) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to talk!");
+			}
 		}
 	}
 	
@@ -99,9 +101,11 @@ public class HandCuffListener implements Listener {
 		if(event.isCancelled()) return;
 		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
-			if(!event.getMessage().startsWith("/r") || !event.getMessage().startsWith("/reply")) {
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to use commands!");
+			if(!event.getPlayer().hasPermission("jail.command.handcuff")) {
+				if(!event.getMessage().startsWith("/r") || !event.getMessage().startsWith("/reply")) {
+					event.setCancelled(true);
+					event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to use commands!");
+				}
 			}
 		}
 	}
