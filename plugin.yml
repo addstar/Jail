@@ -68,6 +68,8 @@ commands:
         description: Allows players to vote to jail a player
     handcuff:
         description: Allows the player to handcuff another player
+    unhandcuff:
+        description: Allows the player to remove the handcuffs on a player.
 permissions:
     jail.*:
         children:

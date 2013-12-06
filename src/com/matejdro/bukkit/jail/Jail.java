@@ -46,6 +46,7 @@ import com.matejdro.bukkit.jail.commands.JailTeleInCommand;
 import com.matejdro.bukkit.jail.commands.JailTeleOutCommand;
 import com.matejdro.bukkit.jail.commands.JailTransferAllCommand;
 import com.matejdro.bukkit.jail.commands.JailTransferCommand;
+import com.matejdro.bukkit.jail.commands.JailUnHandcuffCommand;
 import com.matejdro.bukkit.jail.commands.JailVersionCommand;
 import com.matejdro.bukkit.jail.commands.JailVoteCommand;
 import com.matejdro.bukkit.jail.commands.UnJailCommand;
@@ -183,6 +184,7 @@ public class Jail extends JavaPlugin {
 		commands.put("jailversion", new JailVersionCommand());
 		commands.put("votejail", new JailVoteCommand());
 		commands.put("handcuff", new JailHandcuffCommand());
+		commands.put("unhandcuff", new JailUnHandcuffCommand());
 
 		IO.initMetrics();
 		

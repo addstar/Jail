@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.matejdro.bukkit.jail.Jail;
 import com.matejdro.bukkit.jail.Util;
 
-public class JailHandcuffCommand extends BaseCommand{
+public class JailHandcuffCommand extends BaseCommand {
 
 	public JailHandcuffCommand(){
 			needPlayer = false;
@@ -31,9 +31,11 @@ public class JailHandcuffCommand extends BaseCommand{
 			if(Jail.instance.getHandCuffManager().isHandCuffed(player.getName())){
 				Util.Message(ChatColor.GREEN + "That player is already handcuffed, releasing them now!", sender);
 				Jail.instance.getHandCuffManager().removeHandCuffs(player.getName());
+				player.sendMessage(ChatColor.GREEN + "Your handcuffs have been removed.");
 			}else{
 				Jail.instance.getHandCuffManager().addHandCuffs(player.getName(), player.getLocation());
 				Util.Message(ChatColor.BLUE + player.getName() + ChatColor.GREEN + " has been handcuffed!", sender);
+				player.sendMessage(ChatColor.RED + "You've been handcuffed.");
 			}
 		}
 		return true;
