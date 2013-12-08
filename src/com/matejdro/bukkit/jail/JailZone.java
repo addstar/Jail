@@ -186,18 +186,20 @@ public class JailZone {
 	/**
 	 * @return nearest cell to the specified location. Measured using teleport location.
 	 */
-	public JailCell getNearestCell(Location loc)
-	{
+	public JailCell getNearestCell(Location loc) {
 		JailCell cell = null;
 		double distance = -1;
 	
-		for (JailCell c : getCellList())
-		{				
-			double dist = c.getTeleportLocation().distance(loc);
-			if (dist < distance || distance < 0)
-			{
-				cell = c;
-				distance = dist;
+		for (JailCell c : getCellList()) {
+			if(c.getTeleportLocation().getWorld().getName().equalsIgnoreCase(loc.getWorld().getName())) {
+				double dist = c.getTeleportLocation().distance(loc);
+				if (dist < distance || distance < 0) {
+					cell = c;
+					distance = dist;
+				}
+			}else {
+				//They aren't in the same world, so let's just return the first cell found.
+				return c;
 			}
 		}
 		
