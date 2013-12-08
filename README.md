@@ -15,6 +15,7 @@ Bugs Fixed
 * Handcuffs now work a lot better: muting players, no commands except /r and /reply, can't place or destroy blocks, can't teleport, can't move except along pitch and yaw
 * There is now a /unhandcuff command for players.
 * JailRecord and Handcuff no longer require only a player instance of the sender, console can do them now
+* Don't calculate the closest jail cell if they are worlds apart.
 
 Features
 ===
