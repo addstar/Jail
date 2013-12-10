@@ -34,7 +34,7 @@ public class JailLog {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             
-        	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + " for " + time.toString() + " minutes with a reason of '" + reason + "'.");
+        	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + " for " + time.toString() + " minutes with " + (reason.isEmpty() ? "no reason given." : "a reason of '" + reason + "'."));
             
             pw.flush();
             pw.close();
