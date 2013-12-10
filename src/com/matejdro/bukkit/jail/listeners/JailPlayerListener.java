@@ -2,7 +2,6 @@ package com.matejdro.bukkit.jail.listeners;
 
 import com.matejdro.bukkit.jail.*;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -92,7 +91,7 @@ public class JailPlayerListener implements Listener {
         }
 	}
 
-	@EventHandler()
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(event.getPlayer().isOp() && Jail.updateNeeded){
 			event.getPlayer().sendMessage(ChatColor.BLUE + "There is an update for the jail plugin!");
@@ -100,35 +99,41 @@ public class JailPlayerListener implements Listener {
 		
 		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
 			 JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
-			 if(prisoner != null){
-				 if(prisoner.getJail() == null) {
-					 JailZone jail = JailZoneManager.findNearestJail(event.getPlayer().getLocation());
-					 prisoner.setJail(jail);
-					 event.getPlayer().teleport(jail.getTeleportLocation());
-				 }else {
-					 if(prisoner.getCell() == null) {
-						 event.getPlayer().teleport(prisoner.getJail().getTeleportLocation());
-					 }else {
-						 event.getPlayer().teleport(prisoner.getCell().getTeleportLocation());
-					 } 
-				 }
-				 
-				 event.getPlayer().setGameMode(GameMode.ADVENTURE);
-			 }
 			 
-			 if (prisoner.offlinePending()) {
-				 if (prisoner.getTransferDestination().isEmpty()) {
-					 if (prisoner.getRemainingTime() != 0) {
-						 PrisonerManager.Jail(prisoner, event.getPlayer());
-					 } else if (prisoner.getJail() != null) {
-						 PrisonerManager.UnJail(prisoner, event.getPlayer());
-						 return;
-					 } else {
-						 prisoner.delete();
+			 if(prisoner != null) {
+				 if (prisoner.offlinePending()) {
+					 //If the prisoner has something we're supposed to do when they come back online
+					 if (prisoner.getTransferDestination().isEmpty()) {
+						 //We're not transferring the player
+						 if (prisoner.getRemainingTime() != 0) {
+							 //They still have time to server, so they are probably newly jailed.
+							 PrisonerManager.Jail(prisoner, event.getPlayer());
+							 return;
+						 }else if(prisoner.getJail() != null) {
+							 //Their jail wasn't null and they no longer have any time, let's unjail them
+							 PrisonerManager.UnJail(prisoner, event.getPlayer());
+							 return;
+						 }else {
+							 //Something just went completely wrong, so let's go forward and delete the prisoner
+							 prisoner.delete();
+							 return;
+						 }
+					 }else {
+						 PrisonerManager.Transfer(prisoner, event.getPlayer());
 						 return;
 					 }
-				 } else {
-					 PrisonerManager.Transfer(prisoner, event.getPlayer());
+				 }else {
+					 if(prisoner.getJail() == null) {
+						 JailZone jail = JailZoneManager.findNearestJail(event.getPlayer().getLocation());
+						 prisoner.setJail(jail);
+						 event.getPlayer().teleport(jail.getTeleportLocation());
+					 }else {
+						 if(prisoner.getCell() == null) {
+							 event.getPlayer().teleport(prisoner.getJail().getTeleportLocation());
+						 }else {
+							 event.getPlayer().teleport(prisoner.getCell().getTeleportLocation());
+						 } 
+					 }
 				 }
 			 }
 			 

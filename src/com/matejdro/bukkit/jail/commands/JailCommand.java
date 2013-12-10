@@ -108,7 +108,7 @@ public class JailCommand extends BaseCommand {
             JailLog logger = new JailLog();
             
             if(player == null) {//If the player isn't online, then let's handle him separately            	
-            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, false, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "", GameMode.SURVIVAL);
+            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, true, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "", GameMode.SURVIVAL);
                 PrisonerManager.PrepareJail(prisoner, player);
             	
                 message = Settings.getGlobalString(Setting.MessagePrisonerOffline);

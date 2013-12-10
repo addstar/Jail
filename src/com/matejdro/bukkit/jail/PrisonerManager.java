@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 public class PrisonerManager {
 	
 	public static void PrepareJail(JailPrisoner prisoner, Player player) {
@@ -188,17 +187,13 @@ public class PrisonerManager {
 		if (jail.getSettings().getBoolean(Setting.SpoutChangeSkin))
 			Util.changeSkin(player, null);
 		
-		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions) && !jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners)) {
+		if (jail.getSettings().getBoolean(Setting.EnableChangingPermissions) && !jail.getSettings().getBoolean(Setting.RestorePermissionsToEscapedPrisoners))
 			Util.setPermissionsGroups(player.getName(), prisoner.getOldPermissions(), jail.getTeleportLocation().getWorld().getName());
-		}
 		
 		player.setSleepingIgnored(false);
 		
-		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) {
-			player.sendMessage(prisoner.getReleaseTeleportLocation().toString());
+		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease))
 			player.teleport(prisoner.getReleaseTeleportLocation());
-			player.sendMessage(player.getLocation().toString());
-		}
 		
 		if(prisoner.getPreviousGameMode() != null)
 			player.setGameMode(prisoner.getPreviousGameMode());
