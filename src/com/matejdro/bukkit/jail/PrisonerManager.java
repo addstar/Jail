@@ -81,6 +81,12 @@ public class PrisonerManager {
 			player.getInventory().setArmorContents(null);
 		}
 		
+		//only eject them if they're inside a vechicle and also eject anyone else ontop of them
+    	if(player.isInsideVehicle()) {
+    		player.eject();
+    		player.getVehicle().eject();
+    	}
+    	
 		prisoner.setPreviousPosition(player.getLocation());
 		
 		JailCell cell = jail.getRequestedCell(prisoner);
