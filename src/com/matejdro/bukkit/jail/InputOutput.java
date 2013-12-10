@@ -23,24 +23,28 @@ public class InputOutput {
     public static YamlConfiguration global;
     public static YamlConfiguration jails;
     
-    public static HashMap<Integer, String[]> jailStickParameters = new HashMap<Integer, String[]>();
+    public static HashMap<Integer, String[]> jailStickParameters;
     
-	public InputOutput()
-	{
+	public InputOutput() {
+		jailStickParameters = new HashMap<Integer, String[]>();
+		
 		if (!Jail.instance.getDataFolder().exists()) {
 			try {
-			(Jail.instance.getDataFolder()).mkdir();
+				Jail.instance.getDataFolder().mkdir();
 			} catch (Exception e) {
-			Jail.log.log(Level.SEVERE, "[Jail]: Unable to create " + Jail.instance.getDataFolder().getAbsolutePath() + " directory");
+				Jail.log.log(Level.SEVERE, "[Jail]: Unable to create " + Jail.instance.getDataFolder().getAbsolutePath() + " directory");
 			}
-			}
+		}
+		
 		global = new YamlConfiguration();
 		jails = new YamlConfiguration(); 
 		connection = null;
 	}
+	
        // Test
     public static synchronized Connection getConnection() {
     	if (connection == null) connection = createConnection();
+    	
     	if(Settings.getGlobalBoolean(Setting.UseMySQL)) {
             try {
                 if(!connection.isValid(10)) connection = createConnection();
@@ -48,6 +52,7 @@ public class InputOutput {
                 ex.printStackTrace();
             }
         }
+    	
     	return connection;
     }
 
@@ -85,44 +90,37 @@ public class InputOutput {
         }
     }
     
-    public void LoadSettings()
-	{
+    public void LoadSettings() {
     	try {
     		if (!new File(Jail.instance.getDataFolder(),"global.yml").exists()) global.save(new File(Jail.instance.getDataFolder(),"global.yml"));
     		if (!new File(Jail.instance.getDataFolder(),"jails.yml").exists()) jails.save(new File(Jail.instance.getDataFolder(),"jails.yml"));
 
     		global.load(new File(Jail.instance.getDataFolder(),"global.yml"));
 	    	jails.load(new File(Jail.instance.getDataFolder(),"jails.yml"));
-	    	for (Setting s : Setting.values())
-	    	{
+	    	
+	    	for (Setting s : Setting.values()) {
 	    		if (global.get(s.getString()) == null) global.set(s.getString(), s.getDefault());
 	    	}
+	    	
 	    	loadJailStickParameters();
 	    	
 	    	global.save(new File(Jail.instance.getDataFolder(),"global.yml"));
-
 		} catch (FileNotFoundException e) {
-			
 			e.printStackTrace();
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 	}
     
-    public void loadJailStickParameters()
-    {
-    	for (String i : Settings.getGlobalString(Setting.JailStickParameters).split(";"))
-    	{
+    public void loadJailStickParameters() {
+    	for (String i : Settings.getGlobalString(Setting.JailStickParameters).split(";")) {
     		jailStickParameters.put(Integer.parseInt(i.substring(0, i.indexOf(","))), i.split(","));
     	}
-    		
     }
     
-    public void LoadJails()
-    {
+    public void LoadJails() {
     	try {
 			Connection conn = null;
 			PreparedStatement ps = null;
@@ -168,9 +166,8 @@ public class InputOutput {
 			Jail.log.log(Level.INFO,"[Jail] Loaded " + String.valueOf(Jail.zones.size()) + " jail zones.");
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE, "[Jail] Error while loading Jail zones! - " + e.getMessage());
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE, "[Jail] Error while loading Jail zones! - " + e.getMessage());
 		}
     }
     
@@ -210,13 +207,12 @@ public class InputOutput {
 			Jail.log.log(Level.INFO,"[Jail] Loaded " + String.valueOf(Jail.prisoners.size()) + " prisoners.");
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE, "[Jail] Error while loading prisoners from the database! - " + e.getMessage() );
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE, "[Jail] Error while loading prisoners from the database! - " + e.getMessage() );
 		}
     }
     
-    public void LoadCells()
-    {
+    public void LoadCells() {
     	try {
 			Connection conn;
 			PreparedStatement ps = null;
@@ -272,13 +268,12 @@ public class InputOutput {
 			Jail.log.log(Level.INFO,"[Jail] Loaded " + String.valueOf(count) + " cells.");
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE, "[Jail] Error while loading prisoners from the database! - " + e.getMessage() );
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE, "[Jail] Error while loading prisoners from the database! - " + e.getMessage() );
 		}
     }
     
-    public static void InsertZone(JailZone z)
-    {
+    public static void InsertZone(JailZone z) {
     	try {
     		Location firstCorner = z.getFirstCorner();
     		Location secondCorner = z.getSecondCorner();
@@ -315,13 +310,12 @@ public class InputOutput {
 				e.printStackTrace();
 			}
     	} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while creating Jail Zone! - " + e.getMessage() );
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while creating Jail Zone! - " + e.getMessage() );
 		}
     }
     
-    public static void UpdateZone(JailZone z)
-    {
+    public static void UpdateZone(JailZone z) {
     	try {
     		Location firstCorner = z.getFirstCorner();
     		Location secondCorner = z.getSecondCorner();
@@ -350,15 +344,13 @@ public class InputOutput {
 			
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while creating Jail Zone! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while creating Jail Zone! - " + e.getMessage() );
 		}
     }
 
     
-    public static void DeleteZone(JailZone z)
-    {
+    public static void DeleteZone(JailZone z) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM jail_zones WHERE name = ?");
@@ -368,27 +360,24 @@ public class InputOutput {
 			
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Zone from DB! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Zone from DB! - " + e.getMessage() );
 		}
     }
     
-    public static void InsertPrisoner(JailPrisoner p)
-    {
+    public static void InsertPrisoner(JailPrisoner p) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO jail_prisoners  (PlayerName, RemainTime, JailName, Offline, TransferDest, reason, muted, Inventory, Jailer, Permissions, PreviousPosition) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 			ps.setString(1, p.getName());
 			ps.setInt(2, p.getRemainingTime());
-			if (p.getJail() == null)
-			{
+			
+			if (p.getJail() == null) {
 				ps.setString(3, "");
-			}
-			else
-			{
+			} else {
 				ps.setString(3, p.getJail().getName());
 			}
+			
 			ps.setBoolean(4, p.offlinePending());
 			ps.setString(5, p.getTransferDestination());
 			ps.setString(6, p.getReason());
@@ -396,6 +385,7 @@ public class InputOutput {
 			ps.setString(8, p.getInventory());
 			ps.setString(9, p.getJailer());
 			ps.setString(10, p.getOldPermissionsString());
+			
 			if (p.getPreviousPosition() == null)
 				ps.setString(11, "");
 			else
@@ -406,14 +396,12 @@ public class InputOutput {
 			
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while inserting Prisoner into DB! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while inserting Prisoner into DB! - " + e.getMessage() );
 		}
     }
     
-    public static void InsertCell(JailCell c)
-    {
+    public static void InsertCell(JailCell c) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO jail_cells (JailName, Teleport, Sign, Chest, Player, Name) VALUES (?,?,?,?,?,?)");
@@ -445,14 +433,12 @@ public class InputOutput {
 			ps.close();
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while inserting Cell into DB! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while inserting Cell into DB! - " + e.getMessage() );
 		}
     }
     
-    public static void UpdateCell(JailCell c)
-    {
+    public static void UpdateCell(JailCell c) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			if (conn == null || conn.isClosed()) return;
@@ -484,14 +470,12 @@ public class InputOutput {
 			ps.close();
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Cell into DB!");
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Cell into DB!");
 		}
     }
 
-    public static void DeleteCell(JailCell c)
-    {
+    public static void DeleteCell(JailCell c) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM jail_cells WHERE Teleport = ?");
@@ -501,16 +485,12 @@ public class InputOutput {
 			
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Cell from DB! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Cell from DB! - " + e.getMessage() );
 		}
     }
-
-
     
-    public static void UpdatePrisoner(JailPrisoner p)
-    {
+    public static void UpdatePrisoner(JailPrisoner p) {
     	
     	JailScoreboardManager scoreboard = new JailScoreboardManager();
     	scoreboard.displayJailTime();
@@ -542,14 +522,12 @@ public class InputOutput {
 			ps.close();
 
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Prisoner into DB!");
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Prisoner into DB!");
 		}
     }
     
-    public static void DeletePrisoner(JailPrisoner p)
-    {
+    public static void DeletePrisoner(JailPrisoner p) {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM jail_prisoners WHERE PlayerName = ?");
@@ -559,21 +537,18 @@ public class InputOutput {
 			
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Prisoner from DB! - " + e.getMessage() );
-			
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while deleting Prisoner from DB! - " + e.getMessage() );
 		}
     }
     
-    public static void UpdatePrisoners()
-    {
+    public static void UpdatePrisoners() {
     	if (Jail.prisoners.size() == 0) return;
     	try {
 			Connection conn = InputOutput.getConnection();
 			if (conn == null || conn.isClosed()) return;
 			PreparedStatement ps = conn.prepareStatement("UPDATE jail_prisoners SET RemainTime = ?, JailName = ?, Offline = ?, TransferDest = ?, muted = ?, Inventory = ?, Permissions = ?, PreviousLocation = ? WHERE PlayerName = ?");
-			for (JailPrisoner p : Jail.prisoners.values())
-			{
+			for (JailPrisoner p : Jail.prisoners.values()) {
 				ps.setInt(1, p.getRemainingTime());
 				ps.setString(2, p.getJail().getName());
 				ps.setBoolean(3, p.offlinePending());
@@ -581,15 +556,14 @@ public class InputOutput {
 				ps.setBoolean(5, p.isMuted());
 				ps.setString(6, p.getInventory());
 				ps.setString(7, p.getOldPermissionsString());
+				
 				if (p.getPreviousPosition() == null)
 					ps.setString(8, "");
 				else
 					ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
-				ps.executeUpdate();
-
-
 				
 				ps.setString(9, p.getName());
+				ps.executeUpdate();
 				ps.addBatch();
 			}
 			ps.executeBatch();
@@ -597,48 +571,41 @@ public class InputOutput {
 
 			ps.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Prisoner into DB! - " + e.getMessage() );
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE,"[Jail] Error while updating Prisoner into DB! - " + e.getMessage() );
 		}
     }
-        
     
-
-
-    
-    public void PrepareDB()
-    {
+    public void PrepareDB() {
     	Connection conn;
         Statement st = null;
+        
         try {
-            conn = InputOutput.getConnection();//            {
-            	st = conn.createStatement();
-            	if (Settings.getGlobalBoolean(Setting.UseMySQL))
-                {
-                	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_prisoners` ( `PlayerName` varchar(250) NOT NULL, `RemainTime` int(11) DEFAULT NULL, `JailName` varchar(250) DEFAULT NULL, `Offline` varchar(250) DEFAULT NULL, `TransferDest` varchar(250) DEFAULT NULL , `reason` varchar(250) DEFAULT NULL, `muted` TINYINT DEFAULT false, Inventory TEXT DEFAULT NULL, Jailer VARCHAR(250) DEFAULT NULL, Permissions VARCHAR(250) DEFAULT NULL, PreviousPosition VARCHAR(250) DEFAULT NULL, PRIMARY KEY (`PlayerName`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-                	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_zones` ( `name` varchar(250) NOT NULL DEFAULT '', `X1` double DEFAULT NULL, `Y1` double DEFAULT NULL, `Z1` double DEFAULT NULL, `X2` double DEFAULT NULL, `Y2` double DEFAULT NULL, `Z2` double DEFAULT NULL, `teleX` double DEFAULT NULL, `teleY` double DEFAULT NULL, `teleZ` double DEFAULT NULL, `freeX` double DEFAULT NULL, `freeY` double DEFAULT NULL, `FreeZ` double DEFAULT NULL, `teleWorld` varchar(250) DEFAULT NULL, `freeWorld` varchar(250) DEFAULT NULL , PRIMARY KEY (`name`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-                	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_cells` ( `JailName` varchar(250) NOT NULL, `Teleport` varchar(250) NOT NULL, `Sign` TEXT DEFAULT NULL , `Chest` varchar(250) DEFAULT NULL, Player varchar(250) DEFAULT NULL, Name varchar(20) DEFAULT NULL, PRIMARY KEY (Teleport) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-                }
-                else
-                {
-                	st.executeUpdate("CREATE TABLE IF NOT EXISTS \"jail_prisoners\" (\"PlayerName\" VARCHAR PRIMARY KEY  NOT NULL , \"RemainTime\" INTEGER, \"JailName\" VARCHAR, \"Offline\" BOOLEAN, \"TransferDest\" VARCHAR, `reason` VARCHAR, `muted` BOOLEAN, Inventory STRING, Jailer VARCHAR, Permissions VARCHAR, PreviousPosition VARCHAR)");
-                    st.executeUpdate("CREATE TABLE IF NOT EXISTS \"jail_zones\" (\"name\" VARCHAR PRIMARY KEY  NOT NULL , \"X1\" DOUBLE, \"Y1\" DOUBLE, \"Z1\" DOUBLE, \"X2\" DOUBLE, \"Y2\" DOUBLE, \"Z2\" DOUBLE, \"teleX\" DOUBLE, \"teleY\" DOUBLE, \"teleZ\" DOUBLE, \"freeX\" DOUBLE, \"freeY\" DOUBLE, \"FreeZ\" DOUBLE, \"teleWorld\" VARCHAR, \"freeWorld\" STRING)");
-                    st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_cells` ( `JailName` VARCHAR NOT NULL,  `Teleport` VARCHAR  PRIMARY_KEY NOT NULL, `Sign` STRING DEFAULT NULL , `Chest` VARCHAR DEFAULT NULL, Player VARCHAR DEFAULT NULL, Name VARCHAR DEFAULT NULL);");
-                }
-                conn.commit();
-                st.close();
-
-
-//            }
+            conn = InputOutput.getConnection();
+        	st = conn.createStatement();
+        	if (Settings.getGlobalBoolean(Setting.UseMySQL))
+            {
+            	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_prisoners` ( `PlayerName` varchar(250) NOT NULL, `RemainTime` int(11) DEFAULT NULL, `JailName` varchar(250) DEFAULT NULL, `Offline` varchar(250) DEFAULT NULL, `TransferDest` varchar(250) DEFAULT NULL , `reason` varchar(250) DEFAULT NULL, `muted` TINYINT DEFAULT false, Inventory TEXT DEFAULT NULL, Jailer VARCHAR(250) DEFAULT NULL, Permissions VARCHAR(250) DEFAULT NULL, PreviousPosition VARCHAR(250) DEFAULT NULL, PRIMARY KEY (`PlayerName`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+            	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_zones` ( `name` varchar(250) NOT NULL DEFAULT '', `X1` double DEFAULT NULL, `Y1` double DEFAULT NULL, `Z1` double DEFAULT NULL, `X2` double DEFAULT NULL, `Y2` double DEFAULT NULL, `Z2` double DEFAULT NULL, `teleX` double DEFAULT NULL, `teleY` double DEFAULT NULL, `teleZ` double DEFAULT NULL, `freeX` double DEFAULT NULL, `freeY` double DEFAULT NULL, `FreeZ` double DEFAULT NULL, `teleWorld` varchar(250) DEFAULT NULL, `freeWorld` varchar(250) DEFAULT NULL , PRIMARY KEY (`name`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+            	st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_cells` ( `JailName` varchar(250) NOT NULL, `Teleport` varchar(250) NOT NULL, `Sign` TEXT DEFAULT NULL , `Chest` varchar(250) DEFAULT NULL, Player varchar(250) DEFAULT NULL, Name varchar(20) DEFAULT NULL, PRIMARY KEY (Teleport) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+            }
+            else
+            {
+            	st.executeUpdate("CREATE TABLE IF NOT EXISTS \"jail_prisoners\" (\"PlayerName\" VARCHAR PRIMARY KEY  NOT NULL , \"RemainTime\" INTEGER, \"JailName\" VARCHAR, \"Offline\" BOOLEAN, \"TransferDest\" VARCHAR, `reason` VARCHAR, `muted` BOOLEAN, Inventory STRING, Jailer VARCHAR, Permissions VARCHAR, PreviousPosition VARCHAR)");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS \"jail_zones\" (\"name\" VARCHAR PRIMARY KEY  NOT NULL , \"X1\" DOUBLE, \"Y1\" DOUBLE, \"Z1\" DOUBLE, \"X2\" DOUBLE, \"Y2\" DOUBLE, \"Z2\" DOUBLE, \"teleX\" DOUBLE, \"teleY\" DOUBLE, \"teleZ\" DOUBLE, \"freeX\" DOUBLE, \"freeY\" DOUBLE, \"FreeZ\" DOUBLE, \"teleWorld\" VARCHAR, \"freeWorld\" STRING)");
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS `jail_cells` ( `JailName` VARCHAR NOT NULL,  `Teleport` VARCHAR  PRIMARY_KEY NOT NULL, `Sign` STRING DEFAULT NULL , `Chest` VARCHAR DEFAULT NULL, Player VARCHAR DEFAULT NULL, Name VARCHAR DEFAULT NULL);");
+            }
+            conn.commit();
+            st.close();
         } catch (SQLException e) {
-            Jail.log.log(Level.SEVERE, "[Jail]: Error while creating tables! - " + e.getMessage());
             e.printStackTrace();
-    }
+            Jail.log.log(Level.SEVERE, "[Jail]: Error while creating tables! - " + e.getMessage());
+        }
+        
         UpdateDB();
     }
     
-    public void UpdateDB()
-    {
+    public void UpdateDB() {
     	Update("SELECT reason,muted FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD reason VARCHAR;ALTER TABLE jail_prisoners ADD muted BOOLEAN", "ALTER TABLE jail_prisoners ADD reason varchar(250);ALTER TABLE jail_prisoners ADD muted boolean" ); //Jail reason & mute update - 0.6
     	Update("SELECT Inventory FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD Inventory VARCHAR;", "ALTER TABLE jail_prisoners ADD Inventory varchar(250);" ); //Jail inventory storage - 0.7
     	Update("SELECT Jailer FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD Jailer VARCHAR;", "ALTER TABLE jail_prisoners ADD Jailer varchar(250);" ); //Jailer log - 0.7   
@@ -650,21 +617,16 @@ public class InputOutput {
     	DeleteField("jail_cells", "SecondChest");
     }
     
-    public void Update(String check, String sql)
-    {
+    public void Update(String check, String sql) {
     	Update(check, sql, sql);
     }
     
-    public void Update(String check, String sqlite, String mysql)
-    {
-    	try
-    	{
+    public void Update(String check, String sqlite, String mysql) {
+    	try {
     		Statement statement = getConnection().createStatement();
 			statement.executeQuery(check);
 			statement.close();
-    	}
-    	catch(SQLException ex)
-    	{
+    	} catch(SQLException ex) {
     		Jail.log.log(Level.INFO, "[Jail] Updating database");
     		try {
     			String[] query;
@@ -679,18 +641,14 @@ public class InputOutput {
     			conn.commit();
     			st.close();
     		} catch (SQLException e) {
-    			Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + e.getMessage());
                 e.printStackTrace();
+                Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + e.getMessage());
+    		}
     	}
-        
-	}
-    	
     }
     
-    public void UpdateType(String table, String field, String type)
-    {
-    	try
-    	{
+    public void UpdateType(String table, String field, String type) {
+    	try {
     		if (!Settings.getGlobalBoolean(Setting.UseMySQL)) return;
     		Connection conn = getConnection();
     		DatabaseMetaData meta = conn.getMetaData();
@@ -700,8 +658,7 @@ public class InputOutput {
     	    while (rsColumns.next()) {
     	      String columnName = rsColumns.getString("COLUMN_NAME");
     	      String columnType = rsColumns.getString("TYPE_NAME");
-    	      if (columnName.equals(field) && !columnType.equals(type))
-    	      {
+    	      if (columnName.equals(field) && !columnType.equals(type)) {
     	    	  Jail.log.log(Level.INFO, "[Jail] Updating database");
     	    	  Statement st = conn.createStatement();
     	    	  st.executeUpdate("ALTER TABLE " + table + " MODIFY " + field + " " + type + "; ");
@@ -712,27 +669,20 @@ public class InputOutput {
     	    }
     	    
     	    rsColumns.close();
+    	} catch(SQLException ex) {
+    		ex.printStackTrace();
+    		Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + ex.getMessage());
     	}
-    	catch(SQLException ex)
-    	{
-    			Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + ex.getMessage());
-                ex.printStackTrace();
-    	}
-        
 	}
     
-    public void DeleteField(String table, String field)
-    {
+    public void DeleteField(String table, String field) {
     	if (!Settings.getGlobalBoolean(Setting.UseMySQL)) return; //This can't be done in SQLite
     	
-    	try
-    	{
+    	try {
     		Statement statement = getConnection().createStatement();
 			statement.executeQuery("SELECT " + field + " FROM " + table);
 			statement.close();
-    	}
-    	catch(SQLException ex)
-    	{
+    	} catch(SQLException ex) {
     		return;
     	}
     	
@@ -744,13 +694,12 @@ public class InputOutput {
 			conn.commit();
 			st.close();
 		} catch (SQLException e) {
-			Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + e.getMessage());
             e.printStackTrace();
+            Jail.log.log(Level.SEVERE, "[Jail] Error while updating tables to the new version - " + e.getMessage());
 		}
     }
     
-    public void initMetrics()
-    {
+    public void initMetrics() {
     	try {
     	    Metrics metrics = new Metrics(Jail.instance);
 
@@ -764,9 +713,8 @@ public class InputOutput {
 
     	    metrics.start();
     	} catch (IOException e) {
-			Jail.log.log(Level.SEVERE, "[Jail] Error while initializing Metrics - " + e.getMessage());
 			e.printStackTrace();
+			Jail.log.log(Level.SEVERE, "[Jail] Error while initializing Metrics - " + e.getMessage());
     	}
     }
-
 }
