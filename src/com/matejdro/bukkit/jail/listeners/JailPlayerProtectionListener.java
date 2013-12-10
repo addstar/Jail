@@ -129,7 +129,7 @@ public class JailPlayerProtectionListener implements Listener {
 				return;
 			
 			if (!jail.isInside(event.getTo())) {
-				if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards") && prisoner.canGuardsBeSpawned() && event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+				if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards") && prisoner.canGuardsBeSpawned() && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 					if (prisoner.getGuards().size() > 0) {
 						for (Creature w : prisoner.getGuards().toArray(new Creature[0])) {
 							if (w == null || w.isDead()) {
@@ -176,7 +176,7 @@ public class JailPlayerProtectionListener implements Listener {
 		
 		PlayerMoveEvent move = new PlayerMoveEvent(event.getPlayer(), event.getFrom(), event.getTo());
 		onPlayerMove(move);
-		if(move.isCancelled()) event.setCancelled(true);
+		event.setCancelled(move.isCancelled());
 	}
 		 
 	@EventHandler
