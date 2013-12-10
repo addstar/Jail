@@ -180,7 +180,7 @@ public class PrisonerManager {
 	 * @param prisoner prisoner that will be released
 	 * @param player Player that will be teleported
 	 */
-	public static void UnJail(final JailPrisoner prisoner, final Player player) {
+	public static void UnJail(JailPrisoner prisoner, Player player) {
 		prisoner.SetBeingReleased(true);
 		JailZone jail = prisoner.getJail();	
 		Util.Message(ChatColor.GREEN + jail.getSettings().getString(Setting.MessageUnJail), player);
@@ -195,11 +195,9 @@ public class PrisonerManager {
 		player.setSleepingIgnored(false);
 		
 		if (jail.getSettings().getBoolean(Setting.TeleportPrisonerOnRelease)) {
-			Jail.instance.getServer().getScheduler().scheduleSyncDelayedTask(Jail.instance, new Runnable() {
-				public void run() {
-					player.teleport(prisoner.getReleaseTeleportLocation());
-				}
-			}, 5L);
+			player.sendMessage(prisoner.getReleaseTeleportLocation().toString());
+			player.teleport(prisoner.getReleaseTeleportLocation());
+			player.sendMessage(player.getLocation().toString());
 		}
 		
 		if(prisoner.getPreviousGameMode() != null)

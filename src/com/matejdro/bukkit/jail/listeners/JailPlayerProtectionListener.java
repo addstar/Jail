@@ -162,10 +162,7 @@ public class JailPlayerProtectionListener implements Listener {
 						Util.Message(jail.getSettings().getString(Setting.MessageEscapeNoPenalty), event.getPlayer());
 					}
 					
-					if(!prisoner.isBeingReleased()) {//Add this in there just in case we get here? Although we shouldn't
-						event.setTo(prisoner.getTeleportLocation());
-						event.getPlayer().sendMessage("Hate to be the one to break it t you, but you're not being released and so you're not allowed to go there.");
-					}
+					event.setTo(prisoner.getTeleportLocation());
 				}
 			} else if (jail.getSettings().getString(Setting.PlayerMoveProtectionAction).equals("guards")) {
 				prisoner.killGuards();
