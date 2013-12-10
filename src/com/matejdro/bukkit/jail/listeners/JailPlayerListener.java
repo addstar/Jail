@@ -60,7 +60,7 @@ public class JailPlayerListener implements Listener {
                 JailLog logger = new JailLog();
                 damager.sendMessage(ChatColor.RED + "You jailed " + ChatColor.GREEN + player.getName() + ChatColor.RED +  " for " + ChatColor.GREEN + Integer.parseInt(param[2]) + ChatColor.RED + " minutes");
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                    logger.logToFile(player, Integer.parseInt(param[2]), param[4], damager.getName(), player.getName());
+                    logger.logToFile(player.getName(), Integer.parseInt(param[2]), param[4], damager.getName());
                 }
             }else{
                 Util.Message(ChatColor.RED + "That Player does not exist?!?!?!", damager);
@@ -85,7 +85,7 @@ public class JailPlayerListener implements Listener {
                 PrisonerManager.Jail(prisoner, event.getPlayer());
                 JailLog logger = new JailLog();
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                        logger.logToFile(event.getPlayer(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "Console", event.getPlayer().getName());
+                        logger.logToFile(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "swear-jail");
                 }
              }
         }

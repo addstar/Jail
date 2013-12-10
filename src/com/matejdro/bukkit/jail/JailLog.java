@@ -8,14 +8,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
 /**
  * Jail Log Class
  * @author Luke
  */
 public class JailLog {
-    public void logToFile(Player player, Integer time, String reason, String sender, String name) {
+    public void logToFile(String name, Integer time, String reason, String sender) {
         try{
             File dataFolder = Jail.instance.getDataFolder();
 
@@ -34,15 +34,13 @@ public class JailLog {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             
-            if(player != null){
-            	pw.println("[" + dateFormat.format(date) + "] " + player.getName().toLowerCase() + " jailed by " + sender.toLowerCase() + ". Reason: " + reason);
-            }else{
-            	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + ". Reason: " + reason);
-            }
+        	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + " for " + time.toString() + " minutes with a reason of '" + reason + "'.");
             
             pw.flush();
             pw.close();
             
-        }catch(IOException e){}
+        }catch(IOException e){
+        	Bukkit.getLogger().warning("Failed to log a jailing to file because: " + e.getMessage());
+        }
     }
 }

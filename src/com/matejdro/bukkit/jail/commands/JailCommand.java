@@ -113,7 +113,7 @@ public class JailCommand extends BaseCommand {
             	
                 message = Settings.getGlobalString(Setting.MessagePrisonerOffline);
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                    logger.logToFile(player, time, reason, sender.getName(), args[0]);
+                    logger.logToFile(args[0], time, reason, sender.getName());
                 }
                 
             }else {//The player is online
@@ -153,7 +153,7 @@ public class JailCommand extends BaseCommand {
                 }
                 
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                    logger.logToFile(player, time, reason, sender.getName(), player.getName());
+                    logger.logToFile(player.getName(), time, reason, sender.getName());
                 }
             }
 
