@@ -369,7 +369,7 @@ public class InputOutput {
     public static void InsertPrisoner(JailPrisoner p) {
     	try {
 			Connection conn = InputOutput.getConnection();
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO jail_prisoners  (PlayerName, RemainTime, JailName, Offline, TransferDest, reason, muted, Inventory, Jailer, Permissions, PreviousPosition) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO jail_prisoners  (PlayerName, RemainTime, JailName, Offline, TransferDest, reason, muted, Inventory, Jailer, Permissions, PreviousPosition, GameMode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 			ps.setString(1, p.getName());
 			ps.setInt(2, p.getRemainingTime());
 			
@@ -391,10 +391,11 @@ public class InputOutput {
 				ps.setString(11, "");
 			else
 				ps.setString(11, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
+			
+			ps.setString(12, p.getPreviousGameMode().toString());
+			
 			ps.executeUpdate();
-			
 			conn.commit();
-			
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
