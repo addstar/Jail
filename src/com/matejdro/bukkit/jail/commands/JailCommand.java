@@ -108,7 +108,7 @@ public class JailCommand extends BaseCommand {
             JailLog logger = new JailLog();
             
             if(player == null) {//If the player isn't online, then let's handle him separately            	
-            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, true, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "", GameMode.SURVIVAL);
+            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, true, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "");
                 PrisonerManager.PrepareJail(prisoner, player);
             	
                 message = Settings.getGlobalString(Setting.MessagePrisonerOffline);
@@ -134,7 +134,7 @@ public class JailCommand extends BaseCommand {
             		player = event.getPlayer(); //Set our instance of the player to the one from the event, in case a listener changed something.
             		prisoner = new JailPrisoner(playerName,
             				event.getTime() * 6, event.getJail(), event.getCell(), false, "",
-            				event.getReason(), event.isMuted(), "", event.getJailer(), "", player.getGameMode());
+            				event.getReason(), event.isMuted(), "", event.getJailer(), "");
             	}
             	
                 PrisonerManager.PrepareJail(prisoner, player);

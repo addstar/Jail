@@ -55,7 +55,7 @@ public class JailPlayerListener implements Listener {
 
 		if(Util.permission(damager, "jail.usejailstick." + String.valueOf(damager.getItemInHand().getTypeId()), PermissionDefault.OP) && Jail.jailStickToggle.get(damager.getName().toLowerCase())){
             if(player != null){
-                JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "", player.getGameMode());
+                JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "");
                 PrisonerManager.PrepareJail(prisoner, player);
                 JailLog logger = new JailLog();
                 damager.sendMessage(ChatColor.RED + "You jailed " + ChatColor.GREEN + player.getName() + ChatColor.RED +  " for " + ChatColor.GREEN + Integer.parseInt(param[2]) + ChatColor.RED + " minutes");
@@ -80,12 +80,12 @@ public class JailPlayerListener implements Listener {
         	String word = (String) o;
             if(event.getMessage().toLowerCase().contains(word + " ") && Settings.getGlobalBoolean(Setting.EnableJailSwear)){
                 event.setCancelled(true);
-                JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "", "", event.getPlayer().getGameMode());
+                JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "JailSwear", "");
                 PrisonerManager.PrepareJail(prisoner, event.getPlayer());
                 PrisonerManager.Jail(prisoner, event.getPlayer());
                 JailLog logger = new JailLog();
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                        logger.logToFile(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "swear-jail");
+                        logger.logToFile(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "JailSwear");
                 }
              }
         }

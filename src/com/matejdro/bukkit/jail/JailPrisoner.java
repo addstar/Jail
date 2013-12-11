@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-
 /**
  * JailPrisoner class stores data about specific prisoner and allows you to modify status of the specified prisoner.
  */
@@ -54,8 +53,9 @@ public class JailPrisoner {
 	 * @param Muted Should this prisoner be muted (not allowed to chat) in jail?
 	 * @param Inventory Inventory string for this prisoner
 	 * @param Jailer Who jailed this prisoner
+	 * @param Permissions Their old permissions
 	 */
-	public JailPrisoner(String Name, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions, GameMode Gamemode) {
+	public JailPrisoner(String Name, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions) {
 		name = Name.toLowerCase();
 		remaintime = Remaintime;
 		setJail(Jail);
@@ -67,7 +67,6 @@ public class JailPrisoner {
 		jailer = Jailer;
 		requestedCell = Cell;
 		afktime = 0;
-		previousGameMode = Gamemode;
 		setOldPermissions(Permissions);
 	}
 		

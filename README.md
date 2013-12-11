@@ -16,6 +16,8 @@ Bugs Fixed
 * There is now a /unhandcuff command for players.
 * JailRecord and Handcuff no longer require only a player instance of the sender, console can do them now
 * Don't calculate the closest jail cell if they are worlds apart.
+* When a player is jailed offline and the config is set to send them back to their old location, they wouldn't be released to their old position
+* Store the player's previous gamemode, whether offline or online
 
 Features
 ===

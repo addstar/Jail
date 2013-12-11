@@ -3,6 +3,7 @@ package com.matejdro.bukkit.jail;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Chest;
@@ -88,6 +89,7 @@ public class PrisonerManager {
     	}
     	
 		prisoner.setPreviousPosition(player.getLocation());
+		prisoner.setPreviousGameMode(player.getGameMode());
 		
 		JailCell cell = jail.getRequestedCell(prisoner);
 		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().trim().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
@@ -159,6 +161,7 @@ public class PrisonerManager {
 		
 		Jail.prisoners.put(prisoner.getName().toLowerCase(), prisoner);
 		prisoner.SetBeingReleased(false);
+		player.setGameMode(GameMode.SURVIVAL);
 		
 		int minFood = jail.getSettings().getInt(Setting.FoodControlMinimumFood);
 		int maxFood = jail.getSettings().getInt(Setting.FoodControlMaximumFood);

@@ -45,15 +45,19 @@ public class JailAPI {
 	 * @param reason Reason for jailing. Use null if you don't want to specify reason.
 	 * @param jailer Who jailed this player? Usually name of your plugin.
 	 */
-
-	public JailPrisoner jailPlayer(String playerName, int time, String jailName, String cellName, String reason, String jailer)
-	{
+	public JailPrisoner jailPlayer(String playerName, int time, String jailName, String cellName, String reason, String jailer) {
 		if (jailName == null) jailName = "";
 		if (cellName == null) cellName = "";
 		if (reason == null) reason = "";
 		
-		JailPrisoner prisoner = new JailPrisoner(playerName, time, jailName, cellName, false, "", reason, false, "", jailer, "", Jail.instance.getServer().getPlayer(playerName).getGameMode());
-		Player player = Util.getPlayer(playerName, false);	
+		JailPrisoner prisoner = new JailPrisoner(playerName, time, jailName, cellName, false, "", reason, false, "", jailer, "");
+		Player player = Util.getPlayer(playerName, false);
+		
+		if(player == null) {//player is offline
+			prisoner.setOfflinePending(true);
+		}else {
+			prisoner.setPreviousGameMode(player.getGameMode());
+		}
 		
 		PrisonerManager.PrepareJail(prisoner, player);
 		

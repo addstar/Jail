@@ -160,8 +160,7 @@ public class Util {
         return (permission != null);
     }
     
-    public static Player getPlayer(String name, Boolean partialName)
-    {
+    public static Player getPlayer(String name, Boolean partialName) {
     	Player player = Bukkit.getServer().getPlayerExact(name);
 		if (player == null && partialName) player = Bukkit.getServer().getPlayer(name);
 		

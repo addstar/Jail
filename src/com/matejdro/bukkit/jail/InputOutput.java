@@ -194,10 +194,11 @@ public class InputOutput {
 				String permissions = set.getString("Permissions");
 				String previousPosition = set.getString("PreviousPosition");
 				Boolean muted = set.getBoolean("muted");
+				String gamemode = set.getString("GameMode");
 				
-				JailPrisoner p = new JailPrisoner(name, remaintime, jailname, null, offline, transferDest, reason, muted, inventory, jailer, permissions, GameMode.SURVIVAL);
-			
+				JailPrisoner p = new JailPrisoner(name, remaintime, jailname, null, offline, transferDest, reason, muted, inventory, jailer, permissions);
 				p.setPreviousPosition(previousPosition);
+				p.setPreviousGameMode(gamemode == null ? GameMode.SURVIVAL : GameMode.valueOf(gamemode));
 				
 				Jail.prisoners.put(p.getName(), p);
 			}
@@ -547,7 +548,7 @@ public class InputOutput {
     	try {
 			Connection conn = InputOutput.getConnection();
 			if (conn == null || conn.isClosed()) return;
-			PreparedStatement ps = conn.prepareStatement("UPDATE jail_prisoners SET RemainTime = ?, JailName = ?, Offline = ?, TransferDest = ?, muted = ?, Inventory = ?, Permissions = ?, PreviousLocation = ? WHERE PlayerName = ?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE jail_prisoners SET RemainTime = ?, JailName = ?, Offline = ?, TransferDest = ?, muted = ?, Inventory = ?, Permissions = ?, PreviousLocation = ?, GameMode = ? WHERE PlayerName = ?");
 			for (JailPrisoner p : Jail.prisoners.values()) {
 				ps.setInt(1, p.getRemainingTime());
 				ps.setString(2, p.getJail().getName());
@@ -562,7 +563,9 @@ public class InputOutput {
 				else
 					ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
 				
-				ps.setString(9, p.getName());
+				ps.setString(9, p.getPreviousGameMode().toString());
+				
+				ps.setString(10, p.getName());
 				ps.executeUpdate();
 				ps.addBatch();
 			}
@@ -615,6 +618,7 @@ public class InputOutput {
     	Update("SELECT Permissions FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD Permissions VARCHAR;", "ALTER TABLE jail_prisoners ADD Permissions varchar(250);" ); //Store permissions - 3.0
     	Update("SELECT PreviousPosition FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD PreviousPosition VARCHAR;", "ALTER TABLE jail_prisoners ADD PreviousPosition varchar(250);" ); //Store position - 2.0
     	DeleteField("jail_cells", "SecondChest");
+    	Update("SELECT GameMode FROM jail_prisoners", "ALTER TABLE jail_prisoners ADD GameMode VARCHAR;", "ALTER TABLE jail_prisoners ADD GameMode varchar(250);" ); //Store Previous GameMode - 2.6.0
     }
     
     public void Update(String check, String sql) {
