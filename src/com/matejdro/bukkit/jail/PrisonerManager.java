@@ -56,6 +56,11 @@ public class PrisonerManager {
 	@SuppressWarnings("unchecked")
 	public static void Jail(JailPrisoner prisoner, Player player) {
 		if (!prisoner.getName().equals(player.getName().toLowerCase())) return;
+		
+		if(Jail.instance.getHandCuffManager().isHandCuffed(player.getName())) {
+			Jail.instance.getHandCuffManager().removeHandCuffs(player.getName());
+		}
+		
 		prisoner.SetBeingReleased(true);
 		JailZone jail = prisoner.getJail();
 		
