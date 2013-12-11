@@ -35,7 +35,7 @@ public class JailLog {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             
-        	pw.println(ChatColor.WHITE + "[" + dateFormat.format(date) + "] "
+        	pw.println(ChatColor.GRAY + "[" + dateFormat.format(date) + "] "
         			+ ChatColor.BLUE + name.toLowerCase() + ChatColor.WHITE + " jailed by "
         			+ ChatColor.BLUE + sender.toLowerCase() + ChatColor.WHITE + " for "
         			+ ChatColor.BLUE + time.toString() + ChatColor.WHITE + " minutes with " + (reason.isEmpty() ? "no reason given." : "a reason of '" + ChatColor.BLUE + reason + ChatColor.WHITE + "'."));
