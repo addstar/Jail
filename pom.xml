@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.graywolf336</groupId>
 	<artifactId>Jail</artifactId>
-	<version>2.6.0</version>
+	<version>2.6.1</version>
 	<name>Jail</name>
 	<description>Ban too harsh? Kick/mute/whatever not enough? Jail bad players!</description>
 	<url>http://dev.bukkit.org/bukkit-plugins/jail/</url>
@@ -14,7 +14,7 @@
 
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://graywolfsolutions.com:8080/Jail</url>
+		<url>http://ci.graywolf336.com/job/Jail - Bug Fixes/</url>
 	</ciManagement>
 
 	<scm>
