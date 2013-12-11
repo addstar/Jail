@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 /**
  * Jail Log Class
@@ -34,7 +35,10 @@ public class JailLog {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             
-        	pw.println("[" + dateFormat.format(date) + "] " + name.toLowerCase() + " jailed by " + sender.toLowerCase() + " for " + time.toString() + " minutes with " + (reason.isEmpty() ? "no reason given." : "a reason of '" + reason + "'."));
+        	pw.println(ChatColor.WHITE + "[" + dateFormat.format(date) + "] "
+        			+ ChatColor.BLUE + name.toLowerCase() + ChatColor.WHITE + " jailed by "
+        			+ ChatColor.BLUE + sender.toLowerCase() + ChatColor.WHITE + " for "
+        			+ ChatColor.BLUE + time.toString() + ChatColor.WHITE + " minutes with " + (reason.isEmpty() ? "no reason given." : "a reason of '" + ChatColor.BLUE + reason + ChatColor.WHITE + "'."));
             
             pw.flush();
             pw.close();
