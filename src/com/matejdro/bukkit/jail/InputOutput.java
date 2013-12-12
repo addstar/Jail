@@ -499,7 +499,7 @@ public class InputOutput {
     	try {
 			Connection conn = InputOutput.getConnection();
 			if (conn == null || conn.isClosed()) return;
-			PreparedStatement ps = conn.prepareStatement("UPDATE jail_prisoners SET RemainTime = ?, JailName = ?, Offline = ?, TransferDest = ?, muted = ?, Inventory = ?, Permissions = ?, PreviousPosition = ? WHERE PlayerName = ?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE jail_prisoners SET RemainTime = ?, JailName = ?, Offline = ?, TransferDest = ?, muted = ?, Inventory = ?, Permissions = ?, PreviousPosition = ?, GameMode = ? WHERE PlayerName = ?");
 			ps.setInt(1, Math.round(p.getRemainingTime()));
 			if (p.getJail() == null)
 			{
@@ -516,8 +516,9 @@ public class InputOutput {
 				ps.setString(8, "");
 			else
 				ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
-
-			ps.setString(9, p.getName());
+			
+			ps.setString(9, p.getPreviousGameMode().toString());
+			ps.setString(10, p.getName());
 			ps.executeUpdate();
 			conn.commit();
 			
