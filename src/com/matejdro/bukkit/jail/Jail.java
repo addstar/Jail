@@ -10,7 +10,6 @@ import javax.swing.Timer;
 
 import me.muizers.Notifications.Notifications;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

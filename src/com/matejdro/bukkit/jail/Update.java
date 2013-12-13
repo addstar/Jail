@@ -18,10 +18,6 @@ public class Update {
 
     // Keys for extracting file information from JSON response
     private static final String API_NAME_VALUE = "name";
-    private static final String API_LINK_VALUE = "downloadUrl";
-    private static final String API_RELEASE_TYPE_VALUE = "releaseType";
-    private static final String API_FILE_NAME_VALUE = "fileName";
-    private static final String API_GAME_VERSION_VALUE = "gameVersion";
 
     // Static information for querying the API
     private static final String API_QUERY = "/servermods/files?projectIds=";
@@ -68,30 +64,13 @@ public class Update {
 
                 // Get the version's title
                 String versionName = (String) latest.get(API_NAME_VALUE);
-
-                // Get the version's link
-                String versionLink = (String) latest.get(API_LINK_VALUE);
-
-                // Get the version's release type
-                String versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
-
-                // Get the version's file name
-                String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
-
-                // Get the version's game version
-                String versionGameVersion = (String) latest.get(API_GAME_VERSION_VALUE);
-
-                Bukkit.getLogger().info(
-                        "The latest version of " + versionFileName +
-                                " is " + versionName +
-                                ", a " + versionType.toUpperCase() +
-                                " for " + versionGameVersion +
-                                ", available at: " + versionLink
-                );
+                String ver = versionName.split(" ")[1].replaceAll("v", "");
                 
-                Bukkit.getLogger().info(Jail.instance.getDescription().getVersion());
-            } else {
-            	Bukkit.getLogger().info("There are no files for this project");
+                if(!Jail.instance.getDescription().getVersion().contains(ver)) this.needed = true;
+                
+                if(needed) {
+                	Bukkit.getLogger().info("There is an update for Jail, the newest version is: " + ver);
+                }
             }
         } catch (IOException e) {
             // There was an error reading the query

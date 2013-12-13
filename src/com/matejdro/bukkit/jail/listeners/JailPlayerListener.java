@@ -95,6 +95,7 @@ public class JailPlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(event.getPlayer().isOp() && Jail.updateNeeded){
 			event.getPlayer().sendMessage(ChatColor.BLUE + "There is an update for the jail plugin!");
+			event.getPlayer().sendMessage(ChatColor.BLUE + "http://www.curse.com/bukkit-plugins/minecraft/jail");
 		}
 		
 		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
