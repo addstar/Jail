@@ -73,9 +73,9 @@ public class Jail extends JavaPlugin {
     public static HashMap<String, HashMap<String, ItemStack[]>> prisonerInventories = new HashMap<String, HashMap<String, ItemStack[]>>();
     public static HashMap<Creature, JailPrisoner> guards = new HashMap<Creature, JailPrisoner>();
     public static HashMap<String, Boolean> jailStickToggle = new HashMap<String, Boolean>();
+    
     private Timer timer;
-
-    protected UpdateChecker updateChecker;
+    private Update update;
 
     private long lastCheckTime = 0;
 
@@ -97,6 +97,11 @@ public class Jail extends JavaPlugin {
 		if(this.handcuffs != null)
 			this.handcuffs = null;
 		
+		if(this.update != null) {
+			this.update = null;
+			updateNeeded = false;
+		}
+		
 		if (timer != null)
 			timer.stop();
 		InputOutput.freeConnection();
@@ -113,14 +118,6 @@ public class Jail extends JavaPlugin {
 		entityListener = new JailEntityListener(this);
 		IO = new InputOutput();
 		API = new JailAPI();
-		
-		if(Settings.getGlobalBoolean(Setting.AllowUpdateNotifications)){
-			this.updateChecker = new UpdateChecker(this, "http://dev.bukkit.org/bukkit-plugins/jail/files.rss");
-			if(this.updateChecker.updateNeeded()){
-				updateNeeded = true;
-				getLogger().info("There is an update available for Jail. Version " + this.updateChecker.getVersion() + ". Download it at " + this.updateChecker.getLink());
-			}
-		}
 		
 		IO.LoadSettings();
 		IO.PrepareDB();
@@ -190,14 +187,25 @@ public class Jail extends JavaPlugin {
 		
 		final JailScoreboardManager manager = new JailScoreboardManager();
 		
-		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run(){
 				manager.displayJailTime();
 			}
 		}, 10, 50);
 		
 		this.handcuffs = new HandCuffManager();
-
+		
+		if(Settings.getGlobalBoolean(Setting.AllowUpdateNotifications)){
+			this.update = new Update(31139);
+			
+			getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+				public void run() {
+					update.query();
+					updateNeeded = update.updateNeeded();
+				}
+			}, 600L, 36000L);
+		}
+		
 		log.info("[Jail] " + getDescription().getFullName() + " loaded!");
 	}
 
