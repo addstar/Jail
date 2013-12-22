@@ -81,6 +81,7 @@ permissions:
             jail.openchest: true
             jail.canswear: true
             jail.cantbejailed: true
+            jail.cantbehandcuffed: true
     jail.command.*:
         description: access to all admin commands
         children:
@@ -191,4 +192,6 @@ permissions:
     jail.canswear:
         default: op
     jail.cantbejailed:
+        default: op
+    jail.cantbehandcuffed:
         default: op

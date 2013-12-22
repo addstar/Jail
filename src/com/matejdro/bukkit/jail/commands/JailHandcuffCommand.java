@@ -28,6 +28,10 @@ public class JailHandcuffCommand extends BaseCommand {
 				return true;
 			}
 			
+			if(player.hasPermission("jail.cantbehandcuffed")) {
+				Util.Message(ChatColor.RED + "They player can't be handcuffed.", sender);
+			}
+			
 			if(Jail.prisoners.containsKey(player.getName().toLowerCase())) {
 				Util.Message(ChatColor.RED + "That player is currently jailed, you can't handcuff a prisoner.", sender);
 			}else if(Jail.instance.getHandCuffManager().isHandCuffed(player.getName())){
