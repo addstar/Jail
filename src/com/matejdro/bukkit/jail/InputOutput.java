@@ -392,7 +392,7 @@ public class InputOutput {
 			else
 				ps.setString(11, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
 			
-			ps.setString(12, p.getPreviousGameMode().toString());
+			ps.setString(12, (p.getPreviousGameMode() == null ? "Survival" : p.getPreviousGameMode().toString()));
 			
 			ps.executeUpdate();
 			conn.commit();
@@ -517,7 +517,7 @@ public class InputOutput {
 			else
 				ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
 			
-			ps.setString(9, p.getPreviousGameMode().toString());
+			ps.setString(9, (p.getPreviousGameMode() == null ? "Survival" : p.getPreviousGameMode().toString()));
 			ps.setString(10, p.getName());
 			ps.executeUpdate();
 			conn.commit();
@@ -565,7 +565,7 @@ public class InputOutput {
 				else
 					ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
 				
-				ps.setString(9, p.getPreviousGameMode().toString());
+				ps.setString(9, (p.getPreviousGameMode() == null ? "Survival" : p.getPreviousGameMode().toString()));
 				
 				ps.setString(10, p.getName());
 				ps.executeUpdate();

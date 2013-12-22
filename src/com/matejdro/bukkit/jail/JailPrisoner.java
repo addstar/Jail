@@ -30,7 +30,7 @@ public class JailPrisoner {
 	private JailCell cell;
 	private Boolean offline, releasing = false, muted = false, canSpawnGuards = true;
 	private String inventory = "", jailer = "", requestedCell, transferDest = "", reason = "", previousPositionWorld;
-	private GameMode previousGameMode;
+	private GameMode previousGameMode = GameMode.SURVIVAL;
 	private HashSet<Creature> guards = new HashSet<Creature>();
 	private HashSet<LivingEntity> guardTargets = new HashSet<LivingEntity>();
 	private List<String> oldPermissions = new ArrayList<String>();
