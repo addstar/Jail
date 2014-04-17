@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -37,9 +37,8 @@ public class JailPlayerProtectionListener implements Listener {
 		plugin = instance;
 	}
 	
-	@EventHandler()
-	public void onPlayerChat (PlayerChatEvent event) {
-		if (event.isCancelled()) return;
+	@EventHandler(ignoreCancelled=true)
+	public void onPlayerChat (AsyncPlayerChatEvent event) {
 		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
 		if (prisoner != null && prisoner.isMuted()) {
 			Util.Message(prisoner.getJail().getSettings().getString(Setting.MessageMute), event.getPlayer());
@@ -53,9 +52,8 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		if (event.isCancelled()) return;
 		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
 		JailZone jail = prisoner != null ? prisoner.getJail() : null;
 
@@ -109,10 +107,8 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (event.isCancelled()) return;
-
 		if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
 			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
 			if (prisoner.isBeingReleased())
@@ -170,16 +166,14 @@ public class JailPlayerProtectionListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if (event.isCancelled()) return;
-		
 		PlayerMoveEvent move = new PlayerMoveEvent(event.getPlayer(), event.getFrom(), event.getTo());
 		onPlayerMove(move);
 		event.setCancelled(move.isCancelled());
 	}
 		 
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST && (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) || !Util.permission(event.getPlayer(), "jail.openchest", PermissionDefault.OP)))
 				{
@@ -253,7 +247,7 @@ public class JailPlayerProtectionListener implements Listener {
 			}
 		}
 	 
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) && !Jail.prisoners.get(event.getPlayer().getName().toLowerCase()).isBeingReleased())
 			{
@@ -290,7 +284,7 @@ public class JailPlayerProtectionListener implements Listener {
 			}
 	 }
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerFoodchange(FoodLevelChangeEvent event)
 	{
 		JailPrisoner prisoner = Jail.prisoners.get(event.getEntity().getName().toLowerCase());

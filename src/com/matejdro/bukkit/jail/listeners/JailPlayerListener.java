@@ -1,13 +1,15 @@
 package com.matejdro.bukkit.jail.listeners;
 
 import com.matejdro.bukkit.jail.*;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,8 +20,10 @@ import com.matejdro.bukkit.jail.commands.JailSetCommand;
 @SuppressWarnings("deprecation")
 public class JailPlayerListener implements Listener {
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (!JailZoneCreation.players.containsKey(event.getPlayer().getName())) return;
+
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getTypeId() == Settings.getGlobalInt(Setting.SelectionTool))
 		{
 			if ( JailZoneCreation.players.containsKey(event.getPlayer().getName()))
@@ -40,8 +44,9 @@ public class JailPlayerListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerHit(EntityDamageByEntityEvent event){
+		if (!Settings.getGlobalBoolean(Setting.EnableJailStick)) return;
 		if(!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
 		
 		Player damager = (Player) event.getDamager();
@@ -68,30 +73,38 @@ public class JailPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler()
-	public void onPlayerChat(PlayerChatEvent event) {
+	@EventHandler(ignoreCancelled=true)
+	public void onplayerChat(final AsyncPlayerChatEvent event) {
 		if ( JailCellCreation.players.containsKey(event.getPlayer().getName()))
 		{
 			if (JailCellCreation.chatmessage(event.getPlayer(), event.getMessage()));
 				event.setCancelled(true);
 		}
 
-        for(Object o : Settings.getGlobalList(Setting.BannedWords)){
+		// Ignore chat event if Jail Swear is disabled
+		if (!Settings.getGlobalBoolean(Setting.EnableJailSwear)) return;
+
+		for(Object o : Settings.getGlobalList(Setting.BannedWords)){
         	String word = (String) o;
-            if(event.getMessage().toLowerCase().contains(word + " ") && Settings.getGlobalBoolean(Setting.EnableJailSwear)){
+            if(event.getMessage().toLowerCase().contains(word + " ")) {
                 event.setCancelled(true);
-                JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "JailSwear", "");
-                PrisonerManager.PrepareJail(prisoner, event.getPlayer());
-                PrisonerManager.Jail(prisoner, event.getPlayer());
-                JailLog logger = new JailLog();
-                if(Settings.getGlobalBoolean(Setting.EnableLogging)){
-                        logger.logToFile(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "JailSwear");
-                }
+                final JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "JailSwear", "");
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Jail.instance, new Runnable() {
+                    @Override
+                    public void run() {
+                    	PrisonerManager.PrepareJail(prisoner, event.getPlayer());
+                    	PrisonerManager.Jail(prisoner, event.getPlayer());
+                    	JailLog logger = new JailLog();
+                    	if(Settings.getGlobalBoolean(Setting.EnableLogging)){
+                    		logger.logToFile(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime), "Swearing", "JailSwear");
+                    	}
+                    }
+                });
              }
         }
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(event.getPlayer().isOp() && Jail.updateNeeded){
 			event.getPlayer().sendMessage(ChatColor.BLUE + "There is an update for the jail plugin!");
@@ -143,7 +156,7 @@ public class JailPlayerListener implements Listener {
 		 }
 	 }
 	 
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
 		if (prisoner == null) return;

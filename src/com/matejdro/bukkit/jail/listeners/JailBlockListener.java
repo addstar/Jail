@@ -9,9 +9,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class JailBlockListener implements Listener {
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (event.isCancelled()) return;
 		JailZone jail = JailZoneManager.getJail(event.getBlock().getLocation());
 		if (jail == null || !jail.getSettings().getBoolean(Setting.EnableBlockDestroyProtection)) return;
 		
@@ -34,10 +33,8 @@ public class JailBlockListener implements Listener {
 	
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (event.isCancelled()) return;
-		
 		JailZone jail = JailZoneManager.getJail(event.getBlock().getLocation());
 		if (jail == null || !jail.getSettings().getBoolean(Setting.EnableBlockPlaceProtection)) return;
 		

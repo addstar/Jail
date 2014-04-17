@@ -28,7 +28,7 @@ public class JailEntityListener implements Listener {
 		plugin = instance;
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onEntityDeath(EntityDeathEvent event) {
 		//Guards have done their job, lets remove them.
 		if (event.getEntity() instanceof Player)
@@ -65,7 +65,7 @@ public class JailEntityListener implements Listener {
 		
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (!(event.getEntity() instanceof Creature)) return;
 		
@@ -75,9 +75,8 @@ public class JailEntityListener implements Listener {
 			event.setCancelled(true);
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled()) return;
 		Entity victim = event.getEntity();
 		// Apply Wolf Armor or Invincibiliy
 		JailPrisoner prisoner = Jail.guards.get(victim);
@@ -127,9 +126,8 @@ public class JailEntityListener implements Listener {
 			
 	}
 	
-	@EventHandler()
+	@EventHandler(ignoreCancelled=true)
 	public void onEntityExplode(EntityExplodeEvent event) {
-		if (event.isCancelled()) return;
 		for (Object o : event.blockList().toArray())
 		{
 			Block b = (Block) o;

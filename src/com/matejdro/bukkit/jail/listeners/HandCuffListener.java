@@ -24,10 +24,8 @@ public class HandCuffListener implements Listener {
 		this.tos = new HashMap<String, Location>();
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			Location to = pl.getHandCuffManager().getLocation(event.getPlayer().getName());
 			to.setPitch(event.getTo().getPitch());
@@ -43,10 +41,8 @@ public class HandCuffListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			if(event.getTo() != tos.get(event.getPlayer().getName())) {
 				Location to = pl.getHandCuffManager().getLocation(event.getPlayer().getName());
@@ -64,10 +60,8 @@ public class HandCuffListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void playerChat(AsyncPlayerChatEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			if(!event.getPlayer().hasPermission("jail.command.handcuff")) {
 				event.setCancelled(true);
@@ -76,30 +70,24 @@ public class HandCuffListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void blockBreak(BlockBreakEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to break blocks!");
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void blockPlace(BlockPlaceEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(ChatColor.RED + "You are handcuffed and aren't allowed to place blocks!");
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void preCommands(PlayerCommandPreprocessEvent event) {
-		if(event.isCancelled()) return;
-		
 		if (pl.getHandCuffManager().isHandCuffed(event.getPlayer().getName())) {
 			if(!event.getPlayer().hasPermission("jail.command.handcuff")) {
 				if(!event.getMessage().startsWith("/r") || !event.getMessage().startsWith("/reply")) {
