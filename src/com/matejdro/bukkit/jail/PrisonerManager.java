@@ -2,6 +2,7 @@ package com.matejdro.bukkit.jail;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -20,15 +21,15 @@ public class PrisonerManager {
 			if (prisoner.getJail() != null) {
 				Util.debug(prisoner, "Searching for requested cell");
 				JailCell cell = prisoner.getJail().getRequestedCell(prisoner);
-				if (cell != null && (cell.getPlayerName() == null || cell.getPlayerName().trim().equals(""))) {
+				if (cell != null && cell.getPlayer() == null) {
 					Util.debug(prisoner, "Found requested cell");
-					cell.setPlayerName(prisoner.getName());
+					cell.setPlayer(prisoner.getUUID());
 					cell.update();
 				}
 			}
 			
 			InputOutput.InsertPrisoner(prisoner);
-			Jail.prisoners.put(prisoner.getName(), prisoner);			
+			Jail.prisoners.put(prisoner.getUUID(), prisoner);			
 		} else {
 			prisoner.setOfflinePending(false);
 			Jail(prisoner, player);			
@@ -55,7 +56,7 @@ public class PrisonerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void Jail(JailPrisoner prisoner, Player player) {
-		if (!prisoner.getName().equals(player.getName().toLowerCase())) return;
+		if (!prisoner.getUUID().equals(player.getUniqueId())) return;
 		
 		if(Jail.instance.getHandCuffManager().isHandCuffed(player.getName())) {
 			Jail.instance.getHandCuffManager().removeHandCuffs(player.getName());
@@ -97,7 +98,7 @@ public class PrisonerManager {
 		prisoner.setPreviousGameMode(player.getGameMode());
 		
 		JailCell cell = jail.getRequestedCell(prisoner);
-		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().trim().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
+		if (cell == null || (cell.getPlayer() != null && !cell.getPlayer().equals(prisoner.getUUID()))) {
 			Util.debug(prisoner, "No requested cell. searching for empty cell");
 			cell = null;
 			cell = jail.getEmptyCell();
@@ -105,7 +106,7 @@ public class PrisonerManager {
 		
 		if (cell != null) {
 			Util.debug(prisoner, "Found cell!");
-			cell.setPlayerName(player.getName().toLowerCase());
+			cell.setPlayer(player.getUniqueId());
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
@@ -159,12 +160,12 @@ public class PrisonerManager {
 			 player.setSleepingIgnored(true);
 
 		
-		if (Jail.prisoners.containsKey(prisoner.getName().toLowerCase()))
+		if (Jail.prisoners.containsKey(prisoner.getUUID()))
 			InputOutput.UpdatePrisoner(prisoner);
 		else
 			InputOutput.InsertPrisoner(prisoner);
 		
-		Jail.prisoners.put(prisoner.getName().toLowerCase(), prisoner);
+		Jail.prisoners.put(prisoner.getUUID(), prisoner);
 		prisoner.SetBeingReleased(false);
 		player.setGameMode(GameMode.SURVIVAL);
 		
@@ -246,7 +247,7 @@ public class PrisonerManager {
 				sign.update();
 			}
 			
-			cell.setPlayerName("");
+			cell.setPlayer(null);
 			cell.update();
 		}else {
 			prisoner.restoreInventory(player);
@@ -276,11 +277,11 @@ public class PrisonerManager {
 	public static void PrepareTransferAll(JailZone zone, String target) {
 		for (JailPrisoner prisoner : zone.getPrisoners()) {
 			prisoner.setTransferDestination(target);
-			Player player = Jail.instance.getServer().getPlayerExact(prisoner.getName());
+			Player player = Bukkit.getPlayer(prisoner.getUUID());
 			if (player == null) {
 				prisoner.setOfflinePending(true);
 				InputOutput.UpdatePrisoner(prisoner);
-				Jail.prisoners.put(prisoner.getName(), prisoner);
+				Jail.prisoners.put(prisoner.getUUID(), prisoner);
 			} else {
 				Transfer(prisoner, player);
 			}
@@ -299,7 +300,7 @@ public class PrisonerManager {
 		
 		if (prisoner.getCell() != null) {
 			JailCell cell = prisoner.getCell();
-			cell.setPlayerName("");
+			cell.setPlayer(null);
 			for (Sign sign : cell.getSigns()) {
 				sign.setLine(0, "");
 				sign.setLine(1, "");
@@ -345,16 +346,16 @@ public class PrisonerManager {
 		prisoner.setTransferDestination("");
 		prisoner.setOfflinePending(false);
 		Util.Message(jail.getSettings().getString(Setting.MessageTransfer), player);
-		Jail.prisoners.put(prisoner.getName(),prisoner);
+		Jail.prisoners.put(prisoner.getUUID(),prisoner);
 
 		JailCell cell = jail.getRequestedCell(prisoner);
-		if (cell == null || (cell.getPlayerName() != null && !cell.getPlayerName().equals("") && !cell.getPlayerName().equals(prisoner.getName()))) {
+		if (cell == null || (cell.getPlayer() != null && !cell.getPlayer().equals(prisoner.getUUID()))) {
 			cell = null;
 			cell = jail.getEmptyCell();
 		}
 		
 		if (cell != null) {
-			cell.setPlayerName(player.getName());
+			cell.setPlayer(player.getUniqueId());
 			prisoner.setCell(cell);
 			player.teleport(prisoner.getTeleportLocation());
 			prisoner.updateSign();
@@ -389,7 +390,7 @@ public class PrisonerManager {
 			player.teleport(prisoner.getTeleportLocation());
 			
 			if(jail.getSettings().getBoolean(Setting.StoreInventory)) {
-				if(!Jail.prisonerInventories.containsKey(player.getName().toLowerCase())) {
+				if(!Jail.prisonerInventories.containsKey(player.getUniqueId())) {
 					prisoner.storeInventory(player.getInventory());
 					player.getInventory().setArmorContents(null);
 					player.getInventory().clear();

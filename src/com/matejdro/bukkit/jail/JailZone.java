@@ -161,7 +161,7 @@ public class JailZone {
 		for (JailCell c : cells)
 		{
 			if (c.getName() != null && getSettings().getList(Setting.ManualCells).contains(c.getName())) continue;
-			if (c.getPlayerName() == null || c.getPlayerName().trim().equals("") || !Jail.prisoners.containsKey(c.getPlayerName().toLowerCase()))
+			if (c.getPlayer() == null || !Jail.prisoners.containsKey(c.getPlayer()))
 			{
 				return c;
 			}
@@ -178,7 +178,7 @@ public class JailZone {
 		for (JailCell cell : getCellList())
 		{
 			if (cell.getName() != null && cell.getName().equals(prisoner.getRequestedCell())) return cell;
-			if (cell.getPlayerName() != null && cell.getPlayerName().equals(prisoner.getName())) return cell;
+			if (cell.getPlayer() != null && cell.getPlayer().equals(prisoner.getUUID())) return cell;
 		}
 		return null;
 	}

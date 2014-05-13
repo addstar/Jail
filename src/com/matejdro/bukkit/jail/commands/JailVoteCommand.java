@@ -61,7 +61,7 @@ public class JailVoteCommand extends BaseCommand{
 						BukkitTask task = new BukkitRunnable(){
 							public void run() {
 								if(JailVote.yesVotes > JailVote.noVotes){
-									JailPrisoner prisoner = new JailPrisoner(target.getName(), Settings.getGlobalInt(Setting.VoteJailTime) * 6, "", "", false, "", Settings.getGlobalString(Setting.VoteJailReason), true, "", "Players", "");
+									JailPrisoner prisoner = new JailPrisoner(target.getName(), target.getUniqueId(), Settings.getGlobalInt(Setting.VoteJailTime) * 6, "", "", false, "", Settings.getGlobalString(Setting.VoteJailReason), true, "", "Players", "");
 									PrisonerManager.Jail(prisoner, target);
 									if(Jail.instance.notificationsPlugin != null){
 										Notification jailNotification = new Notification("Jail", target.getName() + " was jailed by players vote", "For " + Settings.getGlobalInt(Setting.VoteJailTime) + " mins", Color.ORANGE, Color.RED, Color.RED);

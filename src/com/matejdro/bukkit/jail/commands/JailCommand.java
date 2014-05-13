@@ -7,6 +7,7 @@ import me.muizers.Notifications.Notification;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -43,6 +44,8 @@ public class JailCommand extends BaseCommand {
 
             //Initialize defaults
             String playerName = args[0].toLowerCase();
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+            
             int time = Settings.getGlobalInt(Setting.DefaultJailTime);
             String jailname = "";
             String cellname = "";
@@ -50,7 +53,7 @@ public class JailCommand extends BaseCommand {
             Boolean muted = Settings.getGlobalBoolean(Setting.AutomaticMute);
 
             //Check if the player is currently jailed
-            if(Jail.prisoners.containsKey(playerName)){
+            if(Jail.prisoners.containsKey(player.getUniqueId())){
             	Util.Message(Settings.getGlobalString(Setting.MessagePlayerAlreadyJailed), sender);
             	return true;
             }
@@ -102,14 +105,13 @@ public class JailCommand extends BaseCommand {
                 }
             }
 
-            Player player = Util.getPlayer(playerName, true);
             JailPrisoner prisoner = null;
             String message;
             JailLog logger = new JailLog();
             
-            if(player == null) {//If the player isn't online, then let's handle him separately            	
-            	prisoner = new JailPrisoner(playerName, time * 6, jailname, cellname, true, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "");
-                PrisonerManager.PrepareJail(prisoner, player);
+            if(!player.isOnline()) {//If the player isn't online, then let's handle him separately            	
+            	prisoner = new JailPrisoner(player.getName(), player.getUniqueId(), time * 6, jailname, cellname, true, "", reason, muted, "", sender instanceof Player ? ((Player) sender).getName() : "console", "");
+                PrisonerManager.PrepareJail(prisoner, null);
             	
                 message = Settings.getGlobalString(Setting.MessagePrisonerOffline);
                 if(Settings.getGlobalBoolean(Setting.EnableLogging)){
@@ -117,14 +119,14 @@ public class JailCommand extends BaseCommand {
                 }
                 
             }else {//The player is online
-            	if(player.hasPermission("jail.cantbejailed")){
+            	if(((Player)player).hasPermission("jail.cantbejailed")){
                 	sender.sendMessage(ChatColor.RED + "This player can not be jailed!");
                 	return true;
                 }
             	
             	playerName = player.getName().toLowerCase();
             	
-            	OnlinePlayerJailedEvent event = new OnlinePlayerJailedEvent(player, time, jailname, cellname, reason, muted, sender instanceof Player ? ((Player) sender).getName() : "console");
+            	OnlinePlayerJailedEvent event = new OnlinePlayerJailedEvent(player.getPlayer(), time, jailname, cellname, reason, muted, sender instanceof Player ? ((Player) sender).getName() : "console");
             	Jail.instance.getServer().getPluginManager().callEvent(event);
             	
             	if(event.isCancelled()) {
@@ -132,14 +134,14 @@ public class JailCommand extends BaseCommand {
             		return true;
             	}else {
             		player = event.getPlayer(); //Set our instance of the player to the one from the event, in case a listener changed something.
-            		prisoner = new JailPrisoner(playerName,
+            		prisoner = new JailPrisoner(player.getName(), player.getUniqueId(),
             				event.getTime() * 6, event.getJail(), event.getCell(), false, "",
             				event.getReason(), event.isMuted(), "", event.getJailer(), "");
             	}
             	
-                PrisonerManager.PrepareJail(prisoner, player);
+                PrisonerManager.PrepareJail(prisoner, (Player)player);
                 
-                player.setGameMode(GameMode.SURVIVAL);
+                ((Player)player).setGameMode(GameMode.SURVIVAL);
                 
                 message = Settings.getGlobalString(Setting.MessagePrisonerJailed);
                 if(Settings.getGlobalBoolean(Setting.BroadcastJailMessage)){

@@ -1,8 +1,11 @@
 package com.matejdro.bukkit.jail;
 
 import java.util.Collection;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,9 +34,23 @@ public class JailAPI {
 	 * @param cellName Name of the cell, where prisoner will be jailed.
 	 * @param reason Reason for jailing. Use null if you don't want to specify reason.
 	 */
+	@Deprecated
 	public JailPrisoner jailPlayer(String playerName, int time, String jailName, String cellName, String reason)
 	{
 		return jailPlayer(playerName, time, jailName, cellName, reason, "other player");
+	}
+	
+	/**
+	 * Jail specified player
+	 * @param player UUID of the player you want to jail
+	 * @param time Jail time in minutes
+	 * @param jailName Name of the jail, where prisoner will be jailed. Use null to let plugin select nearest jail.
+	 * @param cellName Name of the cell, where prisoner will be jailed.
+	 * @param reason Reason for jailing. Use null if you don't want to specify reason.
+	 */
+	public JailPrisoner jailPlayer(UUID player, int time, String jailName, String cellName, String reason)
+	{
+		return jailPlayer(player, time, jailName, cellName, reason, "other player");
 	}
 	
 	/**
@@ -45,13 +62,32 @@ public class JailAPI {
 	 * @param reason Reason for jailing. Use null if you don't want to specify reason.
 	 * @param jailer Who jailed this player? Usually name of your plugin.
 	 */
+	@Deprecated
 	public JailPrisoner jailPlayer(String playerName, int time, String jailName, String cellName, String reason, String jailer) {
+		OfflinePlayer player = Bukkit.getPlayerExact(playerName);
+		if(player == null)
+			player = Bukkit.getOfflinePlayer(playerName);
+		
+		return jailPlayer(player.getUniqueId(), time, jailName, cellName, reason, "other player");
+	}
+	
+	/**
+	 * Jail specified player
+	 * @param id UUID of the player you want to jail
+	 * @param time Jail time in minutes
+	 * @param jailName Name of the jail, where prisoner will be jailed. Use null to let plugin select nearest jail.
+	 * @param cellName Name of the cell, where prisoner will be jailed.
+	 * @param reason Reason for jailing. Use null if you don't want to specify reason.
+	 * @param jailer Who jailed this player? Usually name of your plugin.
+	 */
+	public JailPrisoner jailPlayer(UUID id, int time, String jailName, String cellName, String reason, String jailer) {
 		if (jailName == null) jailName = "";
 		if (cellName == null) cellName = "";
 		if (reason == null) reason = "";
-		
-		JailPrisoner prisoner = new JailPrisoner(playerName, time, jailName, cellName, false, "", reason, false, "", jailer, "");
-		Player player = Util.getPlayer(playerName, false);
+
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(id);
+		JailPrisoner prisoner = new JailPrisoner(offlinePlayer.getName(), id, time, jailName, cellName, false, "", reason, false, "", jailer, "");
+		Player player = offlinePlayer.getPlayer();
 		
 		if(player == null) {//player is offline
 			prisoner.setOfflinePending(true);
@@ -69,9 +105,23 @@ public class JailAPI {
 	 * @param playerName name of the player you want to check
 	 * @return true if player is jailed, false if he is not jailed
 	 */
+	@Deprecated
 	public Boolean isPlayerJailed(String playerName)
 	{
 		if (Jail.prisoners.containsKey(playerName.toLowerCase()))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Check if is specified player jailed
+	 * @param player UUID of the player you want to check
+	 * @return true if player is jailed, false if he is not jailed
+	 */
+	public Boolean isPlayerJailed(UUID player)
+	{
+		if (Jail.prisoners.containsKey(player))
 			return true;
 		else
 			return false;
@@ -143,7 +193,7 @@ public class JailAPI {
 	public void InsertPrisoner(JailPrisoner prisoner)
 	{
 		InputOutput.InsertPrisoner(prisoner);
-		Jail.prisoners.put(prisoner.getName(), prisoner);
+		Jail.prisoners.put(prisoner.getUUID(), prisoner);
 	}
 	
 }

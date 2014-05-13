@@ -21,8 +21,8 @@ public class JailStatusCommand extends BaseCommand {
 
 	public Boolean run(CommandSender sender, String[] args) {		
 		Player player = (Player) sender;
-		JailPrisoner prisoner = Jail.prisoners.get(player.getName().toLowerCase());
-		if (!Jail.prisoners.containsKey(player.getName().toLowerCase()))
+		JailPrisoner prisoner = Jail.prisoners.get(player.getUniqueId());
+		if (!Jail.prisoners.containsKey(player.getUniqueId()))
 		{
 			Util.Message(Settings.getGlobalString(Setting.MessageYouNotJailed), sender);
 			return true;

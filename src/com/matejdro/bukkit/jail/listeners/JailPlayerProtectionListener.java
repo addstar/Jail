@@ -1,5 +1,7 @@
 package com.matejdro.bukkit.jail.listeners;
 
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -39,22 +41,22 @@ public class JailPlayerProtectionListener implements Listener {
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerChat (AsyncPlayerChatEvent event) {
-		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 		if (prisoner != null && prisoner.isMuted()) {
 			Util.Message(prisoner.getJail().getSettings().getString(Setting.MessageMute), event.getPlayer());
 			event.setCancelled(true);
 		}
 		
-		for(String playerName: Jail.prisoners.keySet()){
+		for(UUID player: Jail.prisoners.keySet()){
 			if(!Settings.getGlobalBoolean(Setting.PrisonersRecieveMessages)){
-				event.getRecipients().remove(Jail.instance.getServer().getPlayer(playerName));
+				event.getRecipients().remove(Jail.instance.getServer().getPlayer(player));
 			}
 		}
 	}
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 		JailZone jail = prisoner != null ? prisoner.getJail() : null;
 
 		if (prisoner != null && jail != null)
@@ -109,8 +111,8 @@ public class JailPlayerProtectionListener implements Listener {
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
-			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+		if (Jail.prisoners.containsKey(event.getPlayer().getUniqueId())) {
+			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 			if (prisoner.isBeingReleased())
 				return;
 			
@@ -175,7 +177,7 @@ public class JailPlayerProtectionListener implements Listener {
 		 
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST && (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) || !Util.permission(event.getPlayer(), "jail.openchest", PermissionDefault.OP)))
+			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST && (Jail.prisoners.containsKey(event.getPlayer().getUniqueId()) || !Util.permission(event.getPlayer(), "jail.openchest", PermissionDefault.OP)))
 				{
 					for (int i = -1; i < 4; i++)
 					{
@@ -188,7 +190,7 @@ public class JailPlayerProtectionListener implements Listener {
 						for (JailZone jail : Jail.zones.values())
 							for (JailCell cell : jail.getCellList())
 							{
-								if ((!jail.getSettings().getBoolean(Setting.CanPrisonerOpenHisChest) || !cell.getPlayerName().toLowerCase().equals(event.getPlayer().getName().toLowerCase())) && ((cell.getChest() != null && block == cell.getChest().getBlock())))
+								if ((!jail.getSettings().getBoolean(Setting.CanPrisonerOpenHisChest) || !cell.getPlayer().equals(event.getPlayer().getUniqueId())) && ((cell.getChest() != null && block == cell.getChest().getBlock())))
 										{
 									event.setCancelled(true);
 									return;
@@ -197,7 +199,7 @@ public class JailPlayerProtectionListener implements Listener {
 						}
 					}
 
-			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+			JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 			if (prisoner != null && prisoner.getJail() != null)
 			{
 				JailZone jail = prisoner.getJail();
@@ -249,9 +251,9 @@ public class JailPlayerProtectionListener implements Listener {
 	 
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) && !Jail.prisoners.get(event.getPlayer().getName().toLowerCase()).isBeingReleased())
+		 if (Jail.prisoners.containsKey(event.getPlayer().getUniqueId()) && !Jail.prisoners.get(event.getPlayer().getUniqueId()).isBeingReleased())
 			{
-				final JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+				final JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 
                 event.setRespawnLocation(prisoner.getTeleportLocation());
 
@@ -287,7 +289,7 @@ public class JailPlayerProtectionListener implements Listener {
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerFoodchange(FoodLevelChangeEvent event)
 	{
-		JailPrisoner prisoner = Jail.prisoners.get(event.getEntity().getName().toLowerCase());
+		JailPrisoner prisoner = Jail.prisoners.get(event.getEntity().getUniqueId());
 		if (prisoner != null && prisoner.getJail() != null && prisoner.getJail().getSettings().getBoolean(Setting.EnableFoodControl))
 		{
 			int minFood = prisoner.getJail().getSettings().getInt(Setting.FoodControlMinimumFood);

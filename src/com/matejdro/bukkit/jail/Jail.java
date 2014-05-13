@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.swing.Timer;
@@ -68,8 +69,8 @@ public class Jail extends JavaPlugin {
 	public InputOutput IO;
     public Notifications notificationsPlugin;
     public static HashMap<String,JailZone> zones = new HashMap<String,JailZone>();
-    public static HashMap<String,JailPrisoner> prisoners = new HashMap<String,JailPrisoner>();
-    public static HashMap<String, HashMap<String, ItemStack[]>> prisonerInventories = new HashMap<String, HashMap<String, ItemStack[]>>();
+    public static HashMap<UUID,JailPrisoner> prisoners = new HashMap<UUID,JailPrisoner>();
+    public static HashMap<UUID, HashMap<String, ItemStack[]>> prisonerInventories = new HashMap<UUID, HashMap<String, ItemStack[]>>();
     public static HashMap<Creature, JailPrisoner> guards = new HashMap<Creature, JailPrisoner>();
     public static HashMap<String, Boolean> jailStickToggle = new HashMap<String, Boolean>();
     
@@ -231,11 +232,11 @@ public class Jail extends JavaPlugin {
 			else
 				return;
 			
-			for (JailPrisoner prisoner : prisoners.values().toArray(new JailPrisoner[0]))
+			for (JailPrisoner prisoner : prisoners.values())
 			{
 				Util.debug(prisoner, "Time event");
 				Util.debug(prisoner, "Name: \"" + prisoner.getName() + "\"");
-				Player player = getServer().getPlayerExact(prisoner.getName());
+				Player player = getServer().getPlayer(prisoner.getUUID());
 				Util.debug(prisoner, "Remaining time:" + prisoner.getRemainingTime());
 				Util.debug("Player: " + String.valueOf(player));
 				if (prisoner.getRemainingTime() > 0 && (player != null || (prisoner.getJail() != null && prisoner.getJail().getSettings().getBoolean(Setting.CountdownTimeWhenOffline))))

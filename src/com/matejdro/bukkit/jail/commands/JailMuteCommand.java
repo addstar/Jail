@@ -1,6 +1,8 @@
 package com.matejdro.bukkit.jail.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.matejdro.bukkit.jail.InputOutput;
 import com.matejdro.bukkit.jail.Jail;
@@ -21,7 +23,16 @@ public class JailMuteCommand extends BaseCommand {
 			Util.Message("Usage: /jailmute [Player name]", sender);
 			return true;
 		}
-		JailPrisoner prisoner = Jail.prisoners.get(args[0].toLowerCase());
+		
+		Player player = Bukkit.getPlayer(args[0]);
+		
+		if(player == null)
+		{
+			Util.Message("Unknown player " + args[0], sender);
+			return true;
+		}
+		
+		JailPrisoner prisoner = Jail.prisoners.get(player.getUniqueId());
 		
 		if (prisoner == null)
 		{

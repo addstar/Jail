@@ -2,6 +2,7 @@ package com.matejdro.bukkit.jail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +12,7 @@ import org.bukkit.block.Sign;
 public class JailCell {
 	private String name;
 	private String jailname;
-	private String player;
+	private UUID player;
 	private Location teleport;
 	private HashSet<Location> signs = new HashSet<Location>();
 	private Location chest;
@@ -20,9 +21,9 @@ public class JailCell {
 	/**
 	 * @param Name Name of the cell. Can be null if you don't want to specify one.
 	 * @param JailName Name of the jail that contains that cell
-	 * @param Player Name of the player that is jailed inside that cell. Make it empty string, if there is no such player.
+	 * @param Player UUID of the player that is jailed inside that cell. Make it null, if there is no such player.
 	 */
-	public JailCell(String JailName, String Player, String Name)
+	public JailCell(String JailName, UUID Player, String Name)
 	{
 		jailname = JailName;
 		player = Player;
@@ -181,18 +182,18 @@ public class JailCell {
 	}
 	
 	/**
-	 * @return name of the player that is being jailed in that cell.
+	 * @return uuid of the player that is being jailed in that cell.
 	 */
-	public String getPlayerName()
+	public UUID getPlayer()
 	{
 		return player;
 	}
 	
 	/**
 	 * Set name of the player that is being jailed in this cell.
-	 * @param input name of the player. Use blank string if you want to clear that field.
+	 * @param input uuid of the player. Use blank string if you want to clear that field.
 	 */
-	public void setPlayerName(String input)
+	public void setPlayer(UUID input)
 	{
 		player = input;
 	}

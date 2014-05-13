@@ -60,7 +60,7 @@ public class JailPlayerListener implements Listener {
 
 		if(Util.permission(damager, "jail.usejailstick." + String.valueOf(damager.getItemInHand().getTypeId()), PermissionDefault.OP) && Jail.jailStickToggle.get(damager.getName().toLowerCase())){
             if(player != null){
-                JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "");
+                JailPrisoner prisoner = new JailPrisoner(player.getName().toLowerCase(), player.getUniqueId(), Integer.parseInt(param[2]) * 6, param[3], "", false, "", param[4], false, "", damager.getName(), "");
                 PrisonerManager.PrepareJail(prisoner, player);
                 JailLog logger = new JailLog();
                 damager.sendMessage(ChatColor.RED + "You jailed " + ChatColor.GREEN + player.getName() + ChatColor.RED +  " for " + ChatColor.GREEN + Integer.parseInt(param[2]) + ChatColor.RED + " minutes");
@@ -88,7 +88,7 @@ public class JailPlayerListener implements Listener {
         	String word = (String) o;
             if(event.getMessage().toLowerCase().contains(word + " ")) {
                 event.setCancelled(true);
-                final JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "JailSwear", "");
+                final JailPrisoner prisoner = new JailPrisoner(event.getPlayer().getName(), event.getPlayer().getUniqueId(), Settings.getGlobalInt(Setting.JailSwearTime) * 6, "", "", false, "", "Swearing", true, "", "JailSwear", "");
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Jail.instance, new Runnable() {
                     @Override
                     public void run() {
@@ -111,8 +111,8 @@ public class JailPlayerListener implements Listener {
 			event.getPlayer().sendMessage(ChatColor.BLUE + "http://www.curse.com/bukkit-plugins/minecraft/jail");
 		}
 		
-		 if (Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())) {
-			 JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+		 if (Jail.prisoners.containsKey(event.getPlayer().getUniqueId())) {
+			 JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 			 
 			 if(prisoner != null) {
 				 if (prisoner.offlinePending()) {
@@ -158,7 +158,7 @@ public class JailPlayerListener implements Listener {
 	 
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+		JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 		if (prisoner == null) return;
 
 		prisoner.killGuards();

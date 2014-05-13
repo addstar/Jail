@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,6 +26,7 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public class JailPrisoner {
 	private String name;
+	private UUID uid;
 	private int remaintime, afktime;
 	private JailZone jail;
 	private JailCell cell;
@@ -55,8 +57,9 @@ public class JailPrisoner {
 	 * @param Jailer Who jailed this prisoner
 	 * @param Permissions Their old permissions
 	 */
-	public JailPrisoner(String Name, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions) {
+	public JailPrisoner(String Name, UUID Id, int Remaintime, String Jail, String Cell,  Boolean Offline, String TransferDest, String Reason, Boolean Muted, String Inventory, String Jailer, String Permissions) {
 		name = Name.toLowerCase();
+		uid = Id;
 		remaintime = Remaintime;
 		setJail(Jail);
 		offline = Offline;
@@ -75,6 +78,13 @@ public class JailPrisoner {
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * @return UUID of this prisoner
+	 */
+	public UUID getUUID() {
+		return uid;
 	}
 		
 	/**
@@ -501,12 +511,12 @@ public class JailPrisoner {
 	 * @param playerinv inventory that will be stored
 	 */
 	public void storeInventory(PlayerInventory playerinv) {
-		if(!Jail.prisonerInventories.containsKey(name)) {
-			Jail.prisonerInventories.put(name, new HashMap<String, ItemStack[]>());
+		if(!Jail.prisonerInventories.containsKey(uid)) {
+			Jail.prisonerInventories.put(uid, new HashMap<String, ItemStack[]>());
 		}
 		
-		Jail.prisonerInventories.get(name).put("armor", playerinv.getArmorContents());
-		Jail.prisonerInventories.get(name).put("content", playerinv.getContents());
+		Jail.prisonerInventories.get(uid).put("armor", playerinv.getArmorContents());
+		Jail.prisonerInventories.get(uid).put("content", playerinv.getContents());
 		
 		InputOutput.UpdatePrisoner(this);
 	}
@@ -516,11 +526,11 @@ public class JailPrisoner {
 	 * @param player player that will receive items
 	 */
 	public void restoreInventory(Player player) {
-		String name = player.getName().toLowerCase();
+		UUID id = player.getUniqueId();
 		
-		if(Jail.prisonerInventories.containsKey(name)){
-			ItemStack[] armor = Jail.prisonerInventories.get(name).get("armor");
-			ItemStack[] contents = Jail.prisonerInventories.get(name).get("content");
+		if(Jail.prisonerInventories.containsKey(id)){
+			ItemStack[] armor = Jail.prisonerInventories.get(id).get("armor");
+			ItemStack[] contents = Jail.prisonerInventories.get(id).get("content");
 			
 			for(ItemStack item : armor) {
 				if(item == null)
@@ -549,7 +559,7 @@ public class JailPrisoner {
 				}
 			}
 			
-			Jail.prisonerInventories.remove(name);
+			Jail.prisonerInventories.remove(id);
 		}else{
 			Util.debug("Cant find " + player.getName() + "'s inventory!");
 		}
@@ -621,7 +631,7 @@ public class JailPrisoner {
 	 * otherwise he will be released when he logs in.
 	 */
 	public void release() {
-		Player player = Jail.instance.getServer().getPlayerExact(getName());
+		Player player = Jail.instance.getServer().getPlayer(getUUID());
 		
 		if (player == null) {
 			setOfflinePending(true);
@@ -653,12 +663,12 @@ public class JailPrisoner {
 			targetjail = "find nearest";
 				
 		setTransferDestination(targetjail);
-		Player player = Jail.instance.getServer().getPlayerExact(getName());
+		Player player = Jail.instance.getServer().getPlayer(uid);
 		
 		if (player == null) {
 			setOfflinePending(true);
 			update();
-			Jail.prisoners.put(getName(), this);
+			Jail.prisoners.put(uid, this);
 		} else {
 			PrisonerManager.Transfer(this, player);
 		}
@@ -679,7 +689,7 @@ public class JailPrisoner {
 		SetBeingReleased(true);
 		JailCell cell = getCell();
 		InputOutput.DeletePrisoner(this);
-		Jail.prisoners.remove(getName());
+		Jail.prisoners.remove(uid);
 		if (cell != null) {
 			for (Sign sign : cell.getSigns()) {
 				sign.setLine(0, "");
@@ -691,10 +701,10 @@ public class JailPrisoner {
 			}
 			
 			if (cell.getChest() != null) cell.getChest().getInventory().clear();
-			cell.setPlayerName("");
+			cell.setPlayer(null);
 		}
 		
-		Jail.prisonerInventories.remove(getName());
+		Jail.prisonerInventories.remove(uid);
 		
 		for (LivingEntity e : guards) {
 			e.remove();

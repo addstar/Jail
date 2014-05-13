@@ -32,7 +32,7 @@ public class JailPayCommand extends BaseCommand {
 	public Boolean run(CommandSender sender, String[] args) {		
 		Player player = (Player) sender;
 		
-		JailPrisoner prisoner = Jail.prisoners.get(((Player) sender).getName().toLowerCase());
+		JailPrisoner prisoner = Jail.prisoners.get(((Player) sender).getUniqueId());
 //		if (prisoner == null || !prisoner.getJail().getSettings().getBoolean(Setting.EnablePaying)) 
 //		{
 //			return false;

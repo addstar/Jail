@@ -11,10 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -183,7 +186,19 @@ public class InputOutput {
 			//conn.commit();
 			Jail.prisoners.clear();
 			while (set.next()) {
+				OfflinePlayer player = null;
 				String name = set.getString("PlayerName").toLowerCase();
+				try
+				{
+					player = Bukkit.getOfflinePlayer(UUID.fromString(name));
+				}
+				catch(IllegalArgumentException e)
+				{
+					player = Bukkit.getOfflinePlayer(name);
+					if(player == null)
+						continue;
+				}
+				
 				int remaintime = set.getInt("RemainTime");
 				String jailname = set.getString("JailName");
 				Boolean offline = set.getBoolean("Offline");
@@ -196,11 +211,11 @@ public class InputOutput {
 				Boolean muted = set.getBoolean("muted");
 				String gamemode = set.getString("GameMode");
 				
-				JailPrisoner p = new JailPrisoner(name, remaintime, jailname, null, offline, transferDest, reason, muted, inventory, jailer, permissions);
+				JailPrisoner p = new JailPrisoner(player.getName(), player.getUniqueId(), remaintime, jailname, null, offline, transferDest, reason, muted, inventory, jailer, permissions);
 				p.setPreviousPosition(previousPosition);
 				p.setPreviousGameMode(gamemode == null ? GameMode.SURVIVAL : GameMode.valueOf(gamemode));
 				
-				Jail.prisoners.put(p.getName(), p);
+				Jail.prisoners.put(p.getUUID(), p);
 			}
 			
 			set.close();
@@ -229,12 +244,12 @@ public class InputOutput {
 				String teleport = set.getString("Teleport");
 				String sign = set.getString("Sign");
 				String chest = set.getString("Chest");
-				String player = set.getString("Player").toLowerCase();
+				UUID player = UUID.fromString(set.getString("Player"));
 				String name = set.getString("Name");
 				
 				JailPrisoner prisoner = Jail.prisoners.get(player);
 				if (prisoner == null)
-					player = "";
+					player = null;
 				
 				JailCell cell = new JailCell(jailname, player, name);
 				cell.setTeleportLocation(teleport);
@@ -370,7 +385,7 @@ public class InputOutput {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO jail_prisoners  (PlayerName, RemainTime, JailName, Offline, TransferDest, reason, muted, Inventory, Jailer, Permissions, PreviousPosition, GameMode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-			ps.setString(1, p.getName());
+			ps.setString(1, p.getUUID().toString());
 			ps.setInt(2, p.getRemainingTime());
 			
 			if (p.getJail() == null) {
@@ -428,7 +443,7 @@ public class InputOutput {
 
 			
 
-			ps.setString(5, c.getPlayerName());
+			ps.setString(5, c.getPlayer().toString());
 			ps.executeUpdate();
 			conn.commit();
 			
@@ -459,7 +474,7 @@ public class InputOutput {
 			else
 				ps.setString(4, "");
 
-			ps.setString(5, c.getPlayerName());
+			ps.setString(5, c.getPlayer().toString());
 			if (c.getName() != null)
 				ps.setString(6, c.getName());
 			else
@@ -518,7 +533,7 @@ public class InputOutput {
 				ps.setString(8, p.getPreviousPosition().getWorld().getName() + "," + String.valueOf(p.getPreviousPosition().getBlockX()) + "," + String.valueOf(p.getPreviousPosition().getBlockY()) + "," + String.valueOf(p.getPreviousPosition().getBlockZ()));
 			
 			ps.setString(9, (p.getPreviousGameMode() == null ? "Survival" : p.getPreviousGameMode().toString()));
-			ps.setString(10, p.getName());
+			ps.setString(10, p.getUUID().toString());
 			ps.executeUpdate();
 			conn.commit();
 			
@@ -534,7 +549,7 @@ public class InputOutput {
     	try {
 			Connection conn = InputOutput.getConnection();
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM jail_prisoners WHERE PlayerName = ?");
-			ps.setString(1, p.getName());
+			ps.setString(1, p.getUUID().toString());
 			ps.executeUpdate();
 			conn.commit();
 			
@@ -567,7 +582,7 @@ public class InputOutput {
 				
 				ps.setString(9, (p.getPreviousGameMode() == null ? "Survival" : p.getPreviousGameMode().toString()));
 				
-				ps.setString(10, p.getName());
+				ps.setString(10, p.getUUID().toString());
 				ps.executeUpdate();
 				ps.addBatch();
 			}

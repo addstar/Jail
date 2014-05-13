@@ -34,7 +34,7 @@ public class JailEntityListener implements Listener {
 		if (event.getEntity() instanceof Player)
 		{
 			Player player = (Player) event.getEntity();	
-			JailPrisoner prisoner = Jail.prisoners.get(player.getName());
+			JailPrisoner prisoner = Jail.prisoners.get(player.getUniqueId());
 			if (prisoner == null) return;
 			
 			prisoner.killGuards();
@@ -50,7 +50,7 @@ public class JailEntityListener implements Listener {
 				prisoner.getGuards().remove(guard);
 				Jail.guards.remove(guard);
 				
-				Player player = plugin.getServer().getPlayer(prisoner.getName());
+				Player player = plugin.getServer().getPlayer(prisoner.getUUID());
 				if (player == null) return;
 				
 				if (prisoner.getJail().getSettings().getBoolean(Setting.RespawnGuards))

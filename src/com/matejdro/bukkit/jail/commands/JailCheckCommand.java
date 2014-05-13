@@ -1,7 +1,10 @@
 package com.matejdro.bukkit.jail.commands;
 
 import java.util.Arrays;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import com.matejdro.bukkit.jail.Jail;
@@ -37,11 +40,12 @@ public class JailCheckCommand extends BaseCommand {
 		}
 		else
 		{
-
-			String name = args[0].toLowerCase();
-			JailPrisoner prisoner = Jail.prisoners.get(name);
+			OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+			
+			UUID id = player.getUniqueId();
+			JailPrisoner prisoner = Jail.prisoners.get(id);
 			String message ="";
-			if (!Jail.prisoners.containsKey(name))
+			if (!Jail.prisoners.containsKey(id))
 			{
 				Util.Message(Settings.getGlobalString(Setting.MessagePlayerNotJailed), sender);
 				return true; 
@@ -76,7 +80,7 @@ public class JailCheckCommand extends BaseCommand {
 	
 	private void listAllPrisoners(CommandSender sender, String[] args)
 	{
-		String[] allPrisoners = Jail.prisoners.keySet().toArray(new String[0]);
+		UUID[] allPrisoners = Jail.prisoners.keySet().toArray(new UUID[0]);
 		Arrays.sort(allPrisoners);
 		
 		int prisonersPerPage = Settings.getGlobalInt(Setting.JailCheckPrisonersPerPage);
@@ -95,7 +99,7 @@ public class JailCheckCommand extends BaseCommand {
 			
 			JailPrisoner prisoner = Jail.prisoners.get(allPrisoners[i]);
 			if (prisoner.getJail() == null)
-				Util.Message(Settings.getGlobalString(Setting.MessageJailCheckLineWaitingOffline).replace("<Player>", allPrisoners[i]), sender);
+				Util.Message(Settings.getGlobalString(Setting.MessageJailCheckLineWaitingOffline).replace("<Player>", prisoner.getName()), sender);
 			else
 				Util.Message(prisoner.parseTags(Settings.getGlobalString(Setting.MessageJailCheckLine)), sender);
 				

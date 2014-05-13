@@ -16,12 +16,10 @@ public class JailClearCommand extends BaseCommand {
 
 
 	public Boolean run(CommandSender sender, String[] args) {		
-		Object[] names = Jail.prisoners.keySet().toArray();
-		for (Object p : names)
-		{
-			JailPrisoner prisoner = Jail.prisoners.get((String) p);
+
+		for (JailPrisoner prisoner : Jail.prisoners.values())
 			prisoner.release();
-		}
+
 		return true;
 	}
 

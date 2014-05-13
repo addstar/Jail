@@ -1,5 +1,7 @@
 package com.matejdro.bukkit.jail.commands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import com.matejdro.bukkit.jail.Jail;
@@ -21,13 +23,16 @@ public class UnJailForceCommand extends BaseCommand {
 			Util.Message("Usage: /unjailforce [Name]", sender);
 			return true;
 		}
-		if (!Jail.prisoners.containsKey(args[0].toLowerCase()))
+		
+		OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+		
+		if (player == null || !Jail.prisoners.containsKey(player.getUniqueId()))
 		{
 			Util.Message("That player is not jailed!", sender);
 			return true;
 		}
-		String playername = args[0].toLowerCase();
-		Jail.prisoners.get(playername).delete();
+
+		Jail.prisoners.get(player.getUniqueId()).delete();
 		Util.Message("Player deleted from the jail database!", sender);
 		return true;
 	}

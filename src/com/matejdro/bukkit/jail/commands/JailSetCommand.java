@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
@@ -135,7 +137,14 @@ public class JailSetCommand extends BaseCommand {
 	public static void JailSetPlayer(CommandSender sender, String[] args)
 	{
 		String parameter = args[1];
-		JailPrisoner prisoner = Jail.prisoners.get(args[0].toLowerCase());
+		OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+		if(player == null)
+		{
+			Util.Message("That player is not jailed!", sender);
+			return;
+		}
+		
+		JailPrisoner prisoner = Jail.prisoners.get(player.getUniqueId());
 		
 		if (prisoner == null)
 		{

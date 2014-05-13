@@ -18,12 +18,12 @@ public class JailBlockListener implements Listener {
 		if (jail.getSettings().getList(Setting.BlockDestroyProtectionExceptions).contains(String.valueOf(event.getBlock().getTypeId() + ":" + event.getBlock().getData()))
 			||	jail.getSettings().getList(Setting.BlockDestroyProtectionExceptions).contains(String.valueOf(event.getBlock().getTypeId()))) return;
 		
-		if ((!Util.permission(jail, event.getPlayer(), "jail.modifyjail", PermissionDefault.OP) || Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())))
+		if ((!Util.permission(jail, event.getPlayer(), "jail.modifyjail", PermissionDefault.OP) || Jail.prisoners.containsKey(event.getPlayer().getUniqueId())))
 		{
 			
-			if (Settings.getGlobalBoolean(Setting.EnableBlockDestroyProtection) && jail.getSettings().getInt(Setting.BlockDestroyPenalty) > 0 && Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase()) && Jail.prisoners.get(event.getPlayer().getName().toLowerCase()).getRemainingTime() > 0)
+			if (Settings.getGlobalBoolean(Setting.EnableBlockDestroyProtection) && jail.getSettings().getInt(Setting.BlockDestroyPenalty) > 0 && Jail.prisoners.containsKey(event.getPlayer().getUniqueId()) && Jail.prisoners.get(event.getPlayer().getName().toLowerCase()).getRemainingTime() > 0)
 				{
-					JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName().toLowerCase());
+					JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 					Util.Message(jail.getSettings().getString(Setting.MessageBlockDestroyedPenalty), event.getPlayer());
 					prisoner.setRemainingTime(prisoner.getRemainingTime() + jail.getSettings().getInt(Setting.BlockDestroyPenalty) * 6);
 					InputOutput.UpdatePrisoner(prisoner);
@@ -42,11 +42,11 @@ public class JailBlockListener implements Listener {
 		if (jail.getSettings().getList(Setting.BlockPlaceProtectionExceptions).contains(String.valueOf(event.getBlock().getTypeId() + ":" + event.getBlock().getData()))
 				||	jail.getSettings().getList(Setting.BlockPlaceProtectionExceptions).contains(String.valueOf(event.getBlock().getTypeId()))) return;
 
-		if (JailZoneManager.isInsideJail(event.getBlockPlaced().getLocation()) && (!Util.permission(jail, event.getPlayer(), "jail.modifyjail", PermissionDefault.OP) || Jail.prisoners.containsKey(event.getPlayer().getName().toLowerCase())))
+		if (JailZoneManager.isInsideJail(event.getBlockPlaced().getLocation()) && (!Util.permission(jail, event.getPlayer(), "jail.modifyjail", PermissionDefault.OP) || Jail.prisoners.containsKey(event.getPlayer().getUniqueId())))
 		{
-			if (Settings.getGlobalBoolean(Setting.EnableBlockPlaceProtection) && jail.getSettings().getInt(Setting.BlockPlacePenalty) > 0 && Jail.prisoners.containsKey(event.getPlayer().getName()) && Jail.prisoners.get(event.getPlayer().getName()).getRemainingTime() > 0)
+			if (Settings.getGlobalBoolean(Setting.EnableBlockPlaceProtection) && jail.getSettings().getInt(Setting.BlockPlacePenalty) > 0 && Jail.prisoners.containsKey(event.getPlayer().getName()) && Jail.prisoners.get(event.getPlayer().getUniqueId()).getRemainingTime() > 0)
 				{
-					JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getName());
+					JailPrisoner prisoner = Jail.prisoners.get(event.getPlayer().getUniqueId());
 					Util.Message(jail.getSettings().getString(Setting.MessageBlockPlacedPenalty), event.getPlayer());
 					prisoner.setRemainingTime(prisoner.getRemainingTime() + jail.getSettings().getInt(Setting.BlockPlacePenalty) * 6);
 					InputOutput.UpdatePrisoner(prisoner);

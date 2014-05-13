@@ -129,7 +129,7 @@ public static HashMap<String,CreationPlayer> players = new HashMap<String,Creati
 		private JailCell cell;		
 		public CreationPlayer(String name) {
 			state = 1;
-			cell = new JailCell(name, "", "");
+			cell = new JailCell(name, null, "");
 		}
 	}
 }

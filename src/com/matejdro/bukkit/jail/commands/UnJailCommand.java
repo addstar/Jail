@@ -1,5 +1,7 @@
 package com.matejdro.bukkit.jail.commands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,17 +27,20 @@ public class UnJailCommand extends BaseCommand {
 			Util.Message("Usage: /unjail [Name]", sender);
 			return true;
 		}
-		if (!Jail.prisoners.containsKey(args[0].toLowerCase()))
+		
+		OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+		
+		if (player == null || !Jail.prisoners.containsKey(player.getUniqueId()))
 		{
 			Util.Message("That player is not jailed!", sender);
 			return true;
 		}
-		String playername = args[0].toLowerCase();
-		JailPrisoner prisoner = Jail.prisoners.get(playername);
+
+		JailPrisoner prisoner = Jail.prisoners.get(player.getUniqueId());
 		
 		prisoner.release();
 		
-		if (Jail.instance.getServer().getPlayer(prisoner.getName()) == null)
+		if (!player.isOnline())
 			Util.Message("Player is offline. He will be automatically released when he connnects.", sender);
 		else
 			Util.Message("Player released", sender);
@@ -51,7 +56,7 @@ public class UnJailCommand extends BaseCommand {
 			else
 				jailer = "console";
 			
-			Jail.log.info("Player " + playername + " was released by " + jailer);
+			Jail.log.info("Player " + player.getName() + " was released by " + jailer);
 		}
 		
 		return true;

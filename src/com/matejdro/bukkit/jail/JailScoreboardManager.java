@@ -1,6 +1,7 @@
 package com.matejdro.bukkit.jail;
 
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
 
@@ -19,10 +20,10 @@ public class JailScoreboardManager {
 	private WeakHashMap<Player, Scoreboard> scoreboards = new WeakHashMap<Player, Scoreboard>();
 	
 	public void displayJailTime(){
-		for(String name: Jail.prisoners.keySet())
+		for(UUID id : Jail.prisoners.keySet())
 		{
-			Player player = Bukkit.getPlayerExact(name); // TODO: Replace with uuid
-			if(!scoreboards.containsKey(player))
+			Player player = Bukkit.getPlayer(id);
+			if(player != null && !scoreboards.containsKey(player))
 				scoreboards.put(player, manager.getNewScoreboard());
 		}
 		
@@ -33,9 +34,8 @@ public class JailScoreboardManager {
 			Entry<Player, Scoreboard> entry = it.next();
 			Scoreboard board = entry.getValue();
 			Player player = entry.getKey();
-			
 			Objective obj;
-			if(!Jail.prisoners.containsKey(player.getName().toLowerCase())){
+			if(!Jail.prisoners.containsKey(player.getUniqueId())){
 				it.remove();
 				player.setScoreboard(manager.getMainScoreboard());
 				continue;
@@ -48,8 +48,8 @@ public class JailScoreboardManager {
 			}
 			obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 			obj.setDisplayName("Jail Stats");
-			Score score = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Time:"));
-			score.setScore((int) Math.ceil(Jail.prisoners.get(player.getName().toLowerCase()).getRemainingTimeMinutes()));
+			Score score = obj.getScore(ChatColor.GREEN + "Time:");
+			score.setScore((int) Math.ceil(Jail.prisoners.get(player.getUniqueId()).getRemainingTimeMinutes()));
 			
 			player.setScoreboard(board);
 		}
