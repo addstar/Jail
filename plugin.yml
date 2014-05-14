@@ -1,6 +1,6 @@
 name: Jail
 main: com.matejdro.bukkit.jail.Jail
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}
 description: Ban too harsh? Kick/mute/whatever not enough? Jail bad players!
 authors: [matejdro,multidude,graywolf336]
 website: dev.bukkit.org/server-mods/jail/
